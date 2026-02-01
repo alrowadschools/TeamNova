@@ -1,47 +1,761 @@
-<!-- VIDEO BUTTONS -->
-<button class="item-color"
-        style="--color:#fb923c"
-        onclick="showIframe('https://www.youtube.com/embed/7_SX4pTr3gk')">
-  ▶ Lesson 1
-</button>
-
-<button class="item-color"
-        style="--color:#fb923c"
-        onclick="showIframe('https://www.youtube.com/embed/DlBUuWBfnTs')">
-  ▶ Lesson 2
-</button>
-
-<button class="item-color"
-        style="--color:#fb923c"
-        onclick="showIframe('https://www.youtube.com/embed/lRWdlh6MFHM')">
-  ▶ Lesson 3
-</button>
-
-<!-- VIDEO IFRAME -->
-<iframe id="lessonIframe"
-        style="
-            width:100%;
-            height:90%;
-            border:none;
-            overflow-x:hidden;
-            overflow-y:auto;
-            display:none;
-        "
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowfullscreen>
-</iframe>
-<script>
-function showIframe(videoUrl) {
-    const iframe = document.getElementById("lessonIframe");
-
-    // Ensure autoplay is always added
-    if (!videoUrl.includes("autoplay")) {
-        videoUrl += (videoUrl.includes("?") ? "&" : "?") + "autoplay=1";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Quiz Generator</title>
+  <script src="https://unpkg.com/compromise@14.14.5/builds/compromise.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
-
-    iframe.src = videoUrl;
-    iframe.style.display = "block";
-}
-</script>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .card {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      overflow: hidden;
+    }
+    .header {
+      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+      color: white;
+      padding: 30px;
+      text-align: center;
+    }
+    .header h1 {
+      font-size: 2rem;
+      margin-bottom: 8px;
+    }
+    .header p {
+      opacity: 0.9;
+      font-size: 1rem;
+    }
+    .content {
+      padding: 30px;
+    }
+    .input-section {
+      margin-bottom: 24px;
+    }
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #374151;
+    }
+    textarea {
+      width: 100%;
+      min-height: 180px;
+      padding: 16px;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      font-size: 1rem;
+      resize: vertical;
+      transition: border-color 0.2s;
+    }
+    textarea:focus {
+      outline: none;
+      border-color: #6366f1;
+    }
+    .char-count {
+      font-size: 0.875rem;
+      color: #6b7280;
+      margin-top: 8px;
+    }
+    .char-count.valid {
+      color: #10b981;
+    }
+    .slider-section {
+      margin-bottom: 24px;
+    }
+    .slider-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    input[type="range"] {
+      width: 100%;
+      height: 8px;
+      border-radius: 4px;
+      background: #e5e7eb;
+      outline: none;
+      -webkit-appearance: none;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #6366f1;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(99, 102, 241, 0.4);
+    }
+    .btn {
+      width: 100%;
+      padding: 16px 32px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: white;
+      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4);
+    }
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .btn-secondary {
+      background: #f3f4f6;
+      color: #374151;
+    }
+    .btn-secondary:hover:not(:disabled) {
+      background: #e5e7eb;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    /* Quiz Section */
+    #quiz-section {
+      display: none;
+    }
+    .quiz-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding: 16px;
+      background: #f9fafb;
+      border-radius: 12px;
+    }
+    .quiz-info h2 {
+      font-size: 1.25rem;
+      color: #1f2937;
+    }
+    .quiz-info p {
+      color: #6b7280;
+      font-size: 0.9rem;
+    }
+    .progress-bar {
+      height: 8px;
+      background: #e5e7eb;
+      border-radius: 4px;
+      margin-bottom: 24px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+      transition: width 0.3s ease;
+    }
+    .question-card {
+      background: #f9fafb;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+    .question-number {
+      font-size: 0.875rem;
+      color: #6b7280;
+      margin-bottom: 8px;
+    }
+    .question-text {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #1f2937;
+      line-height: 1.6;
+    }
+    .options {
+      margin-top: 20px;
+    }
+    .option {
+      display: flex;
+      align-items: center;
+      padding: 16px;
+      margin-bottom: 12px;
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .option:hover:not(.disabled) {
+      border-color: #6366f1;
+      background: #f5f3ff;
+    }
+    .option.selected {
+      border-color: #6366f1;
+      background: #eef2ff;
+    }
+    .option.correct {
+      border-color: #10b981;
+      background: #d1fae5;
+    }
+    .option.incorrect {
+      border-color: #ef4444;
+      background: #fee2e2;
+    }
+    .option.disabled {
+      cursor: default;
+    }
+    .option input {
+      margin-right: 12px;
+      width: 20px;
+      height: 20px;
+      accent-color: #6366f1;
+    }
+    .option-text {
+      flex: 1;
+      font-size: 1rem;
+    }
+    .option-icon {
+      font-size: 1.25rem;
+    }
+    .feedback {
+      padding: 16px;
+      border-radius: 12px;
+      margin-top: 16px;
+      display: none;
+    }
+    .feedback.correct {
+      background: #d1fae5;
+      color: #065f46;
+    }
+    .feedback.incorrect {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+    .explanation {
+      margin-top: 16px;
+      padding: 16px;
+      background: #fef3c7;
+      border-radius: 12px;
+      color: #92400e;
+      display: none;
+    }
+    .btn-row {
+      display: flex;
+      gap: 12px;
+      margin-top: 20px;
+    }
+    .btn-row .btn {
+      flex: 1;
+    }
+    /* Results Section */
+    #results-section {
+      display: none;
+    }
+    .results-header {
+      text-align: center;
+      padding: 40px;
+      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+      color: white;
+    }
+    .trophy {
+      font-size: 4rem;
+      margin-bottom: 16px;
+    }
+    .score-display {
+      font-size: 4rem;
+      font-weight: 700;
+      margin: 20px 0;
+    }
+    .score-text {
+      font-size: 1.25rem;
+      opacity: 0.9;
+    }
+    .results-message {
+      padding: 20px;
+      margin: 20px;
+      border-radius: 12px;
+      text-align: center;
+      font-size: 1.1rem;
+    }
+    .results-message.excellent {
+      background: #d1fae5;
+      color: #065f46;
+    }
+    .results-message.good {
+      background: #fef3c7;
+      color: #92400e;
+    }
+    .results-message.needs-work {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+    .results-buttons {
+      padding: 0 30px 30px;
+      display: flex;
+      gap: 12px;
+    }
+    .results-buttons .btn {
+      flex: 1;
+    }
+    @media (max-width: 600px) {
+      .header h1 {
+        font-size: 1.5rem;
+      }
+      
+      .content {
+        padding: 20px;
+      }
+      
+      .btn-row {
+        flex-direction: column;
+      }
+      
+      .results-buttons {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <!-- Input Section -->
+      <div id="input-section">
+        <div class="header">
+          <h1>✨ AI Quiz Generator</h1>
+          <p>Paste any paragraph and generate quiz questions instantly</p>
+        </div>
+        <div class="content">
+          <div class="input-section">
+            <label for="paragraph">Enter Your Text</label>
+            <textarea 
+              id="paragraph" 
+              placeholder="Paste your paragraph here... For example: 'The Great Wall of China is one of the greatest wonders of the world. It was built over 2,000 years ago by Emperor Qin Shi Huang. The wall stretches over 13,000 miles and was constructed to protect China from invasions. Millions of workers, including soldiers, peasants, and prisoners, were involved in its construction.'"
+            ></textarea>
+            <p class="char-count" id="char-count">0 characters (minimum 50 required)</p>
+          </div>
+          <div class="slider-section">
+            <div class="slider-header">
+              <label>Number of Questions</label>
+              <span id="num-display">5</span>
+            </div>
+            <input type="range" id="num-questions" min="2" max="10" value="5">
+          </div>
+          <button class="btn" id="generate-btn" disabled>🚀 Generate Quiz</button>
+        </div>
+      </div>
+      <!-- Quiz Section -->
+      <div id="quiz-section">
+        <div class="content">
+          <div class="quiz-header">
+            <div class="quiz-info">
+              <h2 id="quiz-topic">Quiz</h2>
+              <p id="score-display">Score: 0/0</p>
+            </div>
+            <button class="btn btn-secondary" id="reset-btn" style="width: auto; padding: 10px 20px;">↺ Reset</button>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" id="progress-fill"></div>
+          </div>
+          <div class="question-card">
+            <p class="question-number" id="question-number">Question 1 of 5</p>
+            <p class="question-text" id="question-text"></p>
+          </div>
+          <div class="options" id="options"></div>
+          <div class="feedback" id="feedback"></div>
+          
+          <div class="explanation" id="explanation"></div>
+          <div class="btn-row">
+            <button class="btn btn-secondary" id="explain-btn" style="display: none;">💡 Show Explanation</button>
+            <button class="btn" id="submit-btn">Submit Answer</button>
+          </div>
+        </div>
+      </div>
+      <!-- Results Section -->
+      <div id="results-section">
+        <div class="results-header">
+          <div class="trophy">🏆</div>
+          <h2>Quiz Complete!</h2>
+          <div class="score-display" id="final-score">0%</div>
+          <p class="score-text" id="final-text">You got 0 out of 0 correct</p>
+        </div>
+        <div class="results-message" id="results-message"></div>
+        <div class="results-buttons">
+          <button class="btn btn-secondary" id="retry-btn">↺ Try Again</button>
+          <button class="btn" id="new-quiz-btn">📝 New Quiz</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Quiz Generator Logic
+    function shuffleArray(array) {
+      const shuffled = [...array];
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+      return shuffled;
+    }
+    function generateDistractors(correctAnswer, allEntities) {
+      const distractors = [];
+      const filtered = allEntities.filter(e => 
+        e.toLowerCase() !== correctAnswer.toLowerCase() && e.length > 1
+      );
+      
+      for (const entity of filtered) {
+        if (distractors.length >= 3) break;
+        if (!distractors.includes(entity)) {
+          distractors.push(entity);
+        }
+      }
+      
+      const generic = ["None of the above", "All of the above", "Cannot be determined", "Not mentioned"];
+      let i = 0;
+      while (distractors.length < 3 && i < generic.length) {
+        if (generic[i] !== correctAnswer) {
+          distractors.push(generic[i]);
+        }
+        i++;
+      }
+      
+      return distractors.slice(0, 3);
+    }
+    function extractTopic(doc) {
+      const nouns = doc.nouns().out('array');
+      const topics = doc.topics().out('array');
+      if (topics.length > 0) return topics[0];
+      if (nouns.length > 0) return nouns[0];
+      return "the given text";
+    }
+    function generateQuiz(paragraph, numQuestions) {
+      const doc = nlp(paragraph);
+      const questions = [];
+      
+      const sentences = doc.sentences().out('array');
+      const people = doc.people().out('array');
+      const places = doc.places().out('array');
+      const organizations = doc.organizations().out('array');
+      const nouns = doc.nouns().out('array');
+      const numbers = doc.numbers().out('array');
+      
+      const allEntities = [...people, ...places, ...organizations, ...nouns.slice(0, 10)];
+      const topic = extractTopic(doc);
+      // Fill-in-the-blank questions
+      sentences.forEach((sentence, idx) => {
+        if (questions.length >= numQuestions) return;
+        
+        const sentDoc = nlp(sentence);
+        const subjects = sentDoc.match('#Noun').out('array');
+        const verbPhrases = sentDoc.verbs().out('array');
+        
+        if (subjects.length > 0 && verbPhrases.length > 0 && sentence.length > 20) {
+          const subject = subjects[0];
+          const questionText = sentence.replace(new RegExp(subject, 'i'), '______');
+          
+          if (questionText !== sentence && subject.length > 2) {
+            const distractors = generateDistractors(subject, allEntities);
+            const options = shuffleArray([subject, ...distractors]);
+            
+            questions.push({
+              id: `q-${idx}-subject`,
+              question: `Fill in the blank: "${questionText}"`,
+              options,
+              correctAnswer: subject,
+              explanation: `The complete sentence is: "${sentence}"`
+            });
+          }
+        }
+      });
+      // True/False questions
+      sentences.forEach((sentence, idx) => {
+        if (questions.length >= numQuestions) return;
+        if (sentence.length < 30) return;
+        
+        const isTrue = Math.random() > 0.5;
+        let questionSentence = sentence;
+        
+        if (!isTrue) {
+          const sentDoc = nlp(sentence);
+          const nums = sentDoc.numbers().out('array');
+          const adjectives = sentDoc.adjectives().out('array');
+          
+          if (nums.length > 0) {
+            const num = nums[0];
+            const fakeNum = String(parseInt(num) + Math.floor(Math.random() * 10) + 1);
+            questionSentence = sentence.replace(num, fakeNum);
+          } else if (adjectives.length > 0) {
+            const opposites = {
+              'large': 'small', 'big': 'tiny', 'fast': 'slow', 'good': 'bad',
+              'new': 'old', 'young': 'ancient', 'high': 'low', 'hot': 'cold'
+            };
+            const adj = adjectives[0].toLowerCase();
+            if (opposites[adj]) {
+              questionSentence = sentence.replace(new RegExp(adj, 'i'), opposites[adj]);
+            }
+          }
+        }
+        
+        if (questionSentence !== sentence || isTrue) {
+          questions.push({
+            id: `q-${idx}-tf`,
+            question: `True or False: "${questionSentence}"`,
+            options: ['True', 'False'],
+            correctAnswer: isTrue ? 'True' : 'False',
+            explanation: isTrue 
+              ? `This statement is directly from the text.`
+              : `The original text states: "${sentence}"`
+          });
+        }
+      });
+      // People questions
+      if (people.length > 0 && questions.length < numQuestions) {
+        const person = people[0];
+        const personSentence = sentences.find(s => s.toLowerCase().includes(person.toLowerCase()));
+        
+        if (personSentence) {
+          const distractors = generateDistractors(person, [...places, ...organizations, ...people.slice(1)]);
+          const options = shuffleArray([person, ...distractors]);
+          
+          questions.push({
+            id: `q-person`,
+            question: `Who is mentioned in: "${personSentence.substring(0, 50)}..."?`,
+            options,
+            correctAnswer: person,
+            explanation: `${person} is mentioned in the text.`
+          });
+        }
+      }
+      // Place questions
+      if (places.length > 0 && questions.length < numQuestions) {
+        const place = places[0];
+        const distractors = generateDistractors(place, [...people, ...organizations, ...places.slice(1)]);
+        const options = shuffleArray([place, ...distractors]);
+        
+        questions.push({
+          id: `q-place`,
+          question: `Which location is mentioned in the text?`,
+          options,
+          correctAnswer: place,
+          explanation: `${place} is a location mentioned in the passage.`
+        });
+      }
+      // Number questions
+      if (numbers.length > 0 && questions.length < numQuestions) {
+        const number = numbers[0];
+        const numSentence = sentences.find(s => s.includes(number));
+        
+        if (numSentence) {
+          const fakeNums = [
+            String(parseInt(number) + 5),
+            String(parseInt(number) - 3),
+            String(parseInt(number) * 2)
+          ].filter(n => n !== number && parseInt(n) > 0);
+          
+          const options = shuffleArray([number, ...fakeNums.slice(0, 3)]);
+          
+          questions.push({
+            id: `q-number`,
+            question: `What number is mentioned in: "${numSentence.substring(0, 60)}..."?`,
+            options,
+            correctAnswer: number,
+            explanation: `The text mentions the number ${number}.`
+          });
+        }
+      }
+      // Main idea question
+      if (questions.length < numQuestions) {
+        const mainIdeas = [
+          `The text primarily discusses ${topic}`,
+          `The passage is about cooking recipes`,
+          `The text focuses on mathematical theories`,
+          `The passage describes weather patterns`
+        ];
+        
+        questions.push({
+          id: `q-main-idea`,
+          question: `What is the main topic of this passage?`,
+          options: shuffleArray(mainIdeas),
+          correctAnswer: mainIdeas[0],
+          explanation: `The passage primarily discusses ${topic}.`
+        });
+      }
+      return { questions: questions.slice(0, numQuestions), topic };
+    }
+    // DOM Elements
+    const paragraphInput = document.getElementById('paragraph');
+    const charCount = document.getElementById('char-count');
+    const numQuestionsSlider = document.getElementById('num-questions');
+    const numDisplay = document.getElementById('num-display');
+    const generateBtn = document.getElementById('generate-btn');
+    const inputSection = document.getElementById('input-section');
+    const quizSection = document.getElementById('quiz-section');
+    const resultsSection = document.getElementById('results-section');
+    // Quiz state
+    let quiz = null;
+    let currentQuestion = 0;
+    let score = 0;
+    let selectedAnswer = null;
+    let isAnswered = false;
+    // Event Listeners
+    paragraphInput.addEventListener('input', () => {
+      const len = paragraphInput.value.length;
+      charCount.textContent = `${len} characters${len < 50 ? ' (minimum 50 required)' : ''}`;
+      charCount.classList.toggle('valid', len >= 50);
+      generateBtn.disabled = len < 50;
+    });
+    numQuestionsSlider.addEventListener('input', () => {
+      numDisplay.textContent = numQuestionsSlider.value;
+    });
+    generateBtn.addEventListener('click', () => {
+      const text = paragraphInput.value.trim();
+      if (text.length < 50) return;
+      quiz = generateQuiz(text, parseInt(numQuestionsSlider.value));
+      currentQuestion = 0;
+      score = 0;
+      if (quiz.questions.length === 0) {
+        alert('Could not generate questions. Try a longer or more descriptive paragraph.');
+        return;
+      }
+      inputSection.style.display = 'none';
+      quizSection.style.display = 'block';
+      document.getElementById('quiz-topic').textContent = `Quiz: ${quiz.topic}`;
+      displayQuestion();
+    });
+    document.getElementById('reset-btn').addEventListener('click', resetQuiz);
+    document.getElementById('retry-btn').addEventListener('click', retryQuiz);
+    document.getElementById('new-quiz-btn').addEventListener('click', resetQuiz);
+    document.getElementById('submit-btn').addEventListener('click', () => {
+      if (!isAnswered && selectedAnswer !== null) {
+        submitAnswer();
+      } else if (isAnswered) {
+        nextQuestion();
+      }
+    });
+    document.getElementById('explain-btn').addEventListener('click', () => {
+      const explanation = document.getElementById('explanation');
+      explanation.style.display = explanation.style.display === 'none' ? 'block' : 'none';
+    });
+    function displayQuestion() {
+      const q = quiz.questions[currentQuestion];
+      
+      document.getElementById('question-number').textContent = `Question ${currentQuestion + 1} of ${quiz.questions.length}`;
+      document.getElementById('question-text').textContent = q.question;
+      document.getElementById('score-display').textContent = `Score: ${score}/${currentQuestion}`;
+      document.getElementById('progress-fill').style.width = `${((currentQuestion + 1) / quiz.questions.length) * 100}%`;
+      
+      const optionsContainer = document.getElementById('options');
+      optionsContainer.innerHTML = q.options.map((opt, idx) => `
+        <div class="option" data-index="${idx}">
+          <input type="radio" name="answer" id="opt-${idx}">
+          <span class="option-text">${opt}</span>
+          <span class="option-icon"></span>
+        </div>
+      `).join('');
+      document.querySelectorAll('.option').forEach(opt => {
+        opt.addEventListener('click', () => {
+          if (isAnswered) return;
+          document.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+          opt.classList.add('selected');
+          opt.querySelector('input').checked = true;
+          selectedAnswer = q.options[parseInt(opt.dataset.index)];
+        });
+      });
+      // Reset state
+      selectedAnswer = null;
+      isAnswered = false;
+      document.getElementById('feedback').style.display = 'none';
+      document.getElementById('explanation').style.display = 'none';
+      document.getElementById('explanation').textContent = q.explanation;
+      document.getElementById('explain-btn').style.display = 'none';
+      document.getElementById('submit-btn').textContent = 'Submit Answer';
+    }
+    function submitAnswer() {
+      if (selectedAnswer === null) return;
+      
+      const q = quiz.questions[currentQuestion];
+      const isCorrect = selectedAnswer === q.correctAnswer;
+      
+      if (isCorrect) score++;
+      isAnswered = true;
+      // Update options styling
+      document.querySelectorAll('.option').forEach(opt => {
+        opt.classList.add('disabled');
+        const optText = opt.querySelector('.option-text').textContent;
+        const icon = opt.querySelector('.option-icon');
+        
+        if (optText === q.correctAnswer) {
+          opt.classList.add('correct');
+          icon.textContent = '✓';
+        } else if (optText === selectedAnswer && !isCorrect) {
+          opt.classList.add('incorrect');
+          icon.textContent = '✗';
+        }
+      });
+      // Show feedback
+      const feedback = document.getElementById('feedback');
+      feedback.style.display = 'block';
+      feedback.className = `feedback ${isCorrect ? 'correct' : 'incorrect'}`;
+      feedback.innerHTML = isCorrect 
+        ? '✓ Correct! Well done!' 
+        : `✗ Incorrect. The correct answer is: ${q.correctAnswer}`;
+      document.getElementById('explain-btn').style.display = 'block';
+      document.getElementById('submit-btn').textContent = 
+        currentQuestion < quiz.questions.length - 1 ? 'Next Question →' : 'See Results 🏆';
+    }
+    function nextQuestion() {
+      if (currentQuestion < quiz.questions.length - 1) {
+        currentQuestion++;
+        displayQuestion();
+      } else {
+        showResults();
+      }
+    }
+    function showResults() {
+      quizSection.style.display = 'none';
+      resultsSection.style.display = 'block';
+      const percentage = Math.round((score / quiz.questions.length) * 100);
+      document.getElementById('final-score').textContent = `${percentage}%`;
+      document.getElementById('final-text').textContent = `You got ${score} out of ${quiz.questions.length} correct`;
+      const msg = document.getElementById('results-message');
+      if (percentage >= 80) {
+        msg.className = 'results-message excellent';
+        msg.textContent = '🎉 Excellent work! You\'ve mastered this content!';
+      } else if (percentage >= 50) {
+        msg.className = 'results-message good';
+        msg.textContent = '👍 Good effort! Review the material and try again.';
+      } else {
+        msg.className = 'results-message needs-work';
+        msg.textContent = '📚 Keep learning! Read the text again and retry.';
+      }
+    }
+    function retryQuiz() {
+      currentQuestion = 0;
+      score = 0;
+      resultsSection.style.display = 'none';
+      quizSection.style.display = 'block';
+      displayQuestion();
+    }
+    function resetQuiz() {
+      quiz = null;
+      currentQuestion = 0;
+      score = 0;
+      paragraphInput.value = '';
+      charCount.textContent = '0 characters (minimum 50 required)';
+      charCount.classList.remove('valid');
+      generateBtn.disabled = true;
+      quizSection.style.display = 'none';
+      resultsSection.style.display = 'none';
+      inputSection.style.display = 'block';
+    }
+  </script>
 </body>
 </html>
