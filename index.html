@@ -5,13 +5,14 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;600;700&family=JetBrains+Mono:wght@500;700&family=Oswald:wght@700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <style>
 :root{--bg:#d9ecfd;--pn:#e6f3ff;--pn2:#f4faff;--tx:#0b2545;--mu:#4b6587;--ac:#1f5fd6;--ln:#b6d5f2;--hv:#cde5fb;--st:#08142a;--ok:#15803d;--bad:#c2261d;
  --mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);height:100%}
 *{box-sizing:border-box}html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
 body{height:100%;margin:0;display:flex;flex-direction:column;overflow:hidden;padding-right:15px;font:15px/1.5 "Lexend",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--tx)}
 button{font:inherit;cursor:pointer;border-radius:10px;border:1px solid var(--ln);background:var(--pn2);color:var(--tx);padding:7px 12px}
-button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid #f59e0b;outline-offset:2px}
+button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid #f59e0b;outline-offset:2px}
 code{font-family:var(--mono)}
 
 /* navbar + footer */
@@ -26,7 +27,7 @@ code{font-family:var(--mono)}
 
 /* layout */
 #wrap{flex:1;display:flex;min-height:0;}
-#sb{width:310px;flex:none;background:var(--pn);border-right:1px solid var(--ln);overflow-y:auto;padding:14px 14px 22px}
+#sb{width:330px;flex:none;background:var(--pn);border-right:1px solid var(--ln);overflow-y:auto;padding:14px 14px 22px}
 #mn{flex:1;min-width:0;display:flex;flex-direction:column;background:var(--st)}
 
 /* stage */
@@ -35,10 +36,10 @@ code{font-family:var(--mono)}
 #sth .led.on{background:#22c55e;box-shadow:0 0 10px #22c55e}
 #sth #stt{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 #sth .xy{margin-left:auto;font-family:var(--mono);color:#7dd3fc;white-space:nowrap}
-#sw{flex:1;position:relative;min-height:0;overflow:hidden;background:radial-gradient(ellipse at 50% 40%,#13294d 0,#08142a 72%)}
+#sw{flex:1;position:relative;min-height:0;overflow:hidden;padding:0px;background:radial-gradient(ellipse at 50% 40%,#13294d 0,#08142a 72%)}
 .card{position:absolute;inset:0;overflow:hidden}
 .card *{visibility:hidden}
-.card canvas.stage{visibility:visible;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);border-radius:12px;background:#0f1d36;box-shadow:0 0 0 1px #24406b,0 24px 60px rgba(0,0,0,.55);transition:box-shadow .35s;cursor:crosshair}
+.card canvas.stage{visibility:visible;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);border-radius:12px;background:#0f1d36;padding:0px;box-shadow:0 0 0 1px #24406b,0 24px 60px rgba(0,0,0,.55);transition:box-shadow .35s;cursor:crosshair}
 .card canvas.stage.pulse{box-shadow:0 0 0 3px #38bdf8,0 0 44px rgba(56,189,248,.6)}
 .card canvas.stage.err{box-shadow:0 0 0 3px #ef4444,0 0 44px rgba(239,68,68,.55)}
 #ro{flex:none;padding:9px 14px;background:#0d1c36;color:#e3eeff;border-top:1px solid #1b2f52;font-size:14px;min-height:44px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
@@ -78,6 +79,7 @@ code{font-family:var(--mono)}
 .it:hover{background:var(--hv)}
 .it i{font-style:normal;width:26px;height:26px;flex:none;border-radius:50%;background:var(--pn2);border:1px solid var(--ln);display:grid;place-items:center;font-size:12px;color:var(--mu)}
 .it.dn i{background:#16a34a;color:#fff;border-color:#16a34a}
+.it em{font-style:normal;font-size:10.5px;font-weight:700;color:#7c2d12;background:#fed7aa;border-radius:6px;padding:1px 6px;margin-left:auto}
 
 /* sidebar: task */
 .back{border:0;background:none;color:var(--ac);padding:4px 2px;font-weight:600}
@@ -100,12 +102,19 @@ ol.stl>li.cur{border:2px solid var(--ac);background:#fff;box-shadow:0 6px 18px r
 .ssum{color:var(--mu);margin-top:2px}.lsn{margin-top:4px;font-size:12.5px;color:#14532d}
 .blk{margin-top:10px}.blk h4{margin:0 0 3px;font-size:13px;color:var(--tx)}.blk p{margin:0}
 .tip{font-size:12.5px;color:var(--mu);margin-top:6px!important}
+.tip.dec{color:#7c2d12;background:#fff1e6;border-radius:8px;padding:6px 8px}
+.chips[hidden]{display:none!important}
 .chips{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
 .chips.sm code{background:var(--hv);padding:1px 6px;border-radius:5px;font-size:12px}
-.chip{font-family:var(--mono);font-weight:700;font-size:14px;background:#0b1d3a;color:#a5f3fc;border-radius:8px;padding:5px 9px;word-break:break-word}
+.chip{font-family:var(--mono);font-weight:700;font-size:13.5px;background:#0b1d3a;color:#a5f3fc;border-radius:8px;padding:5px 9px;word-break:break-word}
 .chip.ok{background:#dcfce7;color:#166534;text-decoration:line-through}
 .chip.nx{box-shadow:0 0 0 2px #f59e0b}
 .then{font-size:12px;color:var(--mu)}
+.rule{font-family:var(--mono);font-size:13px;background:#eef6ff;border:1px dashed var(--ac);border-radius:9px;padding:7px 9px;color:var(--tx);line-height:1.45}
+.rule b{color:var(--ac)}.rule .q{display:inline-block;min-width:26px;text-align:center;background:#f59e0b;color:#fff;border-radius:6px;font-weight:700}
+.opts{display:grid;gap:6px;margin-top:8px}.opts div{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--mu)}
+.opts .chip{flex:none;min-width:118px;text-align:center}
+.means{font-size:12px;color:var(--mu);margin-top:4px}.means i{font-family:var(--mono);font-style:normal}
 .term{margin-top:10px;background:#0b1d3a;border-radius:12px;padding:8px 8px 8px 12px}
 .term:focus-within{box-shadow:0 0 0 3px #f59e0b}
 .term.shake,.startb.nudge{animation:sh .35s}
@@ -122,10 +131,15 @@ ol.stl>li.cur{border:2px solid var(--ac);background:#fff;box-shadow:0 6px 18px r
 .lks{margin-top:14px;display:flex;flex-wrap:wrap;gap:6px;font-size:13px;color:var(--mu);align-items:center}
 .lks a{color:var(--ac);font-weight:600;text-decoration:none;border:1px solid var(--ln);border-radius:8px;padding:4px 8px;background:var(--pn2)}
 .pdfz{margin-top:14px;border-top:1px solid var(--ln);padding-top:12px}
+.pdfz h4{margin:0 0 6px;font-size:14px}
+.pdfz .two{display:grid;grid-template-columns:1fr 118px;gap:8px}
 .pdfz label{font-size:13px;color:var(--mu)}
-.pdfz input{width:100%;margin:4px 0 8px;font:inherit;padding:7px 10px;border:1px solid var(--ln);border-radius:9px;background:#fff;color:var(--tx)}
+.pdfz input,.pdfz select{width:100%;margin:4px 0 8px;font:inherit;padding:7px 10px;border:1px solid var(--ln);border-radius:9px;background:#fff;color:var(--tx)}
+.pdfz .bad{border-color:var(--bad);box-shadow:0 0 0 3px rgba(194,38,29,.18)}
+.req{color:var(--bad);font-weight:700}
 .pdfb{width:100%;padding:10px;font-weight:700;background:#fff;border:2px solid var(--ac);color:var(--ac)}
 .pst{font-size:13px;color:var(--mu);margin-top:6px;min-height:1em}
+.pst.bad{color:var(--bad);font-weight:600}
 
 @media(max-width:760px){#nav{grid-template-columns:1fr;justify-items:center;gap:4px;padding:8px 12px}#nav .brand,#nav .prog{grid-column:1;grid-row:auto;justify-self:center}#nav .brand{font-size:19px}#nav .brand img{height:30px}#wrap{flex-direction:column}#mn{order:-1;flex:none;height:46vh}#sb{width:100%;flex:1;border-right:0;border-top:1px solid var(--ln)}#ft{display:none}#nav .pb{width:70px}#nav .brand small{display:none}#sth .xy{display:none}}
 @media(prefers-reduced-motion:reduce){#burst .cf,.rip{display:none}#burst .msg,.term.shake,.startb.nudge{animation:none}}
@@ -135,61 +149,83 @@ ol.stl>li.cur{border:2px solid var(--ac);background:#fff;box-shadow:0 6px 18px r
 <main id="mn"><div id="sth"><span class="led"></span><span id="stt"></span><span class="xy" id="xy"></span></div>
 <div id="sw"><div class="xl" id="xv"></div><div class="xl" id="xh"></div><div id="toast"></div><div id="hint"></div><div id="burst"></div><div id="lock"></div></div>
 <div id="ro"></div></main></div>
-<footer id="ft"><span><b>Commands only:</b> type exactly what the step shows, then press Run.</span><span><b>Tip:</b> hover the stage to read its x, y positions.</span></footer>
+<footer id="ft"><span><b>Train the AI with short codes:</b> read the rule, type its code (for example <code>stop-at /line</code>), then press Run.</span><span><b>Decisions:</b> when a rule ends with ?, pick the action you think is correct.</span></footer>
 <script>
 let cur=0,stopFns=[],sel=0,done=new Set();
-try{JSON.parse(localStorage.getItem('aiw')||'[]').forEach(x=>done.add(x))}catch(e){}
+try{JSON.parse(localStorage.getItem('aiw2')||'[]').forEach(x=>done.add(x))}catch(e){}
 const raf=fn=>{const id=cur;(function f(){if(id!==cur)return;fn();requestAnimationFrame(f)})()};
 const mk=()=>{const k=document.createElement('canvas');k.width=640;k.height=380;k.className='cv';return k};
 const $=(b,s)=>b.querySelector(s);
 
-/* ---------- 1. Obstacle avoidance ---------- */
+/* ---------- 1. Obstacle avoidance (rule-trained) ---------- */
 function T_avoid(b){
  const c=mk(),x=c.getContext('2d'),st=document.createElement('p');b.append(c,st);
- const R={x:60,y:190,a:0},O=[[300,120,32],[390,270,38],[520,150,30],[200,290,26]];b.api={R,O};
- c.onclick=e=>{const r=c.getBoundingClientRect();O.push([(e.clientX-r.left)*640/r.width,(e.clientY-r.top)*380/r.height,24])};
+ const R={x:60,y:190,a:0},O=[[300,120,32],[390,270,38],[520,150,30],[200,290,26]],K={front:null,side:null},E={hits:0,turns:0,crash:0,test:null};b.api={R,O,K,E};
  const hit=(X,Y)=>X<0||Y<0||X>640||Y>380||O.some(o=>Math.hypot(X-o[0],Y-o[1])<o[2]+10);
  const ray=a=>{for(let d=10;d<110;d+=5)if(hit(R.x+Math.cos(a)*d,R.y+Math.sin(a)*d))return d;return 110};
- raf(()=>{const L=ray(R.a-.6),C=ray(R.a),Q=ray(R.a+.6);let s='✅ Path clear → forward',v=2.2;
-  if(C<75||L<50||Q<50){const t=L>Q?-1:1;R.a+=t*.09;v=.8;s='⚠️ Obstacle! Turning '+(t<0?'left':'right')}
-  R.x=Math.max(8,Math.min(632,R.x+Math.cos(R.a)*v));R.y=Math.max(8,Math.min(372,R.y+Math.sin(R.a)*v));
-  x.clearRect(0,0,640,380);x.fillStyle='#64748b';O.forEach(o=>{x.beginPath();x.arc(o[0],o[1],o[2],0,7);x.fill()});
-  [[L,-.6],[C,0],[Q,.6]].forEach(([d,o])=>{x.strokeStyle=d<75?'#ef4444':'#22c55e';x.beginPath();x.moveTo(R.x,R.y);x.lineTo(R.x+Math.cos(R.a+o)*d,R.y+Math.sin(R.a+o)*d);x.stroke()});
-  x.fillStyle='#6366f1';x.beginPath();x.arc(R.x,R.y,12,0,7);x.fill();x.fillStyle='#fff';x.beginPath();x.arc(R.x+Math.cos(R.a)*7,R.y+Math.sin(R.a)*7,4,0,7);x.fill();
-  st.textContent=`Left ${L} · Centre ${C} · Right ${Q} → ${s}`})}
+ let lastT=performance.now();
+ raf(()=>{const now=performance.now(),ns=Math.max(1,Math.min(6,Math.round((now-lastT)/16.7)));lastT=now;let L,C,Q,s,v;
+  for(let q=0;q<ns;q++){L=ray(R.a-.6);C=ray(R.a);Q=ray(R.a+.6);s='✅ Path clear → driving forward';v=2.2;
+  if(K.front&&C<K.front){const t=L>Q?-1:1;R.a+=t*.09;v=C<=14?.2:.8;E.turns++;s='⚠️ Obstacle ahead → turning '+(t<0?'left':'right')+' to the open side'}
+  else if(C<=14){v=0;s='💥 Collision! No avoidance rule trained yet';if(!E.crash){E.crash=1;E.hits++}}
+  else if(K.side&&(L<K.side||Q<K.side)){v=1.1;s='🐢 Side obstacle close → slowing down'}
+  if(C>14)E.crash=0;
+  R.x=Math.max(8,Math.min(632,R.x+Math.cos(R.a)*v));R.y=Math.max(8,Math.min(372,R.y+Math.sin(R.a)*v));}
+  x.clearRect(0,0,640,380);x.strokeStyle='rgba(148,163,184,.12)';x.lineWidth=1;
+  for(let i=0;i<=640;i+=40){x.beginPath();x.moveTo(i,0);x.lineTo(i,380);x.stroke()}for(let j=0;j<=380;j+=40){x.beginPath();x.moveTo(0,j);x.lineTo(640,j);x.stroke()}
+  x.fillStyle='#64748b';O.forEach(o=>{x.beginPath();x.arc(o[0],o[1],o[2],0,7);x.fill()});
+  [[L,-.6],[C,0],[Q,.6]].forEach(([d,o],i)=>{const th=i==1?(K.front||75):(K.side||50);x.strokeStyle=d<th?'#ef4444':'#22c55e';x.lineWidth=2;x.beginPath();x.moveTo(R.x,R.y);x.lineTo(R.x+Math.cos(R.a+o)*d,R.y+Math.sin(R.a+o)*d);x.stroke()});
+  x.lineWidth=1;x.fillStyle=E.crash?'#ef4444':'#6366f1';x.beginPath();x.arc(R.x,R.y,12,0,7);x.fill();x.fillStyle='#fff';x.beginPath();x.arc(R.x+Math.cos(R.a)*7,R.y+Math.sin(R.a)*7,4,0,7);x.fill();
+  G.t(x,'Rules trained: '+((K.front?1:0)+(K.side?1:0))+'/2'+(E.test?'   ·   Test drive '+Math.min(6,Math.floor((performance.now()-E.test.t0)/1000))+'/6 s · collisions '+(E.hits-E.test.h):''),14,24,14,'#cbd5e1');
+  G.t(x,s,14,366,14,/💥/.test(s)?'#fca5a5':/⚠️|🐢/.test(s)?'#fcd34d':'#86efac');
+  st.textContent=`Front ${C} · Left ${L} · Right ${Q} → ${s}`})}
 
-/* ---------- 3. Line follower ---------- */
+/* ---------- 3. Line follower (rule-trained) ---------- */
 function T_line(b){
  const c=mk(),x=c.getContext('2d'),st=document.createElement('p');b.append(c,st);
- const f=X=>190+80*Math.sin(X/75),on=s=>Math.abs(s[1]-f(s[0]))<6;
- let R,lt=1;const rs=()=>R={x:20,y:f(20),a:Math.atan(80/75*Math.cos(20/75))};rs();b.api={get R(){return R},rs,f};
- raf(()=>{const co=Math.cos(R.a),si=Math.sin(R.a),F=[R.x+co*16,R.y+si*16],Lf=[F[0]+si*11,F[1]-co*11],Rt=[F[0]-si*11,F[1]+co*11],l=on(Lf),r=on(Rt);let s='Line between sensors → straight';
-  if(l&&!r){R.a-=.07;lt=-1;s='Left sensor sees line → steer left'}else if(r&&!l){R.a+=.07;lt=1;s='Right sensor sees line → steer right'}else if(!l&&!r&&Math.abs(F[1]-f(F[0]))>14){R.a+=lt*.04;s='Lost the line → searching'}
-  const sp=b.sp||2;R.x+=Math.cos(R.a)*sp;R.y+=Math.sin(R.a)*sp;if(R.x>625)rs();
-  x.clearRect(0,0,640,380);x.strokeStyle='#94a3b8';x.lineWidth=12;x.beginPath();for(let X=0;X<=640;X+=4)X?x.lineTo(X,f(X)):x.moveTo(X,f(X));x.stroke();x.lineWidth=1;
-  x.save();x.translate(R.x,R.y);x.rotate(R.a);x.fillStyle='#6366f1';x.fillRect(-14,-9,28,18);x.restore();
+ const f=X=>190+80*Math.sin(X/75),on=s=>Math.abs(s[1]-f(s[0]))<6,K={L:null,R:null,lost:null},E={laps:0,off:0,test:null};
+ let R,lt=1;const rs=()=>R={x:20,y:f(20),a:Math.atan(80/75*Math.cos(20/75))};rs();b.api={get R(){return R},rs,f,K,E};
+ let lastT=performance.now();
+ raf(()=>{const now=performance.now(),ns=Math.max(1,Math.min(6,Math.round((now-lastT)/16.7)));lastT=now;let co,si,F,Lf,Rt,l,r,lost,s;
+  for(let q=0;q<ns;q++){co=Math.cos(R.a);si=Math.sin(R.a);F=[R.x+co*16,R.y+si*16];Lf=[F[0]+si*11,F[1]-co*11];Rt=[F[0]-si*11,F[1]+co*11];l=on(Lf);r=on(Rt);lost=!l&&!r&&Math.abs(F[1]-f(F[0]))>14;s='Line between sensors → straight';
+  const act=(k,side)=>{const a=K[k];if(a=='steer left'){R.a-=.07;lt=-1;return side+' sensor sees the line → steer left'}if(a=='steer right'){R.a+=.07;lt=1;return side+' sensor sees the line → steer right'}return side+' sensor sees the line → '+(a?'going straight':'no rule, going straight')};
+  if(l&&!r)s=act('L','Left');else if(r&&!l)s=act('R','Right');
+  else if(lost){E.off++;if(K.lost=='search for the line'){R.a+=lt*.04;s='Lost the line → searching'}else s='Lost the line → '+(K.lost?'stopped':'no rule, driving blind')}
+  const sp=lost&&K.lost=='stop'?0:(b.sp||2);
+  R.x+=Math.cos(R.a)*sp;R.y+=Math.sin(R.a)*sp;if(R.x>625){if(E.test)E.laps++;rs()}if(R.x<-10||R.y<-30||R.y>410)rs();}
+  x.clearRect(0,0,640,380);x.strokeStyle='#cbd5e1';x.lineWidth=16;x.beginPath();for(let X=0;X<=640;X+=4)X?x.lineTo(X,f(X)):x.moveTo(X,f(X));x.stroke();
+  x.strokeStyle='#111827';x.lineWidth=10;x.stroke();x.lineWidth=1;
+  x.save();x.translate(R.x,R.y);x.rotate(R.a);x.fillStyle='#6366f1';x.fillRect(-14,-9,28,18);x.fillStyle='#1e1b4b';x.fillRect(-10,-12,8,4);x.fillRect(-10,8,8,4);x.restore();
   [[Lf,l],[Rt,r]].forEach(([p,o])=>{x.fillStyle=o?'#22c55e':'#ef4444';x.beginPath();x.arc(p[0],p[1],4,0,7);x.fill()});
+  G.t(x,'Rules trained: '+['L','R','lost'].filter(k=>K[k]).length+'/3  ·  speed '+(b.sp||2)+(E.test?'  ·  test lap '+(E.laps?'✅ finished':'running…'):''),14,24,14,'#e2e8f0');
+  G.t(x,s,14,366,14,/no rule|blind|stopped/.test(s)?'#fca5a5':'#86efac');
   st.textContent=`Left sensor: ${l?'ON line':'off'} · Right sensor: ${r?'ON line':'off'} → ${s}`})}
 
-/* ---------- 4. Robotic arm ---------- */
+/* ---------- 4. Robotic arm (camera + picking rules) ---------- */
 function T_arm(b){
  const c=mk(),x=c.getContext('2d');b.append(c);
- const B=[320,370],L1=150,L2=130,bin=[580,345];
+ const B=[320,370],L1=150,L2=130,bin=[580,345],NM=['red','green','orange'];
  const ik=(px,py)=>{const dx=px-B[0],dy=py-B[1],d=Math.min(Math.hypot(dx,dy),L1+L2-1),a2=Math.acos((d*d-L1*L1-L2*L2)/(2*L1*L2));return[Math.atan2(dy,dx)-Math.atan2(L2*Math.sin(a2),L1+L2*Math.cos(a2)),a2]};
- let A=ik(320,150),tg=A,q=[],held=null;const O=[[110,352,'#ef4444'],[190,352,'#22c55e'],[470,352,'#f59e0b']];
- c.onclick=e=>{if(q.length||held!=null)return;const r=c.getBoundingClientRect(),X=(e.clientX-r.left)*640/r.width,Y=(e.clientY-r.top)*380/r.height;
-  const i=O.findIndex(o=>Math.abs(o[0]-X)<26&&Math.abs(o[1]-Y)<26&&o[0]<540);if(i<0)return;
-  q=[['go',O[i][0],O[i][1]],['grab',i],['go',bin[0],bin[1]-60],['drop'],['go',320,150]]};
- b.api={O,pick:i=>{if(q.length||held!=null||O[i][0]>540)return 0;q=[['go',O[i][0],O[i][1]],['grab',i],['go',bin[0],bin[1]-60],['drop'],['go',320,150]];return 1},home:()=>{q=[['go',320,150]]},reset:()=>{q=[];held=null;[[110,352],[190,352],[470,352]].forEach((p,i)=>{O[i][0]=p[0];O[i][1]=p[1]})}};raf(()=>{if(q.length&&Math.abs(A[0]-tg[0])+Math.abs(A[1]-tg[1])<.05){const s=q.shift();if(s[0]=='go')tg=ik(s[1],s[2]);else if(s[0]=='grab')held=s[1];else if(s[0]=='drop'){const o=O[held];o[0]=bin[0]-18+Math.random()*36;o[1]=bin[1]+8;held=null}}
+ let A=ik(320,150),tg=A,q=[],held=null;const O=[[110,352,'#ef4444'],[190,352,'#22c55e'],[470,352,'#f59e0b']];b.scan=0;b.pend=[];b.K={};
+ const prog=i=>[['go',O[i][0],O[i][1]],['grab',i],['go',bin[0],bin[1]-60],['drop'],['go',320,150]];
+ b.api={O,pick:i=>{if(q.length||held!=null||O[i][0]>540)return 0;q=prog(i);return 1},home:()=>{q=[['go',320,150]]},reset:()=>{q=[];held=null;b.pend=[];[[110,352],[190,352],[470,352]].forEach((p,i)=>{O[i][0]=p[0];O[i][1]=p[1]})}};
+ raf(()=>{if(!q.length&&held==null&&b.pend.length)b.api.pick(b.pend.shift());
+  if(q.length&&Math.abs(A[0]-tg[0])+Math.abs(A[1]-tg[1])<.05){const s=q.shift();if(s[0]=='go')tg=ik(s[1],s[2]);else if(s[0]=='grab')held=s[1];else if(s[0]=='drop'){const o=O[held];o[0]=bin[0]-18+Math.random()*36;o[1]=bin[1]+8;held=null}}
   A=A.map((v,i)=>v+(tg[i]-v)*.08);const e=[B[0]+L1*Math.cos(A[0]),B[1]+L1*Math.sin(A[0])],h=[e[0]+L2*Math.cos(A[0]+A[1]),e[1]+L2*Math.sin(A[0]+A[1])];
   if(held!=null){O[held][0]=h[0];O[held][1]=h[1]+14}
-  x.clearRect(0,0,640,380);x.fillStyle='#64748b';x.fillRect(bin[0]-35,bin[1]-5,70,40);x.fillStyle='#cbd5e1';x.font='bold 13px system-ui';x.fillText('BIN',bin[0]-12,bin[1]+20);
+  x.clearRect(0,0,640,380);x.fillStyle='#1e293b';x.fillRect(0,366,640,14);x.fillStyle='#64748b';x.fillRect(bin[0]-35,bin[1]-5,70,40);x.fillStyle='#cbd5e1';x.font='bold 13px system-ui';x.fillText('BIN',bin[0]-12,bin[1]+20);
   O.forEach(o=>{x.fillStyle=o[2];x.fillRect(o[0]-14,o[1]-14,28,28)});
   x.lineCap='round';x.strokeStyle='#6366f1';x.lineWidth=14;x.beginPath();x.moveTo(...B);x.lineTo(...e);x.stroke();x.strokeStyle='#a5b4fc';x.lineWidth=10;x.beginPath();x.moveTo(...e);x.lineTo(...h);x.stroke();
-  x.fillStyle='#cbd5e1';x.beginPath();x.arc(e[0],e[1],7,0,7);x.arc(B[0],B[1],10,0,7);x.fill();x.lineWidth=1})}
+  x.fillStyle='#cbd5e1';x.beginPath();x.arc(e[0],e[1],7,0,7);x.arc(B[0],B[1],10,0,7);x.fill();x.lineWidth=1;x.lineCap='butt';
+  x.fillStyle='#334155';x.fillRect(300,14,40,26);x.fillStyle=b.scan?'#38bdf8':'#475569';x.beginPath();x.arc(320,40,7,0,7);x.fill();
+  if(b.scan){const t=performance.now()/1000;if(t-b.scan<1.6){x.fillStyle='rgba(56,189,248,.18)';x.beginPath();x.moveTo(320,40);x.lineTo(40,370);x.lineTo(600,370);x.fill()}
+   O.forEach((o,i)=>{if(o[0]>540||held===i)return;x.strokeStyle='#22c55e';x.lineWidth=2;x.strokeRect(o[0]-20,o[1]-20,40,40);x.lineWidth=1;G.t(x,NM[i]+' ('+Math.round(o[0])+', '+Math.round(o[1])+')',o[0]-22,o[1]-26,11,'#86efac')});
+   G.t(x,'📷 Camera: '+O.filter(o=>o[0]<540).length+' blocks detected on the table',14,24,14,'#7dd3fc')}
+  else G.t(x,'📷 Camera off — the arm cannot see the blocks yet',14,24,14,'#fca5a5');
+  G.t(x,'Rules: '+(Object.keys(b.K).map(k=>k+' → '+b.K[k]).join('  ·  ')||'none trained'),14,46,12,'#cbd5e1')})}
 
 /* ---------- Generic slider → AI decision engine ---------- */
-function E(b,c){
+function E(b,c){c.R=[];
  b.innerHTML=(c.v?`<canvas class="cv vz" width="640" height="360" style="touch-action:none"></canvas><p class="mu">👆 ${c.h}</p>`:'')+`<div class="eg"><div>${c.s.map((s,i)=>`<label>${s[0]}: <b>${s[3]}</b> ${s[4]||''}<input type="range" min="${s[1]}" max="${s[2]}" value="${s[3]}"></label>`).join('')}</div><div class="o"></div></div>`;
  let V=[],Rr={rows:[['','']]};
  const g=()=>{const I=[...b.querySelectorAll('input')],v=I.map(i=>+i.value);I.forEach(i=>i.previousElementSibling.textContent=i.value);const r=c.f(v);V=v;Rr=r;$(b,'.o').innerHTML=`<div class="big">${r.big}</div>`+r.rows.map(x=>`<div class="rw"><span>${x[0]}</span><b>${x[1]}</b></div>`).join('')};
@@ -202,10 +238,17 @@ function E(b,c){
 const cl=(v,a,z)=>Math.max(a,Math.min(z,v));
 const CFG={
 sensor:{s:[['Distance',0,200,80,'cm'],['Light',0,100,60,'%'],['Temperature',0,50,24,'°C'],['Sound',0,100,20,'level']],
- f:([d,l,t,s])=>({big:'🤖 '+(d<30?'STOP 🛑':d<70?'SLOW 🐢':'GO 🟢'),rows:[['Distance sensor → movement',d<30?'Stop':d<70?'Slow down':'Full speed'],['Light sensor → headlights',l<35?'ON 💡':'OFF'],['Temperature → cooling fan',t>30?'ON 🌀':'OFF'],['Sound sensor → alert',s>80?'LOUD – alert 🔔':'Normal']]})},
-traffic:{s:[['North cars',0,30,8],['South cars',0,30,6],['East cars',0,30,15],['West cars',0,30,12]],
- f:([n,s,e,w])=>{const ns=n+s,ew=e+w,t=ns+ew||1,g=Math.round(10+40*ns/t),h=60-g,fx=ns*30+ew*30,ai=ns*h+ew*g,im=fx?Math.round((fx-ai)/fx*100):0;
-  return{big:`🚦 N–S ${g}s &nbsp;|&nbsp; E–W ${h}s`,rows:[['Busiest road',ns>=ew?'North–South':'East–West'],['AI green time N–S',g+' s'],['AI green time E–W',h+' s'],['Waiting score: fixed 30/30',fx],['Waiting score: AI',ai],['Improvement',im+'%']]}}},
+ f:([d,l,t,s])=>{const V0={'front distance':d,light:l,temperature:t,sound:s},A=new Set(),R=CFG.sensor.R||[];R.forEach(r=>{const v=V0[r.k];if(r.op=='below'?v<r.v:v>r.v)A.add(r.a)});
+  const mv=A.has('stop')?'Stop':A.has('slow down')?'Slow down':'Full speed';
+  return{big:'🤖 '+(mv=='Stop'?'STOP 🛑':mv=='Slow down'?'SLOW 🐢':'GO 🟢')+(R.length?'':' · untrained'),rows:[['Distance sensor → movement',mv],['Light sensor → headlights',A.has('headlights on')?'ON 💡':'OFF'],['Temperature → cooling fan',A.has('fan on')?'ON 🌀':'OFF'],['Sound sensor → alert',A.has('sound alert')?'LOUD – alert 🔔':'Normal'],['Rules trained',R.length]]}}},
+traffic:{s:[['North cars',0,30,8],['South cars',0,30,6],['East cars',0,30,15],['West cars',0,30,12],['Emergency',0,1,0]],
+ f:([n,s,e,w,em])=>{const R=CFG.traffic.R||[],cnt=R.includes('count'),ns=n+s,ew=e+w,t=ns+ew||1;let g=30,mode='Fixed timer 30 s / 30 s';
+  if(cnt&&R.includes('more')){g=Math.round(10+40*ns/t);mode='Adaptive: busier road gets more green'}
+  if(cnt&&R.includes('less')){g=Math.round(50-40*ns/t);mode='Adaptive: busier road gets LESS green ⚠️'}
+  if(cnt&&R.includes('skip')){if(!ns&&ew){g=0;mode='Skip empty North–South'}else if(!ew&&ns){g=60;mode='Skip empty East–West'}}
+  const emer=!!(em&&R.includes('emerg'));if(emer){g=60;mode='🚑 Emergency priority on North'}
+  const h=60-g,fx=ns*30+ew*30,ai=ns*h+ew*g,im=fx?Math.round((fx-ai)/fx*100):0;
+  return{gf:g/60,em,emer,mode,big:`🚦 N–S ${g}s &nbsp;|&nbsp; E–W ${h}s`,rows:[['Car-counting camera',cnt?'ON 📷 '+ns+' N–S / '+ew+' E–W':'OFF'],['Timing mode',mode],['AI green time N–S',g+' s'],['AI green time E–W',h+' s'],['Waiting score: fixed 30/30',fx],['Waiting score: AI',ai],['Improvement',im+'%'],['Emergency vehicle',em?(emer?'🚑 given green':'🚑 STUCK at red!'):'none']]}}},
 face:{s:[['Mouth (frown ↔ smile)',-10,10,0],['Eyebrows (angry ↔ raised)',-10,10,0],['Eyes (closed ↔ wide)',1,10,5]],
  f:([m,br,e])=>{const up=Math.max(br,0)*.8,an=Math.max(-br,0)*.8,y=34-up;
   const em=e>7&&br>4?['Surprised','😮']:m>3?['Happy','😀']:m<-3&&br<-3?['Angry','😠']:m<-3?['Sad','😢']:['Neutral','😐'];
@@ -250,7 +293,6 @@ function T_cls(b){
  $(b,'#pr').onclick=()=>{if(S[0].length<2||S[1].length<2){$(b,'.rs').textContent='Add at least 2 samples per class first';return}
   const v=ft(),D=[];S.forEach((a,k)=>a.forEach(s=>D.push([s.reduce((q,y,i)=>q+(y-v[i])**2,0),k])));D.sort((a,z)=>a[0]-z[0]);const n=D.slice(0,3),w=[0,0];n.forEach(a=>w[a[1]]++);
   const k=w[0]>=w[1]?0:1;$(b,'.rs').textContent=`🤖 ${I[k].value} (${Math.round(w[k]/n.length*100)}% of nearest neighbours)`};
- /* stage view: drawing pad, training samples, prediction */
  const sg=document.createElement('canvas');sg.width=640;sg.height=380;sg.className='cv';b.prepend(sg);const g=sg.getContext('2d');
  raf(()=>{const t=performance.now()/1000;g.fillStyle='#0f1d36';g.fillRect(0,0,640,380);
   G.t(g,'Drawing pad',40,38,15,'#93c5fd');g.fillStyle='#fff';g.fillRect(40,52,240,240);g.drawImage(c,40,52,240,240);g.strokeStyle='#38bdf8';g.lineWidth=2;g.strokeRect(40,52,240,240);
@@ -360,29 +402,31 @@ const G={r:(x,a,b,w,h,c)=>{x.fillStyle=c;x.fillRect(a,b,w,h)},o:(x,a,b,r,c)=>{x.
 fan=(x,cx,cy,r,ang,col)=>{for(let k=0;k<3;k++){const a=ang+k*2.094;G.l(x,cx,cy,cx+Math.cos(a)*r,cy+Math.sin(a)*r,col,5)}G.o(x,cx,cy,4,col)},
 car=(x,a,b,col,v)=>{if(v){G.r(x,a,b,26,44,col);G.r(x,a+4,b+8,18,12,'#e0f2fe')}else{G.r(x,a,b,44,26,col);G.r(x,a+8,b+4,12,18,'#e0f2fe')}};
 
-CFG.sensor.h='Drag the wall left / right to change the distance';
-CFG.sensor.d=(px,py,V,set)=>set(0,(px-170)/2.3);
-CFG.sensor.v=(x,V,r,t)=>{const[d,l,tp,s]=V,sp=d<30?0:d<70?25:80,col=d<30?'#ef4444':d<70?'#eab308':'#22c55e',X=170+d*2.3,span=Math.max(30,X-165);
+CFG.sensor.h='The robot is untrained: type IF–THEN rules to teach it';
+CFG.sensor.v=(x,V,r,t)=>{const[d,l,tp,s]=V,mv=r.rows[0][1],hd=/ON/.test(r.rows[1][1]),fo=/ON/.test(r.rows[2][1]),al=/LOUD/.test(r.rows[3][1]),sp=mv=='Stop'?0:mv=='Slow down'?25:80,col=mv=='Stop'?'#ef4444':mv=='Slow down'?'#eab308':'#22c55e',X=170+d*2.3,span=Math.max(30,X-165),dk=l<35,tc=dk?'#fff':'#0f172a';
  G.r(x,0,0,640,360,'#bfdbfe');G.r(x,0,255,640,105,'#475569');for(let i=-1;i<8;i++)G.r(x,i*90-(t*sp)%90,305,50,6,'#e2e8f0');
  G.r(x,X,170,34,100,'#b45309');for(let i=0;i<4;i++)G.r(x,X,170+i*25,34,2,'#78350f');
  G.r(x,40,222,120,36,col);G.r(x,70,196,64,30,col);G.r(x,78,202,22,20,'#e0f2fe');G.r(x,106,202,22,20,'#e0f2fe');G.o(x,66,260,13,'#111');G.o(x,134,260,13,'#111');
  for(let k=0;k<3;k++){const u=((t*110+k*70)%span)/span;x.strokeStyle=col;x.lineWidth=3;x.globalAlpha=1-u;x.beginPath();x.arc(165+u*span,240,16,-1,1);x.stroke();x.globalAlpha=1}
  x.fillStyle='rgba(2,6,40,'+(.6*(1-l/100)).toFixed(2)+')';x.fillRect(0,0,640,360);
- if(l<35){x.fillStyle='rgba(253,224,71,.45)';x.beginPath();x.moveTo(160,232);x.lineTo(Math.min(X,430),185);x.lineTo(Math.min(X,430),295);x.fill()}
- G.t(x,(d<30?'STOP 🛑':d<70?'SLOW 🐢':'GO 🟢')+'  '+d+' cm',20,40,26,l<35?'#fff':'#0f172a');
- fan(x,590,50,22,tp>30?t*9:0,tp>30?'#38bdf8':'#94a3b8');G.t(x,tp+'°C',590,100,14,l<35?'#fff':'#0f172a','center');
- for(let k=0;k<3;k++){x.strokeStyle=s>80?'#ef4444':'#94a3b8';x.lineWidth=2;x.beginPath();x.arc(600,170,10+k*12+(s>80?(t*30)%12:0),-1,1);x.stroke()}G.t(x,s>80?'LOUD 🔔':'🔈',600,215,14,l<35?'#fff':'#0f172a','center')};
+ if(hd){x.fillStyle='rgba(253,224,71,.45)';x.beginPath();x.moveTo(160,232);x.lineTo(Math.min(X,430),185);x.lineTo(Math.min(X,430),295);x.fill()}
+ G.t(x,(mv=='Stop'?'STOP 🛑':mv=='Slow down'?'SLOW 🐢':'GO 🟢')+'  '+d+' cm',20,40,26,tc);
+ if(d<30&&mv!='Stop')G.t(x,'⚠️ Wall at '+d+' cm — no STOP rule yet!',20,72,17,'#f87171');
+ if(dk&&!hd)G.t(x,'⚠️ Dark and no headlight rule',20,96,15,'#fca5a5');
+ fan(x,590,50,22,fo?t*9:0,fo?'#38bdf8':'#94a3b8');G.t(x,tp+'°C',590,100,14,tp>30&&!fo?'#ef4444':tc,'center');
+ for(let k=0;k<3;k++){x.strokeStyle=al?'#ef4444':'#94a3b8';x.lineWidth=2;x.beginPath();x.arc(600,170,10+k*12+(al?(t*30)%12:0),-1,1);x.stroke()}G.t(x,al?'LOUD 🔔':'🔈',600,215,14,tc,'center');
+ G.t(x,'Rules trained: '+r.rows[4][1],20,350,14,'#e2e8f0')};
 
-CFG.traffic.h='Click a road to add 3 more cars (the AI re-plans the green times)';
-CFG.traffic.d=(px,py,V,set,ph)=>{if(ph!='down')return;const a=Math.abs(px-320)<30&&py<150?0:Math.abs(px-320)<30&&py>210?1:Math.abs(py-180)<30&&px>350?2:Math.abs(py-180)<30&&px<290?3:-1;if(a>=0)set(a,V[a]>=30?0:V[a]+3)};
-CFG.traffic.v=(x,[n,s,e,w],r,t)=>{const ns=n+s,ew=e+w,gf=(10+40*ns/(ns+ew||1))/60,p=(t%12)/12,A=p<gf;
+CFG.traffic.h='Train the junction AI with rules';
+CFG.traffic.v=(x,[n,s,e,w],r,t)=>{const gf=r.gf,p=(t%12)/12,A=p<gf;
  G.r(x,0,0,640,360,'#86efac');G.r(x,0,150,640,60,'#475569');G.r(x,290,0,60,360,'#475569');G.r(x,290,150,60,60,'#334155');
  const arm=(c,go,f)=>{const q=Math.min(c,9),off=go?(t*80)%34:0;for(let k=0;k<q;k++)f(k,off);if(go&&c>0)for(let j=0;j<3;j++)f(-1,(t*140+j*110)%380)};
  arm(n,A,(k,o)=>car(x,300,k<0?o-30:128-k*32+o,'#ef4444',1));arm(s,A,(k,o)=>car(x,330,k<0?330-o:216+k*32-o,'#3b82f6',1));
  arm(e,!A,(k,o)=>car(x,k<0?640-o:366+k*36-o,191,'#f59e0b',0));arm(w,!A,(k,o)=>car(x,k<0?o-40:250-k*36+o,161,'#a855f7',0));
+ if(r.em){const y=r.emer&&A?((t*130)%420)-40:84;car(x,300,y,'#f8fafc',1);G.r(x,300,y+20,26,5,'#ef4444');G.o(x,313,y+6,4,Math.floor(t*6)%2?'#ef4444':'#3b82f6')}
  [[280,140,A],[360,222,A],[366,140,!A],[274,222,!A]].forEach(([a,b,g])=>G.o(x,a,b,9,g?'#22c55e':'#ef4444'));
  G.t(x,'N '+n,370,40,16,'#14532d');G.t(x,'S '+s,370,335,16,'#14532d');G.t(x,'E '+e,590,140,16,'#14532d','center');G.t(x,'W '+w,50,140,16,'#14532d','center');
- G.r(x,20,12,260,14,'#1e293b');G.r(x,20,12,260*p,14,A?'#22c55e':'#f59e0b');G.t(x,'AI: '+(A?'N–S':'E–W')+' green · N–S '+Math.round(gf*60)+'s / E–W '+(60-Math.round(gf*60))+'s',20,45,13,'#14532d')};
+ G.r(x,20,12,260,14,'#1e293b');G.r(x,20,12,260*p,14,A?'#22c55e':'#f59e0b');G.t(x,'AI: '+r.mode,20,45,13,'#14532d');G.t(x,'N–S '+Math.round(gf*60)+'s / E–W '+(60-Math.round(gf*60))+'s',20,64,13,'#14532d')};
 
 CFG.face.h='Drag up/down in the eyebrow, eye and mouth zones (eyes: drag sideways)';
 CFG.face.d=(px,py,V,set)=>{if(py<150)set(1,(105-py)/4.5);else if(py<215)set(2,Math.abs(px-320)/12);else set(0,(py-270)/5.5)};
@@ -512,15 +556,327 @@ function av(b,mo){
    for(let k=0;k<8;k++){const on=t-(lit[k]||-9)<.4;G.r(x,20+k*77,198,72,56,on?'#a5b4fc':'#f8fafc');G.t(x,'CDEFGABC'[k],56+k*77,244,16,'#0f172a','center')}}})}
 const T_voice=b=>{V(b,0);av(b,0)},T_stt=b=>{V(b,1);av(b,1)},T_chat=b=>{T_bot(b);av(b,2)},T_prompt2=b=>{T_prompt(b);av(b,3)},T_music2=b=>{T_music(b);av(b,4)};
 
+/* ================= 3D robotics engine (three.js r128) ================= */
+const rr=(x,a,b,w,h,r)=>{x.beginPath();x.moveTo(a+r,b);x.arcTo(a+w,b,a+w,b+h,r);x.arcTo(a+w,b+h,a,b+h,r);x.arcTo(a,b+h,a,b,r);x.arcTo(a,b,a+w,b,r);x.closePath()};
+const HP=(x,a,b,w,L,ac)=>{x.save();x.fillStyle='rgba(8,20,42,.8)';rr(x,a,b,w,12+L.length*17,9);x.fill();x.strokeStyle=ac||'rgba(125,211,252,.5)';x.lineWidth=1.5;x.stroke();x.textAlign='left';
+ L.forEach((l,i)=>{const[s,c]=Array.isArray(l)?l:[l];x.font=(i?'600 11.5px':'700 13px')+' Lexend,system-ui,sans-serif';x.fillStyle=c||(i?'#e3eeff':'#7dd3fc');x.fillText(s,a+10,b+19+i*17,w-18)});x.restore()};
+const BAN=(x,s,c)=>{x.save();x.font='700 13.5px Lexend,system-ui,sans-serif';const w=Math.min(610,x.measureText(s).width+30);x.fillStyle=c||'rgba(185,28,28,.92)';rr(x,320-w/2,344,w,28,14);x.fill();x.fillStyle='#fff';x.textAlign='center';x.fillText(s,320,363,w-20);x.restore()};
+const RC=(R,k,lab,good)=>[(R[k]?'✔ ':'○ ')+lab,R[k]?(R[k]==good?'#86efac':'#fca5a5'):'#94a3b8'];
+const wrapA=a=>Math.atan2(Math.sin(a),Math.cos(a));
+function S3(b,o){o=o||{};let ren;
+ try{if(!window.THREE)throw 0;ren=new THREE.WebGLRenderer({antialias:true,preserveDrawingBuffer:true})}
+ catch(e){const c=mk(),x=c.getContext('2d');b.append(c);x.fillStyle='#0f1d36';x.fillRect(0,0,640,380);x.font='bold 15px system-ui,sans-serif';x.fillStyle='#fca5a5';x.textAlign='center';x.fillText('The 3D engine could not start (no internet or no WebGL).',320,180);x.fillText('Reload the page in Chrome or Edge.',320,206);b.api={ro:()=>'3D engine not available',E:{},R:{},scen(){},rule(){}};return null}
+ ren.setPixelRatio(Math.min(2,window.devicePixelRatio||1));ren.setSize(640,380,false);ren.shadowMap.enabled=true;ren.shadowMap.type=THREE.PCFSoftShadowMap;
+ ren.outputEncoding=THREE.sRGBEncoding;ren.toneMapping=THREE.ACESFilmicToneMapping;ren.toneMappingExposure=o.exp||1.1;ren.autoClear=false;
+ const cv=ren.domElement;cv.className='cv';cv.dataset.d3='1';b.append(cv);
+ const sc=new THREE.Scene(),sky=new THREE.Color(o.sky==null?0x9fc9ef:o.sky);sc.background=sky;sc.fog=new THREE.Fog(sky,o.fogN||60,o.fogF||180);
+ const cam=new THREE.PerspectiveCamera(o.fov||42,640/380,.1,600);
+ sc.add(new THREE.HemisphereLight(0xe8f2ff,0x5b4a3a,o.hemi||.65));
+ const SX=o.sx==null?28:o.sx,SY=o.sy||46,SZ=o.sz==null?22:o.sz;
+ const sun=new THREE.DirectionalLight(0xfff1dc,o.sun||1.15);sun.position.set(SX,SY,SZ);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);sun.shadow.bias=-.0005;
+ const Z=o.sh||40;Object.assign(sun.shadow.camera,{left:-Z,right:Z,top:Z,bottom:-Z,near:1,far:260});sun.shadow.camera.updateProjectionMatrix();sc.add(sun);sc.add(sun.target);
+ const mat=(c,r,m,x)=>new THREE.MeshStandardMaterial(Object.assign({color:c,roughness:r==null?.6:r,metalness:m||0},x||{}));
+ const tex=(w,h,f,rx,ry)=>{const k=document.createElement('canvas');k.width=w;k.height=h;f(k.getContext('2d'),w,h);const t=new THREE.CanvasTexture(k);t.encoding=THREE.sRGBEncoding;t.wrapS=t.wrapT=THREE.RepeatWrapping;t.repeat.set(rx||1,ry||1);t.anisotropy=8;return t};
+ const shd=k=>{k.castShadow=k.receiveShadow=true;return k};
+ const bx=(w,h,d,m,x,y,z,p)=>{const k=shd(new THREE.Mesh(new THREE.BoxGeometry(w,h,d),m));k.position.set(x||0,y||0,z||0);(p||sc).add(k);return k};
+ const cy=(r1,r2,h,m,x,y,z,p,s)=>{const k=shd(new THREE.Mesh(new THREE.CylinderGeometry(r1,r2,h,s||24),m));k.position.set(x||0,y||0,z||0);(p||sc).add(k);return k};
+ const sp=(r,m,x,y,z,p)=>{const k=shd(new THREE.Mesh(new THREE.SphereGeometry(r,20,14),m));k.position.set(x||0,y||0,z||0);(p||sc).add(k);return k};
+ const pl=(w,d,m,x,y,z,p)=>{const k=new THREE.Mesh(new THREE.PlaneGeometry(w,d),m);k.rotation.x=-Math.PI/2;k.position.set(x||0,y||0,z||0);k.receiveShadow=true;(p||sc).add(k);return k};
+ const noise=(base,v,n)=>(x,w,h)=>{x.fillStyle=base;x.fillRect(0,0,w,h);for(let i=0;i<n;i++){const k=Math.random()*v-v/2;x.fillStyle=k>0?`rgba(255,255,255,${k/100})`:`rgba(0,0,0,${-k/100})`;x.fillRect(Math.random()*w,Math.random()*h,2,2)}};
+ const bld=(x,z,w,d,h,base,glass)=>{const t=tex(128,128,(c,W,H)=>{c.fillStyle=base;c.fillRect(0,0,W,H);for(let r=0;r<4;r++)for(let k=0;k<4;k++){c.fillStyle=Math.random()<.18?'#ffe7a3':glass||'#2c4560';c.fillRect(6+k*31,8+r*31,20,19);c.fillStyle='rgba(255,255,255,.14)';c.fillRect(6+k*31,8+r*31,20,3)}},Math.max(.5,w/12),Math.max(.5,h/12));
+  const sm=mat(0xffffff,.75,.05,{map:t}),rm=mat(0x5b6168,.9),k=shd(new THREE.Mesh(new THREE.BoxGeometry(w,h,d),[sm,sm,rm,rm,sm,sm]));k.position.set(x,h/2,z);sc.add(k);bx(w*.3,.6,d*.3,mat(0x8a9099,.7,.3),x,h+.3,z);return k};
+ const tree=(x,z,s)=>{s=s||1;cy(.12*s,.18*s,1.6*s,mat(0x6b4a2f,.9),x,.8*s,z,null,8);const f=mat(new THREE.Color().setHSL(.27+Math.random()*.05,.5,.26+Math.random()*.08).getHex(),.85,0,{flatShading:true});
+  [[0,2.2,0,1.1],[.35,2.9,.1,.85],[-.2,3.3,-.15,.7]].forEach(([a,y,c,r])=>{const k=shd(new THREE.Mesh(new THREE.IcosahedronGeometry(r*s,1),f));k.position.set(x+a*s,y*s,z+c*s);sc.add(k)})};
+ const hc=document.createElement('canvas');hc.width=1280;hc.height=760;const hx=hc.getContext('2d'),ht=new THREE.CanvasTexture(hc);ht.encoding=THREE.sRGBEncoding;ht.minFilter=THREE.LinearFilter;ht.generateMipmaps=false;
+ const hs=new THREE.Scene(),hcam=new THREE.OrthographicCamera(-1,1,1,-1,0,2),hm=new THREE.Mesh(new THREE.PlaneGeometry(2,2),new THREE.MeshBasicMaterial({map:ht,transparent:true,depthTest:false,depthWrite:false,toneMapped:false}));hm.position.z=-1;hs.add(hm);let hk=null;
+ const hud=(k,f)=>{if(k===hk)return;hk=k;hx.setTransform(1,0,0,1,0,0);hx.clearRect(0,0,1280,760);hx.setTransform(2,0,0,2,0,0);f(hx);ht.needsUpdate=true};
+ let last=performance.now();
+ const loop=f=>raf(()=>{const n=performance.now();let tot=Math.min(.3,(n-last)/1000);last=n;let tt=n/1000-tot;while(tot>1e-4){const d=Math.min(.04,tot);tot-=d;tt+=d;f(d,tt)}ren.clear();ren.render(sc,cam);ren.clearDepth();ren.render(hs,hcam)});
+ stopFns.push(()=>{try{ren.dispose();ren.forceContextLoss()}catch(e){}});
+ const follow=(x,z)=>{sun.position.set(x+SX,SY,z+SZ);sun.target.position.set(x,0,z);sun.target.updateMatrixWorld()};
+ return{sc,cam,ren,mat,tex,bx,cy,sp,pl,noise,bld,tree,hud,loop,follow}}
+
+/* ---------- R6. Self-driving car (3D) ---------- */
+function T_car(b){
+ const S=S3(b,{sky:0xa9d2f0,fogN:90,fogF:230,sh:45,sx:-26,sy:48,sz:30});if(!S)return;const{sc,cam,mat,tex,bx,cy,sp,pl,noise,bld,tree}=S;
+ pl(460,460,mat(0xffffff,.95,0,{map:tex(128,128,noise('#5b8a3b',30,1600),70,70)}),0,0,0);
+ pl(260,12,mat(0xffffff,.9,0,{map:tex(256,256,noise('#3c3f45',26,5000),40,2)}),0,.02,0);
+ const W=mat(0xf2f2ea,.5),Yl=mat(0xf2c21b,.5),poleM=mat(0x2b2f36,.45,.6),walk=mat(0xffffff,.9,0,{map:tex(128,128,(x,w,h)=>{noise('#bdb7ac',18,700)(x,w,h);x.fillStyle='rgba(0,0,0,.18)';x.fillRect(0,0,2,h)},65,1)});
+ [-8.2,8.2].forEach(z=>bx(260,.3,4.4,walk,0,.15,z));[-5.75,5.75].forEach(z=>bx(260,.02,.16,W,0,.03,z));
+ for(let X=-128;X<130;X+=6)if(X<6||X>17)bx(3,.02,.2,Yl,X,.03,0);
+ bx(.45,.02,5.6,W,10,.03,2.9);for(let z=-5;z<=5.3;z+=1.25)bx(3.6,.02,.65,W,13,.03,z);
+ bx(22,.31,.3,Yl,-29,.16,6.05);
+ pl(7,2.4,new THREE.MeshStandardMaterial({map:tex(512,176,(x,w)=>{x.fillStyle='#f2c21b';x.font='bold 130px Oswald,Impact,sans-serif';x.textAlign='center';x.fillText('SCHOOL',w/2,150)}),transparent:true,depthWrite:false,roughness:.6}),-33,.034,2.9);
+ cy(.14,.17,6.4,poleM,9,3.2,6.7);bx(.18,.18,3.9,poleM,9,6.3,4.8);bx(.75,2.15,.75,mat(0x1b1e23,.55,.3),9,5.25,2.9);
+ const lamp=(c,y)=>{const m=new THREE.MeshStandardMaterial({color:0x161616,emissive:c,emissiveIntensity:.05,roughness:.3});sp(.24,m,8.62,y,2.9);bx(.14,.06,.62,poleM,8.56,y+.3,2.9);return m};
+ const LR=lamp(0xff2a1a,5.9),LY=lamp(0xffb000,5.25),LG=lamp(0x19e35c,4.6);
+ const sgT=tex(256,256,x=>{x.fillStyle='#f5c518';x.fillRect(0,0,256,256);x.strokeStyle='#111';x.lineWidth=10;x.strokeRect(12,12,232,232);x.fillStyle='#111';x.font='bold 40px Lexend,sans-serif';x.textAlign='center';x.fillText('SCHOOL',128,66);x.fillText('ZONE',128,108);x.fillStyle='#fff';x.beginPath();x.arc(128,178,56,0,7);x.fill();x.lineWidth=13;x.strokeStyle='#d21f1f';x.stroke();x.fillStyle='#111';x.font='bold 56px Lexend,sans-serif';x.fillText('30',128,198)});
+ cy(.06,.06,3.2,poleM,-46,1.6,6.9);const sg=new THREE.Mesh(new THREE.PlaneGeometry(1.9,1.9),mat(0xffffff,.6,0,{map:sgT,side:THREE.DoubleSide}));sg.position.set(-46,3.75,6.9);sg.rotation.y=-Math.PI/4;sc.add(sg);
+ bld(-30,-23,24,10,9,'#e2cfa6','#37557a');
+ const pal=['#cfd6de','#b8c2cc','#d8cfc2','#a9b4bf','#e0d7ca'];for(let X=-120;X<=120;X+=13){if(X>-46&&X<-14)continue;bld(X+Math.random()*2,-18-Math.random()*5,8+Math.random()*3,7,7+Math.random()*20,pal[Math.random()*5|0])}
+ for(let X=-122;X<=122;X+=17)tree(X,-11.3,1);for(let X=-118;X<=122;X+=21)tree(X+5,11.6,.9);
+ for(let X=-120;X<=120;X+=24){cy(.08,.1,6,poleM,X,3,-6.8,null,8);bx(.1,.1,1.4,poleM,X,6,-6.15);bx(.5,.12,.32,mat(0xeeeeee,.3,0,{emissive:0xfff2c0,emissiveIntensity:.25}),X,5.93,-5.5)}
+ const mkCar=(col,lidar)=>{const g=new THREE.Group();sc.add(g);const paint=mat(col,.3,.5),glass=mat(0x16202c,.12,.7),blk=mat(0x15171a,.8);
+  bx(4.3,.72,2,paint,0,.78,0,g);bx(2.3,.7,1.82,glass,-.3,1.48,0,g);bx(2.1,.08,1.74,paint,-.3,1.86,0,g);bx(.18,.26,2.04,blk,2.13,.52,0,g);bx(.18,.26,2.04,blk,-2.13,.52,0,g);
+  const hl=mat(0xffffff,.2,0,{emissive:0xfff6d5,emissiveIntensity:.9});[-.66,.66].forEach(z=>bx(.06,.16,.44,hl,2.16,.92,z,g));
+  const bl=new THREE.MeshStandardMaterial({color:0x4a0000,emissive:0xff1a1a,emissiveIntensity:.25});[-.7,.7].forEach(z=>bx(.06,.18,.4,bl,-2.16,.94,z,g));
+  const wg=new THREE.CylinderGeometry(.42,.42,.3,22);wg.rotateX(Math.PI/2);const hg=new THREE.CylinderGeometry(.22,.22,.32,12);hg.rotateX(Math.PI/2);const wm=mat(0x111111,.85),hm=mat(0xc3c8cf,.3,.8);
+  const wh=[[1.38,.92],[1.38,-.92],[-1.38,.92],[-1.38,-.92]].map(([x,z])=>{const w=new THREE.Mesh(wg,wm);w.castShadow=true;w.position.set(x,.42,z);w.add(new THREE.Mesh(hg,hm));g.add(w);return w});
+  let ld=null;if(lidar){ld=cy(.22,.26,.3,mat(0x1d1f23,.35,.5),-.3,2.05,0,g,18);bx(.1,.1,.6,mat(0x111111,.3,0,{emissive:0x38bdf8,emissiveIntensity:1}),.75,1.95,0,g)}
+  return{g,wh,bl,ld}};
+ const ego=mkCar(0x1f5fd6,1),oth=mkCar(0xb91c1c,0);oth.g.rotation.y=Math.PI;
+ const fm=new THREE.MeshBasicMaterial({color:0x22c55e,transparent:true,opacity:.17,depthWrite:false,side:THREE.DoubleSide});const fld=new THREE.Mesh(new THREE.CircleGeometry(16,32,-.34,.68),fm);fld.rotation.x=-Math.PI/2;fld.position.set(2.15,.06,0);ego.g.add(fld);
+ const ped=new THREE.Group();sc.add(ped);const skin=mat(0xc68863,.7),shirt=mat(0xe8533f,.7),pants=mat(0x2d3a5a,.8);
+ bx(.55,.75,.32,shirt,0,1.35,0,ped);sp(.2,skin,0,1.95,0,ped);sp(.21,mat(0x2a1a10,.8),0,2.02,-.03,ped);
+ const limb=(m,y,x,len,th)=>{const g=new THREE.BoxGeometry(th,len,th);g.translate(0,-len/2,0);const k=new THREE.Mesh(g,m);k.position.set(x,y,0);k.castShadow=true;ped.add(k);return k};
+ const lg=[limb(pants,.98,-.14,.95,.2),limb(pants,.98,.14,.95,.2)],am=[limb(shirt,1.68,-.36,.7,.14),limb(shirt,1.68,.36,.7,.14)];ped.visible=false;
+ const R={},E={viol:[]},st={pf:{}};let oX=60;
+ const scen=m=>{Object.assign(st,{mode:m,cx:{red:-16,ped:-44,school:-66,test:-60}[m],v:12,lt:m=='red'?'red':'green',ltT:Math.random()*4,stopT:0,spawned:0,pedOn:0,pedZ:-7.2,zmax:0,prevZone:0,pf:{ped:m=='test'&&Math.random()<.7},dec:'',kmh:43});
+  Object.assign(E,{viol:[],stopRed:0,brakePed:0,zoneOk:0,passes:0,test:m=='test'?performance.now():0})};
+ scen('red');
+ b.api={R,E,scen,rule:(k,v)=>{R[k]=v},ro:()=>`Speed ${st.kmh} km/h · Light ${st.lt} · Pedestrian ${st.pedOn?'crossing':'none'} · ${st.dec} · Violations ${E.viol.length}`};
+ const V=new THREE.Vector3(),LA=new THREE.Vector3(-10,0,0);cam.position.set(-28,12.5,25);
+ S.loop((dt,t)=>{
+  if(st.mode=='test'){st.ltT=(st.ltT+dt)%10;st.lt=st.ltT<4.6?'green':st.ltT<6?'yellow':'red'}
+  else if(st.mode=='red'&&st.lt=='red'&&st.stopT>1.6)st.lt='green';
+  if((st.mode=='ped'||st.pf.ped)&&!st.spawned&&st.cx>-34){st.spawned=1;st.pedOn=1;st.pedZ=-7.2}
+  if(st.pedOn){st.pedZ+=1.6*dt;if(st.pedZ>9)st.pedOn=0}
+  const onRoad=st.pedOn&&st.pedZ>-6.2&&st.pedZ<6.2,d=10-st.cx,zone=st.cx>-46&&st.cx<-18;let des=13.9,dec='Road clear → cruising at 50 km/h';
+  if(zone){if(R.school=='slow to 30 km/h'){des=8.2;dec='School zone sign → slowing to 30 km/h'}else dec=R.school?'School zone → keeping 50 km/h ⚠️':'School zone sign → no rule yet'}
+  if((st.lt=='red'||(st.lt=='yellow'&&d>7))&&d>-.2&&d<34){if(R.red=='stop at the line'){des=Math.min(des,d<.45?0:Math.sqrt(14*(d-.4)));dec=(st.lt=='red'?'Red':'Yellow')+' light → stopping at the line'}else if(R.red=='speed up'){des=19;dec='Red light → speeding up ⚠️'}else dec=R.red?'Red light → keeping going ⚠️':'Red light seen → no rule yet ⚠️'}
+  if(onRoad&&st.cx<11.2&&st.cx>-34){const d2=11-st.cx;if(R.ped=='brake and wait'){des=Math.min(des,d2<1.25?0:Math.sqrt(14*(d2-1.2)));dec='Pedestrian on the crossing → braking and waiting'}else dec=R.ped?'Pedestrian on the crossing → '+R.ped+' ⚠️':'Pedestrian detected → no rule yet ⚠️'}
+  const dv=des-st.v;st.v=Math.max(0,st.v+Math.max(-10*dt,Math.min(5*dt,dv)));const px=st.cx;st.cx+=st.v*dt;st.kmh=Math.round(st.v*3.6);
+  if(px<10&&st.cx>=10&&st.lt=='red'&&!st.pf.red){st.pf.red=1;E.viol.push('Ran a red light')}
+  if(st.lt=='red'&&d<2.5&&d>-.2&&st.v<.3){st.stopT+=dt;E.stopRed=1}
+  if(onRoad&&st.cx<11.2&&11-st.cx<6&&st.v<.3)E.brakePed=1;
+  if(st.cx>11&&st.cx-4.3<15&&st.pedOn&&st.pedZ>.2&&st.pedZ<5.6&&!st.pf.miss){st.pf.miss=1;E.viol.push('Pedestrian near miss')}
+  const zt=st.mode=='school'||st.mode=='test',inZ=zt&&st.cx>-40&&st.cx<-18;if(inZ){st.zmax=Math.max(st.zmax,st.kmh);if(st.kmh>35&&!st.pf.spd){st.pf.spd=1;E.viol.push('Speeding in the school zone')}}
+  if(st.prevZone&&!inZ&&st.cx>=-18&&st.zmax>0&&st.zmax<=32)E.zoneOk=1;st.prevZone=inZ;
+  if(st.cx>74){st.cx=-74;E.passes++;st.pf={ped:st.mode=='test'&&Math.random()<.6};st.spawned=0;st.zmax=0;if(st.mode=='red'){st.lt='red';st.stopT=0}}
+  st.dec=dec;
+  let ov=12;if(st.pedOn&&st.pedZ>-6.2&&st.pedZ<.5&&oX-2.15>15&&oX-2.15<22)ov=0;oX-=ov*dt;if(oX<-80)oX=80;oth.g.position.set(oX,0,-2.9);oth.wh.forEach(w=>w.rotation.z-=ov*dt/.42);
+  ego.g.position.set(st.cx-2.15,0,2.9);ego.wh.forEach(w=>w.rotation.z-=st.v*dt/.42);ego.ld.rotation.y+=dt*9;ego.bl.emissiveIntensity=(dv<-.6||st.v<.3)?1.8:.25;
+  const warn=/⚠️/.test(dec),brk=/brak|stopp|slow/i.test(dec);fm.color.set(warn?0xef4444:brk?0xf59e0b:0x22c55e);
+  LR.emissiveIntensity=st.lt=='red'?2.6:.04;LY.emissiveIntensity=st.lt=='yellow'?2.6:.04;LG.emissiveIntensity=st.lt=='green'?2.6:.04;
+  ped.visible=!!st.pedOn;ped.position.set(13,0,st.pedZ);const sw=Math.sin(t*9)*.55;lg[0].rotation.x=sw;lg[1].rotation.x=-sw;am[0].rotation.x=-sw*.8;am[1].rotation.x=sw*.8;
+  const fx=Math.max(-50,Math.min(36,st.cx));cam.position.lerp(V.set(fx-12,12.5,25),.05);LA.lerp(V.set(fx+5,0,0),.08);cam.lookAt(LA);S.follow(fx,0);
+  const n=['red','ped','school'].filter(k=>R[k]).length,el=E.test?Math.min(12,Math.floor((performance.now()-E.test)/1000)):-1;
+  S.hud([st.kmh,st.lt,st.pedOn,dec,E.viol.length,el,JSON.stringify(R)].join('|'),x=>{
+   HP(x,10,10,372,[['🚗 Self-driving car AI'],['Speed: '+st.kmh+' km/h   ·   Light: '+({red:'🔴 RED',yellow:'🟡 YELLOW',green:'🟢 GREEN'})[st.lt]],['Pedestrian: '+(st.pedOn?'🚶 on the crossing':'none detected')],['Decision: '+dec,warn?'#fca5a5':brk?'#fcd34d':'#86efac']]);
+   HP(x,452,10,178,[['🧠 Rules: '+n+'/3'],RC(R,'red','Traffic light','stop at the line'),RC(R,'ped','Pedestrian','brake and wait'),RC(R,'school','School zone','slow to 30 km/h')]);
+   if(E.viol.length)BAN(x,'🚨 '+E.viol[E.viol.length-1]+(E.viol.length>1?'  ('+E.viol.length+' violations)':''));else if(el>=0)BAN(x,'🧪 Test drive '+el+' / 12 s — no violations',el>=12?'rgba(21,128,61,.92)':'rgba(30,64,175,.92)')})})}
+
+/* ---------- R7. Robot vacuum cleaner (3D) ---------- */
+function T_vac(b){
+ const S=S3(b,{sky:0x101826,fogN:70,fogF:140,sh:14,sx:6,sy:22,sz:10,hemi:.9,sun:.9});if(!S)return;const{sc,cam,mat,tex,bx,cy,sp,pl,noise}=S;
+ cam.position.set(0,16,14.5);cam.lookAt(0,-1,.6);const pt=new THREE.PointLight(0xfff0d0,.5,40);pt.position.set(-2,6,2);sc.add(pt);
+ const wood=tex(512,512,(x,w)=>{for(let r=0;r<8;r++){let X=-((r*137)%200);while(X<w){const L=140+Math.random()*160;x.fillStyle=`hsl(${26+Math.random()*6},${24+Math.random()*10}%,${30+Math.random()*10}%)`;x.fillRect(X,r*64,L,64);x.strokeStyle='rgba(70,35,10,.16)';
+  for(let g=0;g<6;g++){const yy=r*64+6+g*10+Math.random()*3;x.beginPath();x.moveTo(X,yy);x.bezierCurveTo(X+L*.3,yy+3,X+L*.6,yy-3,X+L,yy);x.stroke()}x.fillStyle='rgba(40,20,5,.5)';x.fillRect(X,r*64,2,64);X+=L}x.fillStyle='rgba(40,20,5,.45)';x.fillRect(0,r*64,w,2)}});
+ const wd=(rx,ry)=>{const t=wood.clone();t.needsUpdate=true;t.repeat.set(rx,ry);return mat(0xffffff,.55,0,{map:t})};
+ bx(17,.3,14,wd(3.4,2.8),-1.5,-.15,0);bx(3,.3,10,wd(.6,2),8.5,-.15,2);
+ const stM=mat(0x8a6a4a,.7);bx(3,.1,4,mat(0x1a1d22,.9),8.5,-4.2,-5);
+ for(let i=0;i<6;i++){const top=-.42*(i+1),h=4.2+top;bx(3,h,.66,stM,8.5,top-h/2,-3.33-i*.66)}
+ bx(.2,4.3,4,mat(0xd9d2c4,.9),7.1,-2.15,-5);
+ const hz=mat(0xffffff,.6,0,{map:tex(64,16,(x,w,h)=>{for(let i=-2;i<8;i++){x.fillStyle=i%2?'#111':'#f5c518';x.beginPath();x.moveTo(i*12,0);x.lineTo(i*12+12,0);x.lineTo(i*12+4,h);x.lineTo(i*12-8,h);x.fill()}},8,1)});
+ bx(.14,.02,4,hz,7.07,.01,-5);bx(3,.02,.14,hz,8.5,.01,-3.07);
+ const wall=mat(0xe9e4da,.92),base=mat(0xffffff,.6);
+ bx(20.4,3.4,.2,wall,0,1.7,-7.1);bx(.2,3.4,14.4,wall,-10.1,1.7,0);bx(.2,3.4,14.4,wall,10.1,1.7,0);bx(20.4,.35,.2,base,0,.17,7.1);
+ bx(4,2,.06,mat(0xbfe3ff,.1,0,{emissive:0x8fc8ff,emissiveIntensity:.6}),-1,1.9,-6.98);bx(4.2,.12,.14,base,-1,.85,-6.95);
+ bx(.05,1.3,2.2,mat(0xffffff,.8,0,{map:tex(128,80,(x,w,h)=>{const g=x.createLinearGradient(0,0,w,h);g.addColorStop(0,'#f59e0b');g.addColorStop(1,'#1f5fd6');x.fillStyle=g;x.fillRect(0,0,w,h);x.fillStyle='rgba(255,255,255,.5)';x.beginPath();x.arc(80,30,14,0,7);x.fill()})}),-9.97,1.9,-1.5);
+ pl(5,3.4,mat(0xffffff,.95,0,{map:tex(128,96,(x,w,h)=>{x.fillStyle='#7c3b3b';x.fillRect(0,0,w,h);x.strokeStyle='#e8d5b0';x.lineWidth=4;x.strokeRect(8,8,w-16,h-16);x.strokeStyle='#d6a35b';x.lineWidth=2;for(let i=0;i<5;i++)x.strokeRect(20+i*6,20+i*6,w-40-i*12,h-40-i*12)})}),-3.2,.012,1.6);
+ const fab=mat(0x52607a,.95);bx(6,.5,1.9,fab,-4,.4,-5.25);bx(6,1.15,.45,fab,-4,.95,-6.42);bx(.42,.85,2.35,fab,-6.79,.62,-5.42);bx(.42,.85,2.35,fab,-1.21,.62,-5.42);
+ [-5.45,-2.55].forEach(x=>bx(2.7,.22,1.55,mat(0x63728f,.95),x,.76,-5.15));
+ bx(2.5,.85,2,mat(0x7a5536,.6),3,.43,1.5);bx(2,1.15,.08,mat(0x0b0f14,.3,.4,{emissive:0x14284a,emissiveIntensity:.5}),3,1.45,1.5);
+ cy(.35,.28,.6,mat(0xc0703a,.8),-8.6,.3,-6);sp(.6,mat(0x2f7a3a,.8,0,{flatShading:true}),-8.6,1.0,-6);
+ bx(.45,.55,1.0,mat(0x22262c,.4,.3),-9.75,.28,5.5);const dockL=mat(0x111111,.3,0,{emissive:0x22c55e,emissiveIntensity:1.4});bx(.04,.08,.3,dockL,-9.51,.42,5.5);pl(1.2,1.0,mat(0x2a2e35,.6),-9.3,.012,5.5);
+ const rb=new THREE.Group();sc.add(rb);
+ cy(.56,.56,.2,mat(0x2a2f37,.35,.3),0,.15,0,rb,36);cy(.5,.5,.06,mat(0x3b424d,.3,.4),0,.27,0,rb,36);cy(.575,.575,.1,mat(0x6b7280,.5,.2),0,.12,0,rb,36);cy(.17,.17,.1,mat(0x111317,.4,.3),-.12,.33,0,rb,20);
+ const led=new THREE.MeshStandardMaterial({color:0x111111,emissive:0x22c55e,emissiveIntensity:1.6}),ring=new THREE.Mesh(new THREE.TorusGeometry(.38,.022,8,40),led);ring.rotation.x=Math.PI/2;ring.position.y=.305;rb.add(ring);
+ bx(.08,.06,.3,mat(0x111111,.3,0,{emissive:0x38bdf8,emissiveIntensity:1.2}),.52,.2,0,rb);
+ const brush=new THREE.Group();brush.position.set(.36,.04,.34);rb.add(brush);for(let i=0;i<3;i++){const k=new THREE.Mesh(new THREE.BoxGeometry(.32,.01,.025),mat(0x9ca3af,.6));k.rotation.y=i*2.09;brush.add(k)}
+ const fm=new THREE.MeshBasicMaterial({color:0x22c55e,transparent:true,opacity:.2,depthWrite:false,side:THREE.DoubleSide}),fld=new THREE.Mesh(new THREE.CircleGeometry(1.15,20,-.6,1.2),fm);fld.rotation.x=-Math.PI/2;fld.position.y=.02;rb.add(fld);
+ const dm=[mat(0x3b2a1e,.95),mat(0x4a4038,.95),mat(0x2d2620,.95)];
+ const mkD=(x,z)=>{const g=new THREE.Group();for(let i=0;i<7;i++){const k=new THREE.Mesh(new THREE.CircleGeometry(.07+Math.random()*.16,7),dm[i%3]);k.rotation.x=-Math.PI/2;k.position.set((Math.random()-.5)*.6,.014+i*.0005,(Math.random()-.5)*.6);g.add(k)}
+  for(let i=0;i<5;i++){const k=new THREE.Mesh(new THREE.BoxGeometry(.05,.04,.05),dm[i%3]);k.position.set((Math.random()-.5)*.7,.03,(Math.random()-.5)*.7);g.add(k)}g.position.set(x,0,z);sc.add(g);return{g,x,z,c:0,k:1}};
+ let D=[];const setD=a=>{D.forEach(d=>sc.remove(d.g));D=a.map(p=>mkD(p[0],p[1]))};
+ const Bx=[[-7.05,-.95,-6.65,-4.25],[1.75,4.25,.5,2.5],[-9.15,-8.05,-6.55,-5.45]];
+ const blocked=(x,z)=>x<-9.95||x>9.95||z<-6.95||z>6.95||Bx.some(r=>x>r[0]&&x<r[1]&&z>r[2]&&z<r[3]),hole=(x,z)=>x>7&&z<-3;
+ const R={},E={},st={dec:''},POS={dirt:[-8,4.5,0],cliff:[2,-5,0],bump:[-1.6,1.5,0],battery:[5,4.5,Math.PI],test:[-6,3,.4]};
+ const pose=()=>{const p=POS[st.mode];Object.assign(st,{x:p[0],z:p[1],a:p[2],y:0,vy:0,fall:0,man:null,free:0,goDock:0,docked:0,dead:0,tilt:0,bat:st.mode=='battery'?24:100,drain:st.mode=='battery'?1.6:st.mode=='test'?.4:0})};
+ const scen=m=>{st.mode=m;Object.assign(E,{cleaned:0,falls:0,cliffOK:0,bumpOK:0,docked:0,dead:0,stuck:0});
+  if(m=='dirt')setD([[-5,4.4],[-2.6,4.6],[-.2,4.4],[2.4,4.6],[5,4.5]]);
+  else if(m=='test'){const a=[];let g=0;while(a.length<10&&g++<800){const x=-9+Math.random()*15,z=-6.2+Math.random()*12.4;if(!Bx.some(r=>x>r[0]-.8&&x<r[1]+.8&&z>r[2]-.8&&z<r[3]+.8)&&!a.some(p=>Math.hypot(p[0]-x,p[1]-z)<1.4)&&Math.hypot(x+6,z-3)>1.5)a.push([x,z])}setD(a)}
+  else setD([]);pose()};
+ scen('dirt');
+ b.api={R,E,scen,rule:(k,v)=>{R[k]=v},ro:()=>`Battery ${Math.round(st.bat)}% · Dirt cleaned ${E.cleaned}${D.length?'/'+D.length:''} · Falls ${E.falls} · ${st.dec}`};
+ S.loop((dt,t)=>{let dec='Cleaning';const spd=st.mode=='test'?2.1:1.6;
+  if(st.fall){st.fall+=dt;st.vy-=9.8*dt;st.y=Math.max(-4,st.y+st.vy*dt);st.x+=Math.cos(st.a)*.6*dt;st.z+=Math.sin(st.a)*.6*dt;st.tilt=Math.min(1.2,st.tilt+dt*1.5);dec='💥 Fell down the stairs!';if(st.fall>2)pose()}
+  else if(st.dead)dec='🪫 Battery empty — stopped in the middle of the room';
+  else if(st.docked){dec='🔌 Docked and charging';st.bat=Math.min(100,st.bat+6*dt)}
+  else if(st.man){const m=st.man;if(m.b>0){m.b-=dt;st.x-=Math.cos(st.a)*1.1*dt;st.z-=Math.sin(st.a)*1.1*dt;dec=m.why+' → reversing'}else{const s=Math.sign(m.r)*Math.min(Math.abs(m.r),3*dt);st.a+=s;m.r-=s;dec=m.why+' → turning';if(Math.abs(m.r)<1e-3){st.man=null;st.free=1.1}}}
+  else{st.bat=Math.max(0,st.bat-st.drain*dt);if(st.bat<=0){st.dead=1;E.dead=1}
+   if(st.bat<20&&!st.goDock&&R.batt=='return to dock')st.goDock=1;
+   let tg=null;if(st.goDock)tg=[-8.85,5.5];else if(st.mode=='test'&&st.free<=0){let bd=1e9;D.forEach(d=>{if(d.c)return;const q=Math.hypot(d.x-st.x,d.z-st.z);if(q<bd){bd=q;tg=[d.x,d.z]}})}
+   st.free-=dt;
+   if(tg){const da=wrapA(Math.atan2(tg[1]-st.z,tg[0]-st.x)-st.a);st.a+=Math.sign(da)*Math.min(Math.abs(da),2.8*dt);if(st.goDock&&Math.hypot(tg[0]-st.x,tg[1]-st.z)<.3){st.docked=1;E.docked=1}}
+   const ah=(d,o)=>[st.x+Math.cos(st.a+o)*d,st.z+Math.sin(st.a+o)*d],cliff=[0,-.5,.5].some(o=>hole(...ah(.8,o))),bump=[0,-.6,.6].some(o=>blocked(...ah(.64,o))),rnd=()=>st.mode=='test'?(Math.random()<.5?-1:1):1;
+   if(st.docked){}
+   else if(cliff&&R.cliff=='reverse and turn'){st.man={b:.45,r:rnd()*2.3,why:'Drop detected'};E.cliffOK=1;dec='Drop detected → reversing'}
+   else if(bump&&!cliff){if(R.bump=='turn 90 degrees'){st.man={b:.12,r:rnd()*(Math.PI/2+(st.mode=='test'?Math.random()*.7:0)),why:'Bumper hit'};E.bumpOK=1;dec='Bumper hit → turning 90°'}else{E.stuck+=dt;dec=R.bump?'Bumper hit → pushing harder ⚠️ stuck':'Bumper hit → no rule, stuck ⚠️'}}
+   else{st.x+=Math.cos(st.a)*spd*dt;st.z+=Math.sin(st.a)*spd*dt;dec=cliff?(R.cliff?'Drop ahead → keeping going ⚠️':'Drop ahead → no cliff rule ⚠️'):st.goDock?'Battery low → returning to dock':st.bat<20?(R.batt?'Battery low → keep cleaning ⚠️':'Battery low → no rule ⚠️'):'Cleaning'}
+   if(hole(st.x,st.z)){st.fall=.001;st.vy=0;E.falls++}}
+  D.forEach(d=>{if(d.c){d.k=Math.max(.001,d.k-dt*3);d.g.scale.setScalar(d.k);return}if(!st.fall&&Math.hypot(d.x-st.x,d.z-st.z)<.62){if(R.dirt=='turn on strong suction'){d.c=1;E.cleaned++}else if(!st.man)dec=R.dirt?'Dirt detected → ignoring it ⚠️':'Dirt detected → no rule, suction off ⚠️'}});
+  st.dec=dec;rb.position.set(st.x,st.y,st.z);rb.rotation.set(0,-st.a,st.fall?-st.tilt:0);brush.rotation.y+=dt*14;
+  const warn=/⚠️|💥|🪫/.test(dec);led.emissive.set(warn?0xef4444:st.docked?0x38bdf8:st.goDock?0xf59e0b:0x22c55e);fm.color.set(warn?0xef4444:/Drop|Bumper/.test(dec)?0xf59e0b:0x22c55e);
+  dockL.emissiveIntensity=st.docked?1+Math.sin(t*4):1.4;
+  const n=['dirt','cliff','bump','batt'].filter(k=>R[k]).length;
+  S.hud([Math.round(st.bat),E.cleaned,D.length,dec,E.falls,st.docked,JSON.stringify(R)].join('|'),x=>{
+   HP(x,10,10,340,[['🤖 Robot vacuum AI'],['Battery: '+Math.round(st.bat)+'%'+(st.bat<20?'  🪫 low':'  🔋'),st.bat<20?'#fcd34d':0],['Dirt cleaned: '+E.cleaned+(D.length?' / '+D.length:'')],['Decision: '+dec,warn?'#fca5a5':'#86efac']]);
+   HP(x,10,98,170,[['🧠 Rules: '+n+'/4'],RC(R,'dirt','Dirt sensor','turn on strong suction'),RC(R,'cliff','Cliff sensor','reverse and turn'),RC(R,'bump','Bumper','turn 90 degrees'),RC(R,'batt','Battery','return to dock')]);
+   if(E.falls)BAN(x,'💥 The robot fell down the stairs ('+E.falls+'×)');else if(st.docked)BAN(x,'✅ Docked safely — charging','rgba(21,128,61,.92)');else if(st.dead)BAN(x,'🪫 Battery empty — the robot never reached its dock')})})}
+
+/* ---------- R8. Delivery drone autopilot (3D) ---------- */
+function T_drone(b){
+ const S=S3(b,{sky:0x9ccaee,fogN:70,fogF:200,sh:30,sx:-18,sy:46,sz:26});if(!S)return;const{sc,cam,mat,tex,bx,cy,sp,pl,noise,bld,tree}=S;
+ pl(320,320,mat(0xffffff,.95,0,{map:tex(128,128,noise('#5f8c43',28,1500),55,55)}),0,0,0);
+ const asp=()=>mat(0xffffff,.9,0,{map:tex(128,128,noise('#3f4248',24,2500),30,1)});pl(170,7,asp(),0,.02,-10.5);pl(170,7,asp(),0,.02,10.5);
+ const Bs=[],pal=['#cfd6de','#b8c2cc','#d8cfc2','#a9b4bf','#e0d7ca','#c9bfae'],pc=()=>pal[Math.random()*pal.length|0];
+ const B=(x,z,w,d,h,c,g)=>{bld(x,z,w,d,h,c||pc(),g);Bs.push({x,z,w,d,h})};
+ B(-18,0,5,5,4.5);B(0,0,6,6,15,'#9fb6cc','#1d3a5c');B(12,0,5,5,4);B(19,0,4.5,4.5,3.5);
+ for(let X=-48;X<=48;X+=10){B(X+Math.random()*2,-17.5,6+Math.random()*2,6,8+Math.random()*16);B(X+4,-27,7,7,12+Math.random()*20)}
+ for(let X=-46;X<=46;X+=11)B(X,17,5,5,3+Math.random()*2.5);
+ for(let X=-50;X<=50;X+=9){tree(X+3,-6.5,.9);tree(X-2,6.8,.9)}
+ cy(2.5,2.6,.25,mat(0x6b7280,.7),-26,.12,0,null,40);
+ pl(4.6,4.6,mat(0xffffff,.6,0,{transparent:true,map:tex(256,256,x=>{x.fillStyle='#4b5563';x.beginPath();x.arc(128,128,126,0,7);x.fill();x.strokeStyle='#f5c518';x.lineWidth=10;x.beginPath();x.arc(128,128,104,0,7);x.stroke();x.fillStyle='#fff';x.font='bold 150px Lexend,sans-serif';x.textAlign='center';x.fillText('H',128,180)})}),-26,.26,0);
+ bx(5,3,5,mat(0xf1e7d6,.8),31,1.5,0);const roof=new THREE.Mesh(new THREE.ConeGeometry(4.1,2.1,4),mat(0xa3412a,.7));roof.position.set(31,4.05,0);roof.rotation.y=Math.PI/4;roof.castShadow=true;sc.add(roof);
+ bx(.08,1.8,1,mat(0x6b3f22,.6),28.46,.9,0);[-1.4,1.4].forEach(z=>bx(.08,.8,.9,mat(0xbfe3ff,.2,.3),28.46,1.9,z));
+ pl(2.8,2.8,mat(0xffffff,.6,0,{transparent:true,map:tex(256,256,x=>{[[124,'#dc2626'],[92,'#fff'],[60,'#dc2626'],[28,'#fff']].forEach(([r,c])=>{x.fillStyle=c;x.beginPath();x.arc(128,128,r,0,7);x.fill()})})}),25.5,.03,0);
+ const dr=new THREE.Group();sc.add(dr);const wht=mat(0xf3f4f6,.35,.2),blk=mat(0x1f2937,.45,.4);
+ bx(.95,.26,.7,wht,0,0,0,dr);bx(.6,.12,.5,blk,0,.18,0,dr);sp(.12,mat(0x111111,.2,.5),.45,-.14,0,dr);
+ const props=[];[[.62,.62],[.62,-.62],[-.62,.62],[-.62,-.62]].forEach(([x,z])=>{const a=bx(Math.hypot(x,z),.07,.08,blk,x/2,0,z/2,dr);a.rotation.y=-Math.atan2(z,x);cy(.09,.09,.16,blk,x,.08,z,dr,12);
+  const p=new THREE.Group();p.position.set(x,.18,z);dr.add(p);[0,Math.PI/2].forEach(r=>{const k=new THREE.Mesh(new THREE.BoxGeometry(.7,.012,.06),blk);k.rotation.y=r;p.add(k)});
+  const dc=new THREE.Mesh(new THREE.CircleGeometry(.36,24),new THREE.MeshBasicMaterial({color:0xcbd5e1,transparent:true,opacity:.2,depthWrite:false,side:THREE.DoubleSide}));dc.rotation.x=-Math.PI/2;p.add(dc);props.push(p)});
+ [[.3,.25],[.3,-.25],[-.3,.25],[-.3,-.25]].forEach(([x,z])=>bx(.04,.26,.04,blk,x,-.24,z,dr));[.25,-.25].forEach(z=>bx(.8,.04,.05,blk,0,-.37,z,dr));
+ const led=new THREE.MeshStandardMaterial({color:0x111111,emissive:0x22c55e,emissiveIntensity:2});bx(.05,.05,.2,led,.48,.04,0,dr);
+ const pkM=mat(0xffffff,.8,0,{map:tex(64,64,(x,w,h)=>{noise('#c08a55',30,500)(x,w,h);x.fillStyle='#ead6ae';x.fillRect(27,0,10,h)})}),pkB=mat(0x6b4a2b,.95),pkg=bx(.5,.42,.5,pkM,0,0,0);
+ const rope=new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(),new THREE.Vector3()]),new THREE.LineBasicMaterial({color:0x1f2937}));rope.frustumCulled=false;sc.add(rope);
+ const wm=new THREE.MeshBasicMaterial({color:0xffffff,transparent:true,opacity:.45,depthWrite:false}),ws=Array.from({length:36},()=>{const k=new THREE.Mesh(new THREE.BoxGeometry(.03,.03,2.6),wm);k.userData={ox:(Math.random()-.5)*26,oy:Math.random()*10,oz:(Math.random()-.5)*30};k.visible=false;sc.add(k);return k});
+ const R={},E={},st={dec:''},SPD=8,ST={tower:[-22,8,'out',100,0],deliver:[14,8,'out',100,0],wind:[5,8,'out',100,0],battery:[9,8,'out',27,2.2],mission:[-26,.45,'takeoff',100,.5]};
+ const hit=(x,y,z)=>Bs.some(o=>Math.abs(x-o.x)<o.w/2+.45&&Math.abs(z-o.z)<o.d/2+.45&&y<o.h+.15),gH=(x,z)=>Bs.reduce((m,o)=>Math.abs(x-o.x)<o.w/2+.3&&Math.abs(z-o.z)<o.d/2+.3?Math.max(m,o.h):m,0);
+ const pose=()=>{const s=ST[st.mode];Object.assign(st,{x:s[0],y:s[1],z:0,ph:s[2],bat:s[3],drain:s[4],crash:0,crT:0,why:'',tilt:0,roll:0,wind:0,windT:st.mode=='wind'?1.5:-1,x0:s[0],rope:0,lw:'',P:{att:1,x:s[0],y:s[1]-.5,z:0,vy:0,br:0,on:0}});pkg.scale.set(1,1,1);pkg.material=pkM};
+ const scen=m=>{st.mode=m;Object.assign(E,{passTower:0,delivered:0,broken:0,landed:0,returned:0,crashes:0});pose()};
+ const crash=w=>{if(st.crash)return;st.crash=1;st.why=w;E.crashes++};
+ scen('tower');
+ b.api={R,E,scen,rule:(k,v)=>{R[k]=v},ro:()=>`Altitude ${st.y.toFixed(1)} m · Battery ${Math.round(st.bat)}% · Wind ${st.wind} km/h · ${st.dec}`};
+ const V=new THREE.Vector3(),LA=new THREE.Vector3(-18,6,0);cam.position.set(-34,13,17);
+ S.loop((dt,t)=>{let dec='',ob=null;
+  if(st.crash){st.crT+=dt;st.y=Math.max(gH(st.x,st.z)+.25,st.y-7*dt);st.tilt+=dt*2.5;dec='💥 '+st.why;if(st.crT>2.6)pose()}
+  else{st.bat=Math.max(0,st.bat-st.drain*dt);if(st.bat<=0&&st.ph!='down')crash('Battery empty — the drone fell');
+   if(st.windT>0){st.windT-=dt;if(st.windT<=0)st.wind=55}
+   const P=st.P,dir=st.ph=='back'?-1:1,mv=st.ph=='out'||st.ph=='back';let ty=8,hs=SPD;dec=st.ph=='back'?'Flying back to base':'Flying to the customer';
+   if(mv){const e=st.x+dir*7.5,lo=Math.min(st.x,e),hi=Math.max(st.x,e);Bs.forEach(o=>{if(o.x+o.w/2+.8>lo&&o.x-o.w/2-.8<hi&&Math.abs(st.z-o.z)<o.d/2+.8&&o.h>6.4&&(!ob||o.h>ob.h))ob=o})}
+   if(ob){if(R.tower=='climb above it'){ty=ob.h+3;if(st.y<ob.h+.8)hs=.8;dec='Lidar: building ahead → climbing above it'}else dec='Lidar: building ahead → '+(R.tower?'flying straight ⚠️':'no rule ⚠️')}
+   if(st.bat<25&&st.ph=='out'){if(R.batt=='return to base')st.ph='back';else dec='Battery '+Math.round(st.bat)+'% → '+(R.batt?'continuing ⚠️':'no rule ⚠️')}
+   if(st.wind>40&&st.ph!='land'&&st.ph!='down'){if(R.wind=='land safely'){st.ph='land';st.lw='wind'}else{st.z+=2.6*dt;st.roll=.25+Math.sin(t*9)*.15;dec='Wind '+st.wind+' km/h → '+(R.wind?'keep flying ⚠️':'no rule ⚠️');if(Math.abs(st.z)>8)crash('Blown off course by the wind')}}
+   if(st.ph=='takeoff'){dec='Taking off';if(st.y>7.6)st.ph='out'}
+   else if(st.ph=='out'){st.x+=hs*dt;if(st.x>=25.5){st.x=25.5;st.ph='arrive'}}
+   else if(st.ph=='back'){st.x-=hs*dt;if(st.x<=-26){st.x=-26;st.ph='land';st.lw='base'}}
+   else if(st.ph=='arrive'){if(R.deliver=='lower the package on a rope')st.ph='lower';else if(R.deliver){P.att=0;P.vy=0;st.ph='hover'}else dec='Target reached → no delivery rule yet ⚠️'}
+   else if(st.ph=='lower'){ty=4.5;dec='Lowering the package on a rope';if(Math.abs(st.y-4.5)<.15){st.rope+=1.6*dt;if(st.y-.5-st.rope<=.24){P.att=0;P.on=1;st.rope=0;E.delivered=1;st.ph=st.mode=='mission'?'back':'hover'}}}
+   else if(st.ph=='hover'){ty=E.delivered?6:8;dec=E.delivered?'✅ Package delivered gently':P.br?'📦 Package dropped and broken ⚠️':'Dropping the package from the sky ⚠️'}
+   else if(st.ph=='land'){ty=gH(st.x,st.z)+.4;dec=st.lw=='wind'?'Strong wind → landing safely':'Landing at base';if(st.y-ty<.06){st.ph='down';if(st.lw=='wind')E.landed=1;else E.returned=1}}
+   else if(st.ph=='down'){ty=st.y;dec=st.lw=='wind'?'✅ Landed safely — waiting for the wind to calm':'✅ Landed at base'}
+   const dy=ty-st.y;st.y+=Math.sign(dy)*Math.min(Math.abs(dy),(st.ph=='land'?2.4:4.5)*dt);
+   if(st.ph=='out'&&st.x0<-3&&st.x>3.6)E.passTower=1;
+   if(hit(st.x,st.y-.15,st.z))crash('Hit a building');if(st.wind<=40)st.roll*=.9}
+  const P=st.P;if(P.att){P.x=st.x;P.z=st.z;P.y=st.y-.5-st.rope}else if(!P.on&&!P.br){P.vy-=9.8*dt;P.y+=P.vy*dt;const g=gH(P.x,P.z)+.21;if(P.y<=g){P.y=g;if(P.vy<-6){P.br=1;E.broken=1;pkg.scale.set(1.3,.45,1.3);pkg.material=pkB}else P.on=1}}
+  pkg.position.set(P.x,P.y,P.z);
+  const ra=rope.geometry.attributes.position;rope.visible=!!P.att&&st.rope>.05;ra.setXYZ(0,st.x,st.y-.15,st.z);ra.setXYZ(1,P.x,P.y+.21,P.z);ra.needsUpdate=true;
+  const moving=!st.crash&&(st.ph=='out'||st.ph=='back');dr.position.set(st.x,st.y,st.z);dr.rotation.set(st.roll,st.ph=='back'?Math.PI:0,st.crash?-st.tilt:(moving?-.12:0));
+  props.forEach(p=>p.rotation.y+=(st.crash?3:st.ph=='down'?0:45)*dt);led.emissive.set(st.crash?0xef4444:/⚠️/.test(dec)?0xf59e0b:0x22c55e);
+  ws.forEach(k=>{k.visible=st.wind>0;if(!k.visible)return;const u=k.userData;u.oz+=30*dt;if(u.oz>15)u.oz-=30;k.position.set(st.x+u.ox,1+u.oy,u.oz)});
+  cam.position.lerp(V.set(st.x-12,Math.max(7,st.y+5),17),.05);LA.lerp(V.set(st.x+4,Math.max(2,st.y-2),0),.08);cam.lookAt(LA);S.follow(st.x,0);
+  st.dec=dec;const n=['tower','deliver','wind','batt'].filter(k=>R[k]).length,warn=/⚠️|💥/.test(dec);
+  S.hud([st.y.toFixed(1),Math.round(st.bat),st.wind,ob?ob.h:0,dec,E.delivered,E.returned,E.landed,P.br,st.crash,JSON.stringify(R)].join('|'),x=>{
+   HP(x,10,10,356,[['🚁 Delivery drone autopilot'],['Altitude: '+st.y.toFixed(1)+' m   ·   Battery: '+Math.round(st.bat)+'%',st.bat<25?'#fcd34d':0],['Wind: '+st.wind+' km/h'+(st.wind>40?'  ⚠️ strong':''),st.wind>40?'#fcd34d':0],['Lidar: '+(ob?'building '+ob.h.toFixed(0)+' m tall ahead':'path clear')],['Decision: '+dec,warn?'#fca5a5':'#86efac']]);
+   HP(x,452,10,178,[['🧠 Rules: '+n+'/4'],RC(R,'tower','Buildings','climb above it'),RC(R,'deliver','Delivery','lower the package on a rope'),RC(R,'wind','Strong wind','land safely'),RC(R,'batt','Battery','return to base')]);
+   const G2='rgba(21,128,61,.92)';if(st.crash)BAN(x,'💥 '+st.why);else if(P.br)BAN(x,'📦 The package broke — customers expect gentle deliveries');else if(st.mode=='mission'&&E.delivered&&E.returned)BAN(x,'🏁 Mission complete — delivered and back at base',G2);else if(E.delivered)BAN(x,'✅ Package delivered gently',G2);else if(E.returned)BAN(x,'✅ Back at base with battery to spare',G2);else if(E.landed)BAN(x,'✅ Landed safely out of the wind',G2)})})}
+
+/* ---------- R9. Smart factory quality inspection (3D) ---------- */
+function T_fact(b){
+ const S=S3(b,{sky:0x2a3340,fogN:45,fogF:110,sh:18,sx:8,sy:26,sz:14,hemi:.8,sun:.95,exp:1.15});if(!S)return;const{sc,cam,mat,tex,bx,cy,sp,pl,noise}=S;
+ cam.position.set(-.6,10.5,19.5);cam.lookAt(-.6,.9,-.6);
+ [[-8,7],[4,7]].forEach(([x,y])=>{const l=new THREE.PointLight(0xfff4e0,.55,30);l.position.set(x,y,3);sc.add(l)});
+ pl(80,50,mat(0xffffff,.85,0,{map:tex(256,256,(x,w,h)=>{noise('#8b9097',26,6000)(x,w,h);x.strokeStyle='rgba(0,0,0,.25)';x.lineWidth=2;x.strokeRect(0,0,w,h)},16,10)}),0,0,0);
+ const yl=mat(0xf5c518,.6);[-2.3,3.6].forEach(z=>bx(26,.01,.15,yl,-2,.006,z));
+ bx(60,10,.3,mat(0xffffff,.8,.2,{map:tex(64,64,(x,w,h)=>{for(let i=0;i<w;i+=8){const g=x.createLinearGradient(i,0,i+8,0);g.addColorStop(0,'#7b8794');g.addColorStop(.5,'#aab4bf');g.addColorStop(1,'#6b7682');x.fillStyle=g;x.fillRect(i,0,8,h)}},40,6)}),0,5,-9);
+ bx(60,1.2,.32,yl,0,.6,-8.9);bx(40,1.2,.05,mat(0xbfe3ff,.2,0,{emissive:0x9fd0ff,emissiveIntensity:.5}),0,7.5,-8.84);
+ for(let X=-24;X<=24;X+=8)bx(.6,10,.6,mat(0x5b6470,.5,.5),X,5,-8.4);
+ const steel=mat(0x9aa3ad,.35,.75),dark=mat(0x2b3038,.5,.5);
+ const beltT=tex(64,64,(x,w,h)=>{x.fillStyle='#1d2126';x.fillRect(0,0,w,h);x.fillStyle='#2c3138';for(let i=0;i<w;i+=8)x.fillRect(i,0,3,h)},25,1);
+ pl(25,1.6,mat(0xffffff,.9,0,{map:beltT}),-2,1.0,0);
+ bx(25,.34,.14,steel,-2,.85,.86);bx(25,.34,.14,steel,-2,.85,-.86);bx(25,.25,1.6,dark,-2,.85,0);
+ for(let X=-14;X<=10;X+=3)[-.75,.75].forEach(z=>bx(.12,.75,.12,dark,X,.37,z));
+ [-14.5,10.5].forEach(X=>{const r=cy(.18,.18,1.7,steel,X,.88,0,null,16);r.rotation.x=Math.PI/2});
+ const gy=mat(0xf5c518,.45,.3);bx(.22,3.2,.22,gy,-4,1.6,-1.25);bx(.22,3.2,.22,gy,-4,1.6,1.25);bx(.3,.3,2.8,gy,-4,3.2,0);
+ bx(.55,.45,.55,dark,-4,2.82,0);cy(.12,.14,.2,mat(0x111111,.2,.6),-4,2.52,0,null,16);
+ const lzM=new THREE.MeshBasicMaterial({color:0xff2d2d,transparent:true,opacity:0,side:THREE.DoubleSide,depthWrite:false}),lz=new THREE.Mesh(new THREE.ConeGeometry(.9,1.4,4,1,true),lzM);lz.position.set(-4,1.75,0);lz.rotation.set(Math.PI,Math.PI/4,0);sc.add(lz);
+ const scC=document.createElement('canvas');scC.width=256;scC.height=128;const scX=scC.getContext('2d'),scT=new THREE.CanvasTexture(scC);scT.encoding=THREE.sRGBEncoding;
+ cy(.05,.05,1.2,dark,-5.6,1.3,1.35,null,8);bx(1.3,.65,.08,[dark,dark,dark,dark,mat(0xffffff,.4,0,{map:scT,emissive:0xffffff,emissiveMap:scT,emissiveIntensity:.8}),dark],-5.6,2.1,1.35);
+ const drawScale=(g,txt,col)=>{scX.fillStyle='#04120a';scX.fillRect(0,0,256,128);scX.fillStyle=col||'#4ade80';scX.font='bold 50px JetBrains Mono,monospace';scX.textAlign='center';scX.fillText(g,128,70);scX.font='bold 20px Lexend,sans-serif';scX.fillText(txt,128,110);scT.needsUpdate=true};drawScale('--- g','SCALE');
+ bx(1.1,.55,.6,dark,2,1.3,-1.55);const rod=cy(.06,.06,1,steel,2,1.3,-1.1,null,10);rod.rotation.x=Math.PI/2;const pad=bx(1.0,.6,.1,mat(0xf97316,.5,.2),2,1.3,-.95);
+ const bin=(x,z,col)=>{const m=mat(col,.55,.1);bx(1.7,.08,1.5,m,x,.04,z);bx(1.7,.9,.08,m,x,.45,z-.75);bx(1.7,.9,.08,m,x,.45,z+.75);bx(.08,.9,1.5,m,x-.85,.45,z);bx(.08,.9,1.5,m,x+.85,.45,z)};
+ bin(2,2.65,0xdc2626);bin(12.3,0,0x16a34a);
+ const sign=(s,c,x,y,z)=>{const k=new THREE.Mesh(new THREE.PlaneGeometry(1.6,.42),new THREE.MeshBasicMaterial({map:tex(256,68,g=>{g.fillStyle=c;g.fillRect(0,0,256,68);g.fillStyle='#fff';g.font='bold 34px Lexend,sans-serif';g.textAlign='center';g.fillText(s,128,46)}),toneMapped:false}));k.position.set(x,y,z);sc.add(k)};
+ sign('REJECT','#b91c1c',2,1.25,3.43);sign('PACKING','#15803d',12.3,1.25,.8);
+ const cardT=tex(128,128,(x,w,h)=>{noise('#b9854f',30,1500)(x,w,h);x.fillStyle='rgba(235,215,170,.9)';x.fillRect(56,0,16,h)}),cardM=mat(0xffffff,.85,0,{map:cardT});
+ const dmgM=mat(0xffffff,.9,0,{map:tex(128,128,(x,w,h)=>{noise('#8a5c31',40,1800)(x,w,h);x.strokeStyle='#3b2412';x.lineWidth=4;x.beginPath();x.moveTo(10,30);x.lineTo(50,60);x.lineTo(40,90);x.lineTo(90,120);x.stroke();x.beginPath();x.moveTo(80,10);x.lineTo(100,50);x.lineTo(126,60);x.stroke()})});
+ const lblM=mat(0xffffff,.5,0,{map:tex(128,64,(x,w,h)=>{x.fillStyle='#fff';x.fillRect(0,0,w,h);x.fillStyle='#111';for(let i=8;i<120;i+=3)if(Math.random()<.6)x.fillRect(i,8,Math.random()<.5?1:2,34);x.font='bold 12px monospace';x.fillText('SN 4471-382',8,58)})});
+ const lblGeo=new THREE.PlaneGeometry(.62,.32),boxGeo=new THREE.BoxGeometry(1,.8,1);
+ const mkBox=t=>{const g=new THREE.Group(),k=new THREE.Mesh(boxGeo,t.d?dmgM:cardM);k.castShadow=k.receiveShadow=true;g.add(k);if(!t.l){const l=new THREE.Mesh(lblGeo,lblM);l.position.set(0,0,.505);g.add(l)}if(t.d){k.scale.set(1.02,.74,.98);k.rotation.set(.06,0,.1);k.position.y=-.1}sc.add(g);return g};
+ const R={},E={log:[]},st={next:0,seq:[''],si:0,last:null,pz:-.95,id:0,mode:''};let I=[];
+ const SEQ={damage:['','d','','d','d','',''],label:['','l','l','','l','',''],weight:['','w','','w','w','','']};
+ const scen=m=>{st.mode=m;I.forEach(i=>sc.remove(i.g));I=[];st.next=.2;st.si=0;st.last=null;Object.assign(E,{n:0,err:0,ok:0,log:[]});st.seq=m=='run'?['d','l','w','','d','w','','l','dw',''].sort(()=>Math.random()-.5):SEQ[m];drawScale('--- g','SCALE')};
+ const decide=t=>(t.d&&R.dmg=='reject it')||(t.l&&R.lbl=='reject it')||(t.w&&R.wt=='reject it');
+ scen('damage');
+ b.api={R,E,scen,rule:(k,v)=>{R[k]=v},ro:()=>`Inspected ${E.n} · Correct ${E.ok} · Errors ${E.err}`+(st.last?` · Last box #${st.last.id}: ${st.last.dec.toUpperCase()}`:'')};
+ const VB=3.4;
+ S.loop(dt=>{beltT.offset.x-=VB*dt;
+  st.next-=dt;if(st.next<=0){st.next=1.15;const c=st.seq[st.si++%st.seq.length],ty={d:c.includes('d'),l:c.includes('l'),w:c.includes('w')};ty.g=ty.w?Math.round(418+Math.random()*24):Math.round(492+Math.random()*22);I.push({g:mkBox(ty),t:ty,x:-14.2,y:1.4,z:0,s:'belt',dec:null,id:++st.id,tt:0})}
+  lzM.opacity=Math.max(0,lzM.opacity-dt*1.5);
+  I.forEach(it=>{
+   if(it.s=='belt'){it.x+=VB*dt;
+    if(it.dec==null&&it.x>=-4){it.dec=decide(it.t)?'reject':'pass';it.ok=(it.dec=='reject')==(it.t.d||it.t.l||it.t.w);lzM.opacity=.55;drawScale(it.t.g+' g',it.t.w?'UNDERWEIGHT':'WEIGHT OK',it.t.w?'#f87171':'#4ade80');st.last=it}
+    if(it.dec=='reject'&&it.x>=2){it.x=2;it.s='push';it.tt=0}
+    else if(it.x>=10.4){it.s='fall';it.tt=0;it.vx=VB;it.vy=0;it.tgt='pack'}}
+   else if(it.s=='push'){it.tt+=dt;const p=Math.min(1,it.tt/.45);st.pz=-.95+p*2.3;it.z=Math.max(it.z,st.pz+.55);if(p>=1){it.s='fall';it.tt=0;it.vx=0;it.vy=0;it.tgt='rej'}}
+   else if(it.s=='fall'){it.vy-=9.8*dt;it.y+=it.vy*dt;if(it.tgt=='pack')it.x=Math.min(12.3,it.x+it.vx*dt);else it.z=Math.min(2.65,it.z+2.5*dt);
+    if(it.y<=.48){it.y=.48;it.s='done';it.tt=0;E.n++;if(it.ok)E.ok++;else E.err++;E.log.unshift(it);E.log.length=Math.min(E.log.length,4)}}
+   else if(it.s=='done'){it.tt+=dt;if(it.tt>1.4)it.rm=1}
+   it.g.position.set(it.x,it.y,it.z)});
+  I=I.filter(it=>{if(it.rm)sc.remove(it.g);return !it.rm});
+  if(!I.some(i=>i.s=='push'))st.pz=Math.max(-.95,st.pz-dt*4);
+  pad.position.z=st.pz;rod.position.z=(st.pz-1.25)/2;rod.scale.y=Math.max(.05,st.pz+1.25);
+  const L=st.last,n=['dmg','lbl','wt'].filter(k=>R[k]).length,F=E.log[0];
+  S.hud([E.n,E.err,L?L.id:0,JSON.stringify(R)].join('|'),x=>{
+   HP(x,10,10,330,[['🏭 Quality inspection AI'],L?['Box #'+L.id+':  '+(L.t.d?'damaged ✘':'no damage ✔')+'  ·  '+(L.t.l?'no label ✘':'label ✔')+'  ·  '+L.t.g+' g']:['Waiting for the first box…'],L?['Decision: '+(L.dec=='reject'?'REJECT ✖':'PASS → packing ✔')+(L.ok?'':'   ⚠️ wrong'),L.ok?'#86efac':'#fca5a5']:['Decision: —'],['Inspected '+E.n+'  ·  Correct '+E.ok+'  ·  Errors '+E.err]]);
+   HP(x,470,10,160,[['🧠 Rules: '+n+'/3'],RC(R,'dmg','Damage','reject it'),RC(R,'lbl','Missing label','reject it'),RC(R,'wt','Underweight','reject it')]);
+   if(F&&!F.ok)BAN(x,'❌ Box #'+F.id+(F.dec=='pass'?' was shipped with a defect!':' was rejected but it was perfect!'));else if(E.n)BAN(x,'Accuracy '+Math.round(E.ok/E.n*100)+'%  ('+E.ok+' of '+E.n+' correct)','rgba(21,128,61,.92)')})})}
+
 /* ---------- Task catalogue ---------- */
 const TM=['Teachable Machine','https://teachablemachine.withgoogle.com/train'],QD=['Quick, Draw!','https://quickdraw.withgoogle.com/'],MP=['MediaPipe Studio (webcam demos)','https://mediapipe-studio.webapps.google.com/home'],DD=['Duck.ai chat','https://duck.ai'],CM=['Chrome Music Lab','https://musiclab.chromeexperiments.com/Song-Maker/'],WF=['Which Face Is Real','https://www.whichfaceisreal.com/'];
+const NEW3D=new Set([5,6,7,8]);
 const C=[
 ['Robotics and Smart Machines',[
- ['Robot Working and Obstacle Avoidance','A virtual robot uses three distance sensors (the coloured rays) to decide when to turn. You place obstacles and move the robot with commands.','Challenge: add 6 obstacles — can the robot still keep moving?',T_avoid],
- ['AI Sensor Working','Sensors turn the real world into numbers; an AI controller turns numbers into decisions. You change the sensor readings with commands.','Challenge: find settings where the robot must STOP, headlights turn ON and the fan turns ON.',E,CFG.sensor],
- ['Line-Following Robot','Two light sensors at the front detect the black line; the robot steers toward whichever sensor sees it.','Challenge: explain what the robot does when only the left sensor is on the line.',T_line],
- ['Robotic Arm Object Picking','The arm works out joint angles to reach a target (inverse kinematics), picks the block and drops it in the bin.','Challenge: move all 3 blocks into the bin.',T_arm],
- ['AI Traffic Controller','The AI shares a 60-second cycle according to how many cars wait on each road.','Challenge: make the AI improve waiting time by over 40%.',E,CFG.traffic]]],
+ ['Robot Obstacle Avoidance','A virtual robot reads three distance sensors (the coloured rays). It starts untrained: you write the IF–THEN rules that tell it when to turn and when to slow down.','Challenge: pass a 6-second test drive with zero collisions.',T_avoid],
+ ['AI Sensor Controller','Sensors turn the world into numbers; the controller needs rules to turn those numbers into actions. You train one rule per sensor.','Challenge: pass the full sensor test — STOP, headlights ON and fan ON together.',E,CFG.sensor],
+ ['Line-Following Robot','Two light sensors at the front detect the black line. You teach the steering rules that keep the robot on track.','Challenge: finish a test lap at speed 3 without losing the line.',T_line],
+ ['Robotic Arm with Camera','A camera detects each block, then the arm solves its joint angles (inverse kinematics). You program which blocks it must pick.','Challenge: clear all 3 blocks into the bin.',T_arm],
+ ['AI Traffic Controller','The junction starts on a fixed timer. Give the AI eyes (car counting), then train smarter timing rules and emergency priority.','Challenge: beat the fixed timer by over 40% and clear the way for the ambulance.',E,CFG.traffic],
+ ['Self-Driving Car Decisions','The car’s camera and lidar detect traffic lights, pedestrians and road signs. Train the driving AI with IF–THEN rules, then send it on a test drive.','Challenge: finish the 12-second test drive with zero violations.',T_car],
+ ['Robot Vacuum Cleaner AI','A home robot has dirt, cliff, bumper and battery sensors. Train one rule per sensor so it cleans safely on its own.','Challenge: clean 7 dirt spots in one run without falling down the stairs.',T_vac],
+ ['Delivery Drone Autopilot','A delivery drone must avoid buildings, deliver gently, react to strong wind and watch its battery. You program its autopilot.','Challenge: complete the full delivery mission with no crashes.',T_drone],
+ ['Smart Factory Quality Inspection','A camera and a scale inspect every box on a conveyor. Train the AI to reject damaged, unlabelled or underweight boxes.','Challenge: sort 8 mixed boxes with 100% accuracy.',T_fact]]],
 ['Computer Vision and Image Recognition',[
  ['Train Your Own AI Image Classifier','Add drawn samples to two classes, then let a nearest-neighbour model recognise a new drawing — the same idea as Teachable Machine.','Challenge: get the AI right 5 times in a row using ≤ 5 samples per class.',T_cls,null,[TM,QD]],
  ['Hand Gesture Recognition','Send swipe and circle gestures; the AI measures the stroke and triggers an action. For real webcam hands, open the links.','Challenge: trigger all 5 actions.',T_gest,null,[MP,TM]],
@@ -554,28 +910,105 @@ shape=(c,t)=>{const k=c.querySelector('.dc'),x=k.getContext('2d');x.fillStyle='#
 sw=(c,d)=>{const k=c.querySelector('canvas.cv'),r=k.getBoundingClientRect(),P=(x,y,t)=>k.dispatchEvent(new PointerEvent(t,{bubbles:true,pointerId:1,clientX:r.left+x*r.width/400,clientY:r.top+y*r.height/260}));let pts=[];
  if(d=='circle')for(let a=0;a<=24;a++)pts.push([200+70*Math.cos(a/24*6.28),130+70*Math.sin(a/24*6.28)]);else if(d=='tap')pts=[[200,130]];else{const v={right:[1,0],left:[-1,0],up:[0,-1],down:[0,1]}[d];for(let i=0;i<=12;i++)pts.push([200+v[0]*(i-6)*20,130+v[1]*(i-6)*14])}
  P(pts[0][0],pts[0][1],'pointerdown');pts.slice(1).forEach(p=>P(p[0],p[1],'pointermove'));const z=pts[pts.length-1];P(z[0],z[1],'pointerup')},
-QC=(noun,map)=>{const o=Object.keys(map).join('|'),f=(c,m)=>{const b=c.querySelectorAll('[data-k]')[map[m[m.length-1]]];if(!b||b.disabled)throw new Error('You already answered — type: click next');b.click()};
- return[['click <'+o+'>','answer directly',new RegExp('^click ('+o+')$'),f],['drag '+noun+' <'+o+'>','drag the '+noun+' to a box',new RegExp('^drag '+noun+' ('+o+')$'),f],['move '+noun+' <'+o+'>','move the '+noun+' to a box',new RegExp('^move '+noun+' ('+o+')$'),f],['click next','go to the next one',/^click next$/,c=>{const b=c.querySelector('.fb button');if(!b)throw new Error('Answer first, then click next');b.click()}],['click restart','start the game again',/^click restart$/,c=>c.api.reset()]]},
-/* quiz: one step per item, plus a final score step */
+QC=(noun,map)=>{const o=Object.keys(map).join('|'),f=(c,m)=>{const b=c.querySelectorAll('[data-k]')[map[m[m.length-1]]];if(!b||b.disabled)throw new Error('You already answered — type: >>next');b.click()};
+ return[['click <'+o+'>','answer directly',new RegExp('^click ('+o+')$'),f],['drag '+noun+' <'+o+'>','drag the '+noun+' to a box',new RegExp('^drag '+noun+' ('+o+')$'),f],['move '+noun+' <'+o+'>','move the '+noun+' to a box',new RegExp('^move '+noun+' ('+o+')$'),f],['click next','go to the next one',/^click next$/,c=>{const b=c.querySelector('.fb button');if(!b)throw new Error('Answer first, then type >>next');b.click()}],['click restart','start the game again',/^click restart$/,c=>c.api.reset()]]},
 qmAll=(w,map,ok)=>{const o=Object.keys(map).join('|'),N=(w=='clue'?QZ.real:QZ.waste).items.length,VB=['drag','click','move'];
  const ans=k=>c=>{const q=c.querySelector('.qq'),m=/Item ([0-9]+)\//.exec(q.textContent),f=q.querySelector('.fb');return !!m&&+m[1]==k+1&&!!f&&f.textContent.length>0};
  const L=Array.from({length:N},(_,k)=>{const v=VB[k%3],a=v=='click'?'click <'+o+'>':v+' '+w+' <'+o+'>';
-  return[(k?'Type <code>click next</code> to load '+w+' '+(k+1)+' of '+N+', then ':'Study '+w+' 1 of '+N+' on the stage, then ')+'use <b>'+v.toUpperCase()+'</b> to give your verdict.',null,k?null:c=>c.api.reset(),ans(k),'Pick ONE option from the list.',ok,1500,k?['click next',a]:[a]]});
+  return[(k?'Type <code>click next</code> to load '+w+' '+(k+1)+' of '+N+', then ':'Study '+w+' 1 of '+N+' on the stage, then ')+'give your verdict.',null,k?null:c=>c.api.reset(),ans(k),'Pick ONE option from the list.',ok,1500,k?['click next',a]:[a]]});
  L.push(['Type <code>click next</code> to reveal your final <b>score</b>.',null,null,c=>/Score: \d+\//.test(c.querySelector('.qq').textContent),'Type: click next','Your score shows how well you can read the clues.',1500,['click next']]);return L},
 pt=(c,f)=>{const t=c.querySelector('textarea');t.value=f(t.value);t.dispatchEvent(new Event('input',{bubbles:true}))},
 gr=c=>c.querySelector('.gr').textContent,stt=c=>c.querySelector('.st').textContent,lg=c=>c.querySelector('.log').textContent,scp=c=>parseInt(c.querySelector('.sc').textContent),
+rule3=(re,key)=>(c,m)=>c.api.rule(key,m[1]),
+trR=c=>CFG.traffic.R,
 CMD=[
-()=>({c:[['click arena <x> <y>','click the arena at x,y (0-640, 0-380) to drop an obstacle',/^click arena ([0-9]+) ([0-9]+)$/,(c,m)=>cc(c,+m[1],+m[2],640,380)],['drag obstacle <x> <y>','drag a new obstacle to x,y',/^drag obstacle ([0-9]+) ([0-9]+)$/,(c,m)=>{c.api.O.push([+m[1],+m[2],24])}],['move robot <x> <y>','move (teleport) the robot',/^move robot ([0-9]+) ([0-9]+)$/,(c,m)=>{c.api.R.x=+m[1];c.api.R.y=+m[2]}],['turn <left|right>','rotate the robot',/^turn (left|right)$/,(c,m)=>{c.api.R.a+=m[1]=='left'?-.8:.8}],['clear obstacles','remove all obstacles',/^clear obstacles$/,c=>{c.api.O.length=0}]],
- m:[['The robot starts at (60,190) facing right. Put an obstacle <b>right in front</b> of it.','^click arena',c=>{Object.assign(c.api.R,{x:60,y:190,a:0});c.api.O.length=0},c=>c.api.O.some(o=>o[0]>90&&o[0]<230&&Math.abs(o[1]-190)<40),'Try: click arena 150 190','A grey obstacle appears in the robot’s path, so its centre sensor reads a short distance and the ray turns red.'],
- ['Drag an obstacle into the <b>bottom-right</b> corner (x above 450, y above 250).','^drag obstacle',null,c=>c.api.O.some(o=>o[0]>450&&o[1]>250),'Try: drag obstacle 520 320','A new obstacle lands at the exact x, y you type — engineers build test arenas this way.'],
- ['Move the robot to the <b>top-left</b> (x below 150, y below 120).','^move robot',null,c=>c.api.R.x<150&&c.api.R.y<120,'Try: move robot 80 60','The robot jumps to the new position. A robot always tracks its position (x, y) and its heading.'],
- ['AI decision test: the robot is back at (60,190). Put an obstacle about <b>40 px ahead</b> so the status shows <b>Turning</b>.','^(click arena|drag obstacle)',c=>{Object.assign(c.api.R,{x:60,y:190,a:0});c.api.O.length=0},c=>/Turning/.test(c.querySelector('p').textContent),'Try: click arena 100 190','The centre ray reads under 75 px, so the AI slows down and turns toward the side with more room.']]}),
-()=>({c:ENGC(['distance','light','temperature','sound']),m:[['The robot is <b>150 cm</b> from a wall. Set the distance so the controller decides to <b>STOP</b>.','^drag',[150,60,24,20],rx(/STOP/),'Stop happens when distance is under 30 cm. Try: drag distance 20','The wall slides close, the car turns red and the AI chooses STOP to avoid a crash (distance under 30 cm).'],['It is bright (80 %). Make the <b>headlights turn ON</b>.','^move',[150,80,24,20],rx(/headlightsON/),'Headlights need darkness: light below 35. Try: move light to 20','The scene goes dark and the headlight beam switches on (light sensor below 35 %).'],['It is 20 °C. Make the <b>cooling fan turn ON</b>.','^drag',[150,60,20,20],rx(/fanON/),'The fan needs heat above 30. Try: drag temperature 35','The fan in the corner starts spinning (temperature above 30 °C).'],['The settings are a mess. Restore the factory settings.','^click reset',[20,10,40,90],df,'Try: click reset','Every sensor returns to its default value.']]}),
-()=>({c:[['click restart','send the robot back to the start',/^click restart$/,c=>c.api.rs()],['move robot <x>','place the robot on the line at x (20-600)',/^move robot ([0-9]+)$/,(c,m)=>{const X=Math.min(600,+m[1]),R=c.api.R;R.x=X;R.y=c.api.f(X);R.a=Math.atan(80/75*Math.cos(X/75))}],['drag speed <1-5>','set the robot speed',/^drag speed ([1-5])$/,(c,m)=>{c.sp=+m[1]}],['move speed <1-5>','set the robot speed',/^move speed ([1-5])$/,(c,m)=>{c.sp=+m[1]}],['turn <left|right>','nudge the heading',/^turn (left|right)$/,(c,m)=>{c.api.R.a+=m[1]=='left'?-.3:.3}]],
- m:[['The robot is far along the track. Send it back to the start.','^click restart',c=>{const R=c.api.R;R.x=450;R.y=c.api.f(450)},c=>c.api.R.x<120,'Try: click restart','The robot reappears at the left end of the line and starts following it again.'],['Place the robot on the line at <b>x = 300</b>.','^move robot',null,c=>Math.abs(c.api.R.x-300)<45,'Try: move robot 300','The robot drops onto the line at x = 300; its two sensor dots decide the steering from there.'],['Set the speed to <b>4</b>.','^drag speed',null,c=>c.sp==4,'Try: drag speed 4','The robot moves twice as fast — watch whether the sensors can still keep up on the bends.'],['Place the robot near the end (x above 440) at speed <b>2</b>.','^move robot',null,c=>c.sp==2&&c.api.R.x>440,'Try: drag speed 2  then  move robot 460','A slower robot reacts in time on tight curves — engineers trade speed for accuracy.']]}),
-()=>({c:[['pick <red|green|orange>','program the arm to pick that block into the bin',/^pick (red|green|orange)$/,(c,m)=>{if(!c.api.pick(COL[m[1]]))throw new Error('Arm is busy or the block is already in the bin — wait and retry')}],['drag <color> bin','drag a block to the bin',/^drag (red|green|orange) bin$/,(c,m)=>{if(!c.api.pick(COL[m[1]]))throw new Error('Arm is busy or the block is already in the bin — wait and retry')}],['click <color>','click a block',/^click (red|green|orange)$/,(c,m)=>{const o=c.api.O[COL[m[1]]];cc(c,o[0],o[1],640,380)}],['move arm home','return the arm to its home position',/^move arm home$/,c=>c.api.home()],['click reset','put all blocks back on the floor',/^click reset$/,c=>c.api.reset()]],
- m:[['Move the <b>red</b> block into the bin.','^drag red bin',c=>c.api.reset(),c=>c.api.O[0][0]>540,'Try: drag red bin (wait for the arm to finish)','The arm works out its joint angles (inverse kinematics), reaches the red block, carries it and drops it in the bin.',9000],['Send the arm to the <b>green</b> block.','^click green',null,c=>c.api.O[1][0]>540,'Wait until the arm is home, then: click green','The click gives the robot a target and it runs the same pick → carry → drop program.',9000],['Program the arm to bin the <b>orange</b> block.','^pick orange',null,c=>c.api.O[2][0]>540,'Try: pick orange','The orange block is carried to the bin — a program calls the same function as a click.',9000],['Reset so all blocks are back on the floor.','^click reset',null,c=>c.api.O.every(o=>o[0]<540),'Try: click reset','All three blocks return to the floor, ready for a new test.']]}),
-()=>({c:ENGC(['north','south','east','west']),m:[['All roads have 10 cars. Make <b>East–West get the longer green</b>.','^drag',[10,10,10,10],rg((n,s,e,w)=>e+w>n+s),'Add cars to east or west. Try: drag east 25','More cars queue on the East road, so the AI gives East–West a longer green light.'],['Make <b>North–South</b> the busiest road.','^move',[5,5,5,5],rg((n,s,e,w)=>n+s>e+w),'Try: move north to 20','The North queue grows and the AI shifts green time to North–South.'],['Make the AI beat the fixed 30/30 timer by <b>more than 40 %</b>.','^drag',[10,10,10,10],c=>pn(c,'Improvement(-?[0-9]+)')>40,'Make one direction empty and the other very busy.','With one direction empty, the smart timer gives almost all the green to the busy road and waiting drops sharply.'],['Reset the controller.','^click reset',[30,2,0,9],df,'Try: click reset','Every road returns to the default test scenario.']]}),
+/* 0 obstacle avoidance */
+()=>({c:[['place obstacle at <x> <y>','build the test arena: drop an obstacle at x, y (0-640, 0-380)',/^place obstacle at ([0-9]+) ([0-9]+)$/,(c,m)=>{c.api.O.push([+m[1],+m[2],26])}],
+ ['place robot at <x> <y>','move the robot to x, y',/^place robot at ([0-9]+) ([0-9]+)$/,(c,m)=>{Object.assign(c.api.R,{x:+m[1],y:+m[2],a:0})}],
+ ['if front distance is below <n> then <action>','train the front-sensor rule',/^if front distance is below ([0-9]+) then (turn to the open side|keep driving)$/,(c,m)=>{c.api.K.front=m[2]=='turn to the open side'?+m[1]:null}],
+ ['if side distance is below <n> then <action>','train the side-sensor rule',/^if side distance is below ([0-9]+) then (slow down|keep full speed)$/,(c,m)=>{c.api.K.side=m[2]=='slow down'?+m[1]:null}],
+ ['start test drive','start a 6-second collision test',/^start test drive$/,c=>{c.api.E.test={t0:performance.now(),h:c.api.E.hits}}]],
+ m:[['The robot starts at (60, 190) facing right and is <b>untrained</b>. Build a test: place an obstacle right in its path and watch what happens.',null,c=>{Object.assign(c.api.R,{x:60,y:190,a:0});c.api.O.length=0;c.api.E.hits=0},c=>c.api.E.hits>0,'The obstacle must sit on the robot’s line: y = 190, x between 120 and 220.','The robot crashes — its sensors give numbers, but without a rule the AI does not know what those numbers mean.',4000,['place obstacle at 160 190']],
+ ['Train the robot: when the <b>front sensor</b> reads below 70 px, it must react. Decide the correct action.',null,c=>{Object.assign(c.api.R,{x:60,y:190,a:0});c.api.E.turns=0},c=>c.api.E.turns>=3,'A robot that keeps driving will crash again. Choose the action that avoids the obstacle.','The front ray turns red below 70 px and the robot turns toward the side with more space — your rule became its behaviour.',4000,['if front distance is below 70 then <keep driving|turn to the open side>']],
+ ['Train a safety rule: what should the robot do if either <b>side sensor</b> reads below 40 px?',null,null,c=>c.api.K.side==40,'Close to a wall, a careful robot reduces its speed.','Near side obstacles the robot now drops to half speed, giving it more time to react.',1500,['if side distance is below 40 then <keep full speed|slow down>']],
+ ['Final exam: add two more obstacles, then start a <b>6-second test drive</b> with zero collisions.',null,c=>{Object.assign(c.api.R,{x:60,y:190,a:0})},c=>{const E=c.api.E;return !!E.test&&performance.now()-E.test.t0>6000&&E.hits==E.test.h},'If it crashed, check your front rule and run the test again.','Six seconds, zero collisions: the trained rules work even in an arena the robot has never seen.',9000,['place obstacle at 330 200','place obstacle at 470 260','start test drive']]]}),
+/* 1 sensor controller */
+()=>({c:[['if <sensor> is <below|above> <n> then <action>','train a sensor rule (front distance, light, temperature, sound)',/^if (front distance|light|temperature|sound) is (below|above) ([0-9]+) then (stop|slow down|go|headlights on|headlights off|fan on|fan off|sound alert)$/,(c,m)=>{const R=CFG.sensor.R=(CFG.sensor.R||[]).filter(r=>!(r.k==m[1]&&r.op==m[2]&&r.v==+m[3]));R.push({k:m[1],op:m[2],v:+m[3],a:m[4]});sv(c,[])}],
+ ['run sensor test','load the full test: wall 25 cm, dark, 40 °C, loud',/^run sensor test$/,c=>sv(c,[25,15,40,90])]],
+ m:[['The robot is only <b>20 cm</b> from a wall, but it is untrained so it keeps driving. Teach it what to do when the front distance is below 30 cm.',null,c=>{CFG.sensor.R=[];sv(c,[20,70,24,20])},rx(/STOP/),'A wall 20 cm away is an emergency. Pick the safest action.','The car turns red and stops before the wall — the rule maps “distance below 30” to the action STOP.',1500,['if front distance is below 30 then <go|stop|slow down>']],
+ ['The wall is now <b>55 cm</b> away. Stopping is too early, full speed is risky. Train a rule for distances below 70 cm.',null,[55,70,24,20],rx(/SLOW/),'Between 30 and 70 cm the robot should still move, but carefully.','The car turns yellow and slows down — two rules on the same sensor give the AI graded decisions.',1500,['if front distance is below 70 then <stop|slow down|go>']],
+ ['Night is falling: the light sensor reads <b>20 %</b>. Teach the AI what to do when light is below 35 %.',null,[150,20,24,20],rx(/headlightsON/),'Headlights are needed when it is dark.','The scene is dark and the headlight beam switches on automatically.',1500,['if light is below 35 then <headlights off|headlights on>']],
+ ['The motor is overheating at <b>38 °C</b>. Train the cooling rule.',null,[150,70,38,20],rx(/fanON/),'Too hot means the motor needs cooling.','The fan in the corner starts spinning — temperature above 30 °C now triggers cooling.',1500,['if temperature is above 30 then <fan on|fan off>']],
+ ['Final exam: run the full sensor test (wall 25 cm, dark, 40 °C). The robot must <b>STOP</b>, switch the <b>headlights ON</b> and the <b>fan ON</b> at the same time.',null,null,c=>/STOP/.test(ot(c))&&/headlightsON/.test(ot(c))&&/fanON/.test(ot(c)),'All three rules must already be trained correctly.','All rules fire together — a real controller checks every sensor, every moment.',1500,['run sensor test']]]}),
+/* 2 line follower */
+()=>({c:[['if left sensor sees the line then <action>','train the left-sensor rule',/^if left sensor sees the line then (steer left|steer right|go straight)$/,(c,m)=>{c.api.K.L=m[1]}],
+ ['if right sensor sees the line then <action>','train the right-sensor rule',/^if right sensor sees the line then (steer left|steer right|go straight)$/,(c,m)=>{c.api.K.R=m[1]}],
+ ['if both sensors lose the line then <action>','train the recovery rule',/^if both sensors lose the line then (search for the line|stop)$/,(c,m)=>{c.api.K.lost=m[1]}],
+ ['set speed to <1-5>','set the motor speed',/^set speed to ([1-5])$/,(c,m)=>{c.sp=+m[1]}],
+ ['start test lap','run one full test lap',/^start test lap$/,c=>{const E=c.api.E;E.test={off:E.off};E.laps=0;c.api.rs()}]],
+ m:[['The robot has <b>no steering rules</b>, so it drifts off the line. Train the rule for the <b>left</b> sensor.',null,c=>c.api.rs(),c=>c.api.K.L=='steer left','If the line is under the LEFT sensor, the robot must move toward it.','When only the left sensor sees the line, the robot steers left and stays on track.',1500,['if left sensor sees the line then <steer right|go straight|steer left>']],
+ ['Now train the <b>right</b> sensor rule.',null,c=>c.api.rs(),c=>c.api.K.R=='steer right','Mirror the left rule.','Both sensors are trained: the robot zig-zags gently along the line — that is how real line followers work.',1500,['if right sensor sees the line then <steer left|steer right|go straight>']],
+ ['On sharp bends both sensors can lose the line. Train a recovery rule.',null,null,c=>c.api.K.lost=='search for the line','A stopped robot never finishes the track.','When the line is lost, the robot turns back toward where it last saw it.',1500,['if both sensors lose the line then <stop|search for the line>']],
+ ['Final exam: set the speed to <b>3</b> and run a test lap. The robot must reach the end of the track while following the line.',null,null,c=>{const E=c.api.E;return !!E.test&&E.laps>=1&&E.off-E.test.off<60},'Check all three rules, then run the lap again.','The robot completes the lap on its own — three simple rules produce smart-looking behaviour.',15000,['set speed to 3','start test lap']]]}),
+/* 3 robotic arm */
+()=>({c:[['scan the workspace','switch on the camera and detect the blocks',/^scan the workspace$/,c=>{c.scan=performance.now()/1000}],
+ ['if block color is <color> then <action>','train a picking rule',/^if block color is (red|green|orange) then (pick and place in bin|leave it)$/,(c,m)=>{if(!c.scan)throw new Error('The camera cannot see any blocks yet — type: camera /scan');c.K[m[1]]=m[2];if(m[2]=='pick and place in bin'&&!c.pend.includes(COL[m[1]]))c.pend.push(COL[m[1]])}],
+ ['return arm to home','send the arm to its home position',/^return arm to home$/,c=>c.api.home()],
+ ['reset the workspace','put the blocks back on the table',/^reset the workspace$/,c=>c.api.reset()]],
+ m:[['The arm is blind until its camera scans the table. Switch on object detection.',null,c=>{c.api.reset();c.scan=0;c.K={}},c=>!!c.scan,'Type: scan the workspace','Green boxes appear around each block with its colour and x, y position — object detection feeds the arm controller.',1500,['scan the workspace']],
+ ['Train the picking rule for the <b>red</b> block.',null,null,c=>c.api.O[0][0]>540,'The goal is to clear the table into the bin.','The arm computes its joint angles (inverse kinematics), grabs the red block and drops it in the bin.',9000,['if block color is red then <leave it|pick and place in bin>']],
+ ['Train a rule for the <b>green</b> block.',null,null,c=>c.api.O[1][0]>540,'Green blocks also belong in the bin.','The same program runs for a different target — rules make robots reusable.',9000,['if block color is green then <pick and place in bin|leave it>']],
+ ['Train the <b>orange</b> rule to finish clearing the table.',null,null,c=>c.api.O[2][0]>540,'Every block must end up in the bin.','The table is clear. The camera found the blocks; your rules decided what the arm did with each one.',9000,['if block color is orange then <leave it|pick and place in bin>']]]}),
+/* 4 traffic controller */
+()=>({c:[['count cars on every road','switch on the car-counting camera',/^count cars on every road$/,c=>{const R=trR();if(!R.includes('count'))R.push('count');sv(c,[])}],
+ ['if a road has more cars then <action>','train the timing rule',/^if a road has more cars then (give it more green time|give it less green time)$/,(c,m)=>{if(!trR().includes('count'))throw new Error('The AI cannot see the cars yet — type: camera /count-cars');CFG.traffic.R=trR().filter(r=>r!='more'&&r!='less');CFG.traffic.R.push(m[1].includes('more')?'more':'less');sv(c,[])}],
+ ['if a road has no cars then <action>','train the empty-road rule',/^if a road has no cars then (skip its green light|keep its green light)$/,(c,m)=>{CFG.traffic.R=trR().filter(r=>r!='skip');if(m[1].startsWith('skip'))CFG.traffic.R.push('skip');sv(c,[])}],
+ ['if an emergency vehicle is detected then <action>','train the emergency rule',/^if an emergency vehicle is detected then (give its road green|treat it like a normal car)$/,(c,m)=>{CFG.traffic.R=trR().filter(r=>r!='emerg');if(m[1].startsWith('give'))CFG.traffic.R.push('emerg');sv(c,[])}]],
+ m:[['The junction runs on a fixed timer and cannot see any cars. Give the AI its eyes.',null,c=>{CFG.traffic.R=[];sv(c,[3,2,25,20,0])},c=>trR().includes('count'),'Type: count cars on every road','The camera now reports how many cars wait in each direction — data the AI can decide with.',1500,['count cars on every road']],
+ ['East–West has <b>45 cars</b> waiting, North–South only 5 — yet each still gets 30 s. Train the timing rule.',null,[3,2,25,20,0],c=>pn(c,'Improvement(-?[0-9]+)')>20,'The longer queue needs the light for longer.','East–West now gets most of the green and the total waiting score drops by about 40 %.',1500,['if a road has more cars then <give it less green time|give it more green time>']],
+ ['North–South is now <b>completely empty</b> but still gets green time. Teach the AI not to waste it.',null,[0,0,15,12,0],rx(/Skip empty/),'Green time on an empty road helps nobody.','North–South gets 0 s and East–West keeps the green — waiting time drops to almost zero.',1500,['if a road has no cars then <keep its green light|skip its green light>']],
+ ['An <b>ambulance 🚑</b> is waiting on the North road while East–West is busy. Train the emergency rule.',null,[2,1,25,20,1],rx(/given green/),'Saving lives matters more than queue length.','The ambulance gets an immediate green light — emergency rules override normal timing.',1500,['if an emergency vehicle is detected then <treat it like a normal car|give its road green>']]]}),
+/* 5 self-driving car (3D) */
+()=>({c:[['if traffic light is red then <action>','train the traffic-light rule',/^if traffic light is red then (stop at the line|keep driving|speed up)$/,rule3(0,'red')],
+ ['if pedestrian is on the crossing then <action>','train the pedestrian rule',/^if pedestrian is on the crossing then (brake and wait|keep driving|honk and pass)$/,rule3(0,'ped')],
+ ['if school zone sign is detected then <action>','train the speed-sign rule',/^if school zone sign is detected then (slow to 30 km\/h|keep 50 km\/h)$/,rule3(0,'school')],
+ ['start test drive','start the 12-second final test drive',/^start test drive$/,c=>c.api.scen('test')]],
+ m:[['The camera can see the traffic light, but the driving AI has <b>no rule</b> for it — watch the car roll through the red light. Train the traffic-light decision.',null,c=>c.api.scen('red'),c=>c.api.E.stopRed,'Red means every vehicle must wait behind the white stop line.','The car brakes smoothly and waits behind the stop line; when the light turns green it drives on.',8000,['if traffic light is red then <keep driving|stop at the line|speed up>']],
+ ['A pedestrian 🚶 is about to step onto the zebra crossing. Train the pedestrian decision.',null,c=>c.api.scen('ped'),c=>c.api.E.brakePed,'People on a crossing always have priority.','The sensor field turns amber, the car stops before the crossing and waits until the pedestrian is safe.',11000,['if pedestrian is on the crossing then <keep driving|honk and pass|brake and wait>']],
+ ['The camera reads a <b>School Zone 30</b> sign, but the car keeps 50 km/h. Train the speed-sign decision.',null,c=>c.api.scen('school'),c=>c.api.E.zoneOk,'Near schools, children can appear suddenly. Obey the sign.','The car slows to 30 km/h through the zone, then speeds back up — reading signs is part of computer vision.',10000,['if school zone sign is detected then <keep 50 km/h|slow to 30 km/h>']],
+ ['Final exam: a 12-second drive through town with the light changing and pedestrians appearing. <b>Zero violations</b> allowed.',null,c=>c.api.scen('test'),c=>{const E=c.api.E;return !!E.test&&performance.now()-E.test>12000&&!E.viol.length},'Check which rule caused the violation shown on the stage, retrain it, then test again.','12 seconds, zero violations: three trained rules work together like a real driver-assist system.',16000,['start test drive']]]}),
+/* 6 robot vacuum (3D) */
+()=>({c:[['if dirt is detected then <action>','train the dirt-sensor rule',/^if dirt is detected then (turn on strong suction|ignore it)$/,rule3(0,'dirt')],
+ ['if cliff sensor detects a drop then <action>','train the cliff-sensor rule',/^if cliff sensor detects a drop then (reverse and turn|keep going)$/,rule3(0,'cliff')],
+ ['if bumper hits furniture then <action>','train the bumper rule',/^if bumper hits furniture then (turn 90 degrees|push harder)$/,rule3(0,'bump')],
+ ['if battery is below 20 then <action>','train the battery rule',/^if battery is below 20 then (return to dock|keep cleaning)$/,rule3(0,'batt')],
+ ['start cleaning run','start a full cleaning run',/^start cleaning run$/,c=>c.api.scen('test')]],
+ m:[['The robot drives over a trail of dirt but its suction stays off. Train the dirt-sensor decision.',null,c=>c.api.scen('dirt'),c=>c.api.E.cleaned>=4,'Cleaning dirt is the robot’s whole job.','Each time the dirt sensor fires, the suction boosts and the dirt disappears.',11000,['if dirt is detected then <ignore it|turn on strong suction>']],
+ ['The robot is heading toward the <b>stairs</b>. Its cliff sensors can feel the drop. Train the safety decision.',null,c=>c.api.scen('cliff'),c=>c.api.E.cliffOK&&!c.api.E.falls,'A fall down the stairs breaks the robot.','The cliff sensor detects empty space, the robot backs off and turns away — no fall.',7000,['if cliff sensor detects a drop then <keep going|reverse and turn>']],
+ ['The robot is about to hit the TV cabinet. Train the bumper decision.',null,c=>c.api.scen('bump'),c=>c.api.E.bumpOK,'Pushing furniture gets the robot stuck.','The bumper presses, the robot turns 90° and keeps cleaning in a new direction.',5000,['if bumper hits furniture then <push harder|turn 90 degrees>']],
+ ['The battery is at <b>24 %</b> and dropping. Train the battery decision.',null,c=>c.api.scen('battery'),c=>c.api.E.docked,'An empty battery leaves the robot stranded mid-room.','Below 20 % the robot plans a route to the dock and starts charging.',14000,['if battery is below 20 then <keep cleaning|return to dock>']],
+ ['Final exam: a full cleaning run with 10 dirt spots. Clean <b>7 or more</b> without falling down the stairs.',null,c=>c.api.scen('test'),c=>c.api.E.cleaned>=7&&!c.api.E.falls,'All four rules must be correct. Run the test again if needed.','The robot navigates, avoids the stairs, bounces off furniture and cleans the room — four sensors, four rules.',32000,['start cleaning run']]]}),
+/* 7 delivery drone (3D) */
+()=>({c:[['if building is ahead then <action>','train the obstacle rule',/^if building is ahead then (climb above it|fly straight)$/,rule3(0,'tower')],
+ ['if target is reached then <action>','train the delivery rule',/^if target is reached then (lower the package on a rope|drop the package from the sky)$/,rule3(0,'deliver')],
+ ['if wind speed is above 40 then <action>','train the wind rule',/^if wind speed is above 40 then (land safely|keep flying)$/,rule3(0,'wind')],
+ ['if battery is below 25 then <action>','train the battery rule',/^if battery is below 25 then (return to base|continue delivery)$/,rule3(0,'batt')],
+ ['start delivery mission','fly the full mission: base → customer → base',/^start delivery mission$/,c=>c.api.scen('mission')]],
+ m:[['The drone’s lidar sees a <b>15 m tower</b> on its route, but the autopilot has no rule. Train the obstacle decision.',null,c=>c.api.scen('tower'),c=>c.api.E.passTower,'The tower is taller than the drone’s flying height.','The drone slows, climbs above the tower, then descends back to its cruising height.',13000,['if building is ahead then <fly straight|climb above it>']],
+ ['The drone has reached the customer’s garden. Train the delivery decision.',null,c=>c.api.scen('deliver'),c=>c.api.E.delivered,'The package contains fragile items.','The drone hovers lower and winches the package down on a rope onto the target.',13000,['if target is reached then <drop the package from the sky|lower the package on a rope>']],
+ ['A <b>55 km/h wind gust</b> is coming. Small drones lose control in strong wind. Train the wind decision.',null,c=>c.api.scen('wind'),c=>c.api.E.landed,'Safety first — wait for the wind to calm down.','The drone descends and lands safely instead of being blown off course.',13000,['if wind speed is above 40 then <keep flying|land safely>']],
+ ['The battery is at <b>27 %</b> and falling fast. Train the battery decision.',null,c=>c.api.scen('battery'),c=>c.api.E.returned,'A drone with an empty battery falls from the sky.','The drone turns back, climbs over the tower again and lands at base with battery to spare.',22000,['if battery is below 25 then <continue delivery|return to base>']],
+ ['Final exam: fly the full mission — take off, avoid the tower, deliver gently and return to base with <b>no crashes</b>.',null,c=>c.api.scen('mission'),c=>{const E=c.api.E;return E.delivered&&E.returned&&!E.crashes},'All rules must be correct. Run the mission again if it crashed.','Mission complete! The autopilot chained four decisions together — that is how real delivery drones fly.',45000,['start delivery mission']]]}),
+/* 8 factory inspection (3D) */
+()=>({c:[['if box is damaged then <action>','train the damage rule',/^if box is damaged then (reject it|pass it)$/,rule3(0,'dmg')],
+ ['if label is missing then <action>','train the label rule',/^if label is missing then (reject it|pass it)$/,rule3(0,'lbl')],
+ ['if weight is below 450 grams then <action>','train the weight rule',/^if weight is below 450 grams then (reject it|pass it)$/,rule3(0,'wt')],
+ ['start production run','start a mixed production run',/^start production run$/,c=>c.api.scen('run')]],
+ m:[['Boxes roll under the inspection camera. The AI has no rules, so <b>damaged</b> boxes are shipped to customers. Train the damage decision.',null,c=>c.api.scen('damage'),c=>c.api.E.n>=4&&!c.api.E.err,'Would a customer accept a crushed box?','Damaged boxes are pushed into the red REJECT bin, good ones go to packing.',22000,['if box is damaged then <pass it|reject it>']],
+ ['Some boxes arrive <b>without a barcode label</b>, so they cannot be tracked. Train the label decision.',null,c=>c.api.scen('label'),c=>c.api.E.n>=4&&!c.api.E.err,'A box without a label gets lost in the warehouse.','Unlabelled boxes are rejected for relabelling; labelled ones continue to packing.',22000,['if label is missing then <reject it|pass it>']],
+ ['The scale shows each box’s weight. A full box weighs about 500 g; under 450 g means items are missing. Train the weight decision.',null,c=>c.api.scen('weight'),c=>c.api.E.n>=4&&!c.api.E.err,'Underweight means the customer gets less than they paid for.','Underweight boxes are rejected — the scale’s number became a decision.',22000,['if weight is below 450 grams then <pass it|reject it>']],
+ ['Final exam: a mixed production run. The AI must sort <b>8 boxes</b> with 100 % accuracy.',null,c=>c.api.scen('run'),c=>c.api.E.n>=8&&!c.api.E.err,'If a box was sorted wrongly, check the rule for that defect and run again.','100 % accuracy: three inspection rules check every box — a real quality-control system.',30000,['start production run']]]}),
+/* computer vision */
 ()=>({c:[['drag pen <circle|line|cross|zigzag>','draw a shape (drag the pen)',/^drag pen (circle|line|cross|zigzag)$/,(c,m)=>shape(c,m[1])],['move pen <circle|line|cross|zigzag>','draw a shape (move the pen)',/^move pen (circle|line|cross|zigzag)$/,(c,m)=>shape(c,m[1])],['click add <circles|lines>','save the drawing as a training sample',/^click add (circles|lines)$/,(c,m)=>c.querySelector(m[1]=='circles'?'[data-c="0"]':'[data-c="1"]').click()],['click predict','ask the AI what it sees',/^click predict$/,c=>c.querySelector('#pr').click()],['click clear','wipe the drawing',/^click clear$/,c=>c.querySelector('#cx').click()]],
  m:[['Teach the class <b>Circles</b>: draw a circle, then add it as a sample.','^drag pen',c=>{c.api.S[0].length=0;c.api.S[1].length=0},c=>c.api.S[0].some(v=>v.reduce((a,b)=>a+b,0)>5),'Try: drag pen circle  then  click add circles','A circle appears on the pad, then moves into the Circles column as a tiny 16×16 training sample.'],['Teach the class <b>Lines</b>: draw a line, then add it.','^move pen',null,c=>c.api.S[1].some(v=>v.reduce((a,b)=>a+b,0)>5),'Try: move pen line  then  click add lines','A line sample appears in the Lines column — now the AI has two classes to compare.'],['Add <b>one more</b> sample of each class (2 each).','^click add',null,c=>c.api.S[0].length>=2&&c.api.S[1].length>=2,'Draw again, then click add circles / click add lines','Each column now holds 2 samples. More examples make predictions more reliable.'],['Draw a circle and ask for a prediction: the AI must answer <b>Circles</b>.','^click predict',null,c=>/Circles/.test(c.querySelector('.rs').textContent),'Try: drag pen circle  then  click predict','The AI compares your drawing with its nearest training examples and names the class in yellow.']]}),
 ()=>({c:[['drag swipe <right|left|up|down>','swipe with the mouse',/^drag swipe (right|left|up|down)$/,(c,m)=>sw(c,m[1])],['move hand <right|left|up|down>','move your hand in a direction',/^move hand (right|left|up|down)$/,(c,m)=>sw(c,m[1])],['drag circle','draw a circle',/^drag circle$/,c=>sw(c,'circle')],['click canvas','tap without moving',/^click canvas$/,c=>sw(c,'tap')]],
@@ -584,6 +1017,7 @@ CMD=[
 ()=>({c:[['drag objects <1-6>','set how many objects (makes a new scene)',/^drag objects ([1-6])$/,(c,m)=>{c.n=+m[1];c.querySelector('#ns').click()}],['move objects <1-6>','set how many objects (makes a new scene)',/^move objects ([1-6])$/,(c,m)=>{c.n=+m[1];c.querySelector('#ns').click()}],['click new','create a new scene',/^click new$/,c=>c.querySelector('#ns').click()],['click detect','run the detector',/^click detect$/,c=>c.querySelector('#dt').click()]],
  m:[['Make exactly <b>3</b> objects, then run the detector: it must report 3.','^drag objects',null,c=>/^3 objects/.test(stt(c)),'Try: drag objects 3  then  click detect','A new scene with 3 shapes appears, then green boxes and labels are drawn around each one.'],['Make <b>5</b> objects, then detect.','^move objects',null,c=>/^5 objects/.test(stt(c)),'Try: move objects 5  then  click detect','5 shapes appear and the detector boxes each one — more objects, more boxes.'],['Create a brand-new scene and detect.','^click new',null,c=>/objects detected/.test(stt(c)),'Try: click new  then  click detect','A random scene the AI has never seen is detected — a good detector works on new data.'],['Make a single object, then detect: the AI must find <b>1</b>.','^drag objects',null,c=>/^1 objects/.test(stt(c)),'Try: drag objects 1  then  click detect','One shape, one box. Counting correctly is the first test of a detector.']]}),
 ()=>({c:QC('clue',{real:0,ai:1}),m:qmAll('clue',{real:0,ai:1},'The stage reveals REAL PHOTO or AI-GENERATED. Experts check hands, text, shadows, reflections and skin texture.')}),
+/* voice & language */
 ()=>({c:[['say <sentence>','speak to the assistant',/^say (.+)$/,(c,m)=>{c.querySelector('.tx').value=m[1];c.querySelector('.sd').click()}],['type <sentence>','type into the box without sending',/^type (.+)$/,(c,m)=>{c.querySelector('.tx').value=m[1]}],['click send','send the typed text',/^click send$/,c=>c.querySelector('.sd').click()],['click talk','turn the microphone on/off',/^click talk$/,c=>c.querySelector('.mic').click()]],
  m:[['Make the assistant tell you the <b>time</b>.','^say',null,c=>/It is /.test(lg(c)),'Try: say what time is it','The robot’s mouth moves and it speaks the current time — it matched the keyword “time” to an intent.'],['Get a <b>joke</b>.','^say',null,c=>/robot go to school/.test(lg(c)),'Try: say tell me a joke','Different words trigger a different intent: the robot tells a joke.'],['Calculate <b>12 times 4</b>.','^say',null,c=>/is 48/.test(lg(c)),'Try: say 12 times 4','The assistant pulls out the numbers and the operation, then answers 48.'],['Type, then send, the question <b>what is ai</b>.','^click send',null,c=>/AI is software/.test(lg(c)),'Try: type what is ai  then  click send','Voice or text, the AI works on the same words and explains what AI is.']]}),
 ()=>({c:[['rule <keywords> | <reply>','teach the bot a rule',/^rule (.+[|].+)$/,(c,m)=>{const t=c.querySelector('textarea');t.value+='\n'+m[1];t.dispatchEvent(new Event('input',{bubbles:true}))}],['ask <message>','chat with the bot',/^ask (.+)$/,(c,m)=>{c.querySelector('input').value=m[1];c.querySelector('.sd').click()}],['click test <1-6>','run one test question',/^click test ([1-6])$/,(c,m)=>c.querySelectorAll('.qs button')[m[1]-1].click()],['click tests','run all 6 tests',/^click tests$/,c=>c.querySelectorAll('.qs button').forEach(b=>b.click())],['drag rule top','drag the last rule to the top (rules are checked in order)',/^(drag|move) rule top$/,c=>{const t=c.querySelector('textarea'),L=t.value.split('\n').filter(Boolean);L.unshift(L.pop());t.value=L.join('\n')}]],
@@ -594,44 +1028,82 @@ CMD=[
  m:[['Write a prompt with a clear task (explain, write, list…). Reach <b>14+</b>.','^prompt',null,c=>scp(c)>=14,'Try: prompt explain photosynthesis','The Task ingredient lights up green and the rocket lifts off a little.'],['Add a <b>role</b> and an <b>audience</b>. Reach <b>42+</b>.','^drag phrase',null,c=>scp(c)>=42,'Try: drag phrase act as a science teacher  then  drag phrase for 10-year-old students','Role and audience light up and the rocket climbs higher — they guide the AI’s style.'],['Add a <b>format</b> and a <b>limit</b>. Reach <b>70+</b>.','^move phrase',null,c=>scp(c)>=70,'Try: move phrase use bullet points  then  move phrase under 100 words','Format and limit light up — they control the shape and size of the answer.'],['Reach <b>90+</b> (add an example and a tone), then submit.','^click submit',null,c=>{const e=c.querySelector('.lb .rw b');return !!e&&+e.textContent>=90},'Add: for example ... and a friendly tone, then click submit','All seven ingredients glow, the rocket reaches the top and your score joins the leaderboard.']]}),
 ()=>({c:[['mood <happy|sad|calm>','choose the scale',/^mood (happy|sad|calm)$/,(c,m)=>{const s=c.querySelector('.sc');s.value=[...s.options].find(o=>o.text.toLowerCase().includes(m[1])).value;s.dispatchEvent(new Event('change',{bubbles:true}))}],['drag tempo <60-200>','set the tempo',/^drag tempo ([0-9]+)$/,(c,m)=>{const t=c.querySelector('.tp');t.value=m[1];t.dispatchEvent(new Event('input',{bubbles:true}))}],['move tempo <60-200>','set the tempo',/^move tempo ([0-9]+)$/,(c,m)=>{const t=c.querySelector('.tp');t.value=m[1];t.dispatchEvent(new Event('input',{bubbles:true}))}],['click generate','compose and play',/^click generate$/,c=>c.querySelector('.gn').click()],['click stop','stop the music',/^click stop$/,c=>c.querySelector('.sp').click()],['click key <c-b>','play one note',/^click key ([a-g])$/,(c,m)=>c.querySelectorAll('.ky button')['cdefgab'.indexOf(m[1])].click()],['wave <sine|triangle|square|sawtooth>','change the instrument',/^wave (sine|triangle|square|sawtooth)$/,(c,m)=>{c.querySelector('.wv').value=m[1]}]],
  m:[['Pick the <b>sad</b> mood, then compose a melody.','^click generate',null,c=>/Sad/.test(c.querySelector('.sc').value)&&c.querySelector('.bars').children.length>0,'Try: mood sad  then  click generate','16 coloured notes appear on the stage and light up as a minor (sad) melody plays.'],['Set the tempo to about <b>160</b>.','^drag tempo',null,c=>Math.abs(c.querySelector('.tp').value-160)<=5,'Try: drag tempo 160','The next melody will play much faster — tempo means beats per minute.'],['Slow the tempo to <b>75 or less</b>.','^move tempo',null,c=>c.querySelector('.tp').value<=75,'Try: move tempo 70','A slow tempo makes music feel calm.'],['Pick the <b>calm</b> mood and compose again.','^click generate',null,c=>/Calm/.test(c.querySelector('.sc').value),'Try: mood calm  then  click generate','A pentatonic melody plays — these notes rarely clash, so it sounds peaceful.']]}),
+/* smart environments */
 ()=>({c:ENGC(['temperature','light','people','hour']),m:[['A hot (30 °C) room is empty. Let people walk in so the <b>AC turns ON</b>.','^drag',[30,80,0,15],rx(/Air conditionerON/),'Try: drag people 2','Two people appear and cold air flows from the AC — it only runs when someone is inside.'],['People are in a fairly dark room. Make the <b>lights switch ON</b>.','^move',[22,70,3,15],rx(/LightsON/),'Try: move light to 20','The window darkens and the ceiling lamp glows — lights turn on only if the room is occupied and daylight is low.'],['It is 23:00 and 3 people are inside. Make the <b>door lock</b>.','^drag',[22,20,3,23],rx(/Door locked/),'Try: drag people 0','Everyone leaves and the door turns red with a lock — empty at night means lock up.'],['Reset the smart room.','^click reset',[40,5,0,3],df,'Try: click reset','The room returns to the default scenario.']]}),
 ()=>({c:ENGC(['moisture','temperature','rain']),m:[['Soil is fine (60 %). Make the AI say <b>Water now</b>.','^drag',[60,30,10],rx(/Water now/),'Try: drag moisture 20','The plant droops, the pump light turns green and water sprays into the pot.'],['Make the AI <b>skip watering because rain is coming</b>.','^move',[60,30,80],rx(/Skip/),'Soil must be dry (below 35) while rain is above 60.','Rain falls from the grey cloud and the pump stays off — using the forecast saves water.'],['Make the pump deliver <b>3 litres or more</b>.','^drag',[60,25,10],c=>pn(c,'Water to pump([0-9.]+)')>=3,'Drier soil gives more litres.','The drier the soil, the more water: (50 − moisture) × 0.1 litres, ×1.3 when hot.'],['Reset.','^click reset',[5,45,95],df,'Try: click reset','The garden returns to its default settings.']]}),
 ()=>({c:ENGC(['temperature','humidity','pressure','wind']),m:[['Push the rain chance <b>above 60 %</b>.','^drag',[28,50,1013,10],c=>pn(c,'Rain chance .AI model.([0-9]+)')>60,'High humidity and low pressure.','Clouds thicken, the sky greys and rain begins — falling pressure plus high humidity signal rain.'],['Trigger a <b>Storm alert</b>.','^move',[28,50,1013,10],rx(/Storm risk/),'Wind above 50 and pressure below 1000.','The turbine spins hard, lightning flashes and the STORM warning appears.'],['Show an <b>Extreme heat</b> warning.','^drag',[28,50,1013,10],rx(/Extreme heat/),'Temperature above 40.','The thermometer rises and the HEAT warning appears — alerts protect people.'],['Reset.','^click reset',[45,95,985,70],df,'Try: click reset','All readings return to normal.']]}),
 ()=>({c:ENGC(['cars']),m:[['Make the entrance sign show <b>Almost full</b>.','^drag',[3],rx(/Almost full/),'18 or more cars. Try: drag cars 18','The slots fill with cars and the sign turns red at 90 % full.'],['Set 11 cars so the next car is guided to <b>P12</b>.','^move',[3],rx(/Slot P12/),'Try: move cars to 11','A yellow car drives to the flashing slot P12 — the nearest free space.'],['Make the car park <b>FULL</b>.','^drag',[3],rx(/FULL/),'Try: drag cars 20','Every slot is taken and the gate light turns red — new drivers are redirected.'],['Reset.','^click reset',[15],df,'Try: click reset','The car park returns to its default occupancy.']]}),
 ()=>({c:QC('item',{organic:0,paper:1,plastic:2,metal:3,ewaste:4}),m:qmAll('item',{organic:0,paper:1,plastic:2,metal:3,ewaste:4},'The stage shows whether the item landed in the right bin. Smart bins learn every label from thousands of photos.')})];
-const CX={'5.2':'drag pen circle then click add circles then drag pen line then click add lines','4.2':'drag north 0 then drag south 0 then drag east 30','7.1':'drag mouth -8 then move eyebrows to -8','7.2':'drag eyebrows 8 then drag eyes 9','16.1':'move moisture to 20','16.2':'drag moisture 20','17.0':'drag humidity 100 then drag pressure 985','17.1':'move wind to 60 then move pressure to 990','17.2':'drag temperature 45','3.1':'click green','11.3':'click tests','13.3':'drag phrase for example a diagram in a friendly tone then click submit'},
+const CX={'9.2':'drag pen circle then click add circles then drag pen line then click add lines','11.1':'drag mouth -8 then move eyebrows to -8','11.2':'drag eyebrows 8 then drag eyes 9','20.1':'move moisture to 20','20.2':'drag moisture 20','21.0':'drag humidity 100 then drag pressure 985','21.1':'move wind to 60 then move pressure to 990','21.2':'drag temperature 45','15.3':'click tests','17.3':'drag phrase for example a diagram in a friendly tone then click submit'},
 cmdOf=(n,i,m)=>{if(m[7])return m[7];let t=CX[n+'.'+i];
  if(!t){const r=/Try: (.*)$/.exec(m[4]);t=r?r[1].replace(/ *[(].*$/,''):(m[1]||'').replace(/[$^]/g,'')}
  return t.split(/ +then +/).map(x=>x.trim()).filter(Boolean)};
 
+/* ---------- Short command codes: the rule is shown, students type a short code ---------- */
+const ACT={
+ 'keep driving':'drive-on /go','turn to the open side':'turn-to /open','slow down':'slow /down','keep full speed':'full /speed+',
+ 'stop':'stop /now','go':'go /fwd','headlights on':'lights +on','headlights off':'lights -off','fan on':'fan +on','fan off':'fan -off','sound alert':'alert !',
+ 'steer left':'steer <left','steer right':'steer >right','go straight':'go ^straight','search for the line':'search ?line',
+ 'pick and place in bin':'pick >bin','leave it':'leave /skip',
+ 'give it more green time':'green +more','give it less green time':'green -less','skip its green light':'skip /green','keep its green light':'keep /green','give its road green':'priority !green','treat it like a normal car':'normal /wait',
+ 'stop at the line':'stop-at /line','speed up':'speed /up+','brake and wait':'brake /wait','honk and pass':'honk /pass','slow to 30 km/h':'speed =30','keep 50 km/h':'speed =50',
+ 'turn on strong suction':'suction +max','ignore it':'ignore /skip','reverse and turn':'reverse /turn','keep going':'keep /going','turn 90 degrees':'turn @90','push harder':'push +hard','return to dock':'dock /home','keep cleaning':'clean /on',
+ 'climb above it':'climb ^up','fly straight':'fly /straight','lower the package on a rope':'rope /lower','drop the package from the sky':'drop /package','land safely':'land /safe','keep flying':'fly /on','return to base':'base /home','continue delivery':'deliver /on',
+ 'reject it':'reject /box','pass it':'pass /box'};
+const LIT=[
+ ['place obstacle at {a} {b}','+obstacle @{a},{b}'],['place robot at {a} {b}','robot @{a},{b}'],['start test drive','!test-drive'],['run sensor test','!sensor-test'],
+ ['set speed to {a}','speed={a}'],['start test lap','!test-lap'],['scan the workspace','camera /scan'],['return arm to home','arm /home'],['reset the workspace','#reset'],
+ ['count cars on every road','camera /count-cars'],['start cleaning run','!clean-run'],['start delivery mission','!mission'],['start production run','!production'],
+ ['drag pen {a}','pen>{a}'],['move pen {a}','pen>{a}'],['click add {a}','+sample {a}'],['click predict','?predict'],
+ ['drag swipe {a}','swipe>{a}'],['move hand {a}','hand^{a}'],['drag circle','gesture=circle'],['click canvas','tap!'],
+ ['drag objects {a}','objects={a}'],['move objects {a}','objects={a}'],['click new topic','?topic'],['click new','+scene'],['click detect','?detect'],
+ ['drag clue {a}','verdict>{a}'],['move clue {a}','verdict>{a}'],['drag item {a}','bin>{a}'],['move item {a}','bin>{a}'],['click next','>>next'],['click restart','#restart'],
+ ['say {a}','@ {a}'],['type {a}','txt: {a}'],['click send','>send'],['click talk','mic!'],
+ ['rule {a}','+rule {a}'],['ask {a}','? {a}'],['click tests','test#all'],['click test {a}','test#{a}'],
+ ['drag language {a}','lang={a}'],['dictate {a}','~ {a}'],['click copy','#copy'],['click clear','#clear'],['click start','mic>on'],
+ ['prompt {a}','p= {a}'],['drag phrase {a}','+end {a}'],['move phrase {a}','+start {a}'],['click submit','!submit'],
+ ['mood {a}','mood={a}'],['drag tempo {a}','tempo={a}'],['move tempo {a}','tempo={a}'],['click generate','!compose'],['click stop','#stop'],['click key {a}','key={a}'],['wave {a}','wave={a}'],
+ ['click reset','#reset'],['move {a} to {b}','{a}={b}'],['drag {a} {b}','{a}={b}'],['click {a}','pick>{a}']];
+const LIT_T={16:[['click stop','mic>off']]};
+const tplK=t=>t.match(/\{[a-z]\}/g)||[],tplRe=t=>new RegExp('^'+t.split(/(\{[a-z]\})/).map(g=>/^\{[a-z]\}$/.test(g)?'(.+?)':g.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('')+'$');
+const SHORT=(full,n)=>{full=String(full).toLowerCase().trim().replace(/\s+/g,' ');const m=/^if .+ then (.+)$/.exec(full);if(m&&ACT[m[1]])return ACT[m[1]];
+ for(const[f,s]of(LIT_T[n]||[]).concat(LIT)){const mm=tplRe(f).exec(full);if(mm){let o=s;tplK(f).forEach((k,i)=>o=o.split(k).join(mm[i+1]));return o}}return full};
+const expand=(p,n)=>{const m=/<([^<>]*\|[^<>]*)>/.exec(p),nm=s=>String(s).toLowerCase().trim().replace(/\s+/g,' ');
+ if(!m)return[{full:nm(p),opt:null,short:SHORT(p,n)}];return m[1].split('|').map(o=>{const f=nm(p.replace(m[0],o));return{full:f,opt:o.trim(),short:SHORT(f,n)}})};
+const cpk=s=>String(s).toLowerCase().replace(/\s+/g,'');
+const shTxt=(h,n)=>String(h).replace(/<code>([^<]*)<\/code>/g,(z,a)=>'<code>'+SHORT(a,n)+'</code>').replace(/(Try|Type): (.*)$/,(z,a,b)=>a+': '+b.split(/ +then +/).map(x=>x.trim()).filter(Boolean).map(x=>'<code>'+esc(SHORT(x,n))+'</code>').join(' then '));
+/* display order: 3D labs first */
+const ORD=[5,6,7,8,0,1,2,3,4,...Array.from({length:15},(_,i)=>i+9)],pos=n=>ORD.indexOf(n)+1;
+
 /* ================= Command-only lab UI ================= */
-const flat=C.flatMap(c=>c[1]),SB=document.getElementById('sb'),SW=document.getElementById('sw'),RO=document.getElementById('ro'),STH=document.getElementById('sth'),LOCK=document.getElementById('lock'),
+const flat=C.flatMap(c=>c[1]),NT=flat.length,SB=document.getElementById('sb'),SW=document.getElementById('sw'),RO=document.getElementById('ro'),STH=document.getElementById('sth'),LOCK=document.getElementById('lock'),
 TOAST=document.getElementById('toast'),HINT=document.getElementById('hint'),BURST=document.getElementById('burst'),XV=document.getElementById('xv'),XH=document.getElementById('xh'),XY=document.getElementById('xy');
-let STG=null,T=null;
+let STG=null,T=null,STU={n:'',g:''};try{STU=Object.assign(STU,JSON.parse(localStorage.getItem('aiwStu')||'{}'))}catch(e){}
 const catOf=k=>{let i=0;for(const c of C){if(k<i+c[1].length)return c[0];i+=c[1].length}return''},
 plain=s=>{const e=document.createElement('div');e.innerHTML=String(s);return e.textContent},
-short=s=>{s=plain(s);return s.length>92?s.slice(0,90)+'…':s},
+short=s=>{s=plain(s.replace(/<code>([^<]*)<\/code>/g,(z,a)=>'<code>'+SHORT(a,T?T.n:0)+'</code>'));return s.length>92?s.slice(0,90)+'…':s},
 norm=s=>String(s).toLowerCase().trim().split(/\s+/).filter(Boolean).join(' '),
 reE=s=>s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),
-partRe=p=>new RegExp('^'+norm(p).split(/(<[^>]+>)/).map(g=>g[0]=='<'?(g.includes('|')?'('+g.slice(1,-1).split('|').map(reE).join('|')+')':'(.+)'):reE(g)).join('')+'$');
+partRe=p=>new RegExp('^'+norm(p).split(/(<[^>]+>)/).map(g=>g[0]=='<'?(g.includes('|')?'('+g.slice(1,-1).split('|').map(reE).join('|')+')':'(.+)'):reE(g)).join('')+'$'),
+isDec=p=>/ then </.test(p);
 
-const prog=()=>{document.getElementById('pgt').textContent=done.size+' of 20 tasks complete';document.getElementById('pgb').style.width=done.size*5+'%'};
-const saveDone=()=>{try{localStorage.setItem('aiw',JSON.stringify([...done]))}catch(e){}prog()};
+const prog=()=>{document.getElementById('pgt').textContent=done.size+' of '+NT+' tasks complete';document.getElementById('pgb').style.width=(done.size/NT*100)+'%'};
+const saveDone=()=>{try{localStorage.setItem('aiw2',JSON.stringify([...done]))}catch(e){}prog()};
 const lock=(on,a,b)=>{LOCK.hidden=!on;if(on)LOCK.innerHTML=`<div class="lk1">${a}</div><div class="lk2">${b}</div>`};
 const setSth=()=>{const L=$(STH,'.led'),t=$(STH,'#stt');if(!T){L.className='led';t.textContent='AI stage — no task loaded';return}
  L.className='led'+(T.started?' on':'');t.textContent=flat[T.n][0]+' — '+(T.fin?'all steps complete':T.started?'step '+Math.min(T.mi+1,T.D.m.length)+' of '+T.D.m.length:'AI switched off')};
-const fit=()=>{if(!STG)return;const pw=SW.clientWidth-28,ph=SW.clientHeight-28,s=Math.max(.05,Math.min(pw/STG.width,ph/STG.height));STG.style.width=Math.floor(STG.width*s)+'px';STG.style.height=Math.floor(STG.height*s)+'px'};
+const fit=()=>{if(!STG)return;const pw=SW.clientWidth-28,ph=SW.clientHeight-28,s=Math.max(.05,Math.min(pw/640,ph/(640*STG.height/STG.width)));STG.style.width=Math.floor(640*s)+'px';STG.style.height=Math.floor(640*STG.height/STG.width*s)+'px'};
 new ResizeObserver(fit).observe(SW);
 
 /* stage feedback */
 const toast=(s,bad)=>{TOAST.textContent=s;TOAST.className='show'+(bad?' bad':'');clearTimeout(toast.t);toast.t=setTimeout(()=>TOAST.className=bad?'bad':'',1600)};
 const flash=k=>{if(!STG)return;STG.classList.remove('pulse','err');void STG.offsetWidth;STG.classList.add(k);clearTimeout(flash.t);flash.t=setTimeout(()=>STG&&STG.classList.remove(k),650)};
-const ripple=(x,y)=>{if(!STG)return;const r=STG.getBoundingClientRect(),s=SW.getBoundingClientRect(),d=document.createElement('div');d.className='rip';d.style.left=(r.left-s.left+x*r.width/STG.width)+'px';d.style.top=(r.top-s.top+y*r.height/STG.height)+'px';SW.append(d);setTimeout(()=>d.remove(),950)};
+const ripple=(x,y)=>{if(!STG||STG.dataset.d3)return;const r=STG.getBoundingClientRect(),s=SW.getBoundingClientRect(),d=document.createElement('div');d.className='rip';d.style.left=(r.left-s.left+x*r.width/STG.width)+'px';d.style.top=(r.top-s.top+y*r.height/STG.height)+'px';SW.append(d);setTimeout(()=>d.remove(),950)};
 const burst=m=>{BURST.innerHTML=`<div class="msg">${m}</div>`+Array.from({length:28},(_,i)=>`<i class="cf" style="background:hsl(${i*37},85%,60%);--dx:${Math.round((Math.random()-.5)*760)}px;--dy:${Math.round((Math.random()-.7)*440)}px;--r:${Math.round(Math.random()*720)}deg"></i>`).join('');clearTimeout(burst.t);burst.t=setTimeout(()=>BURST.innerHTML='',1700)};
 const shake=sel=>{const el=$(SB,sel);if(el){el.classList.remove('shake','nudge');void el.offsetWidth;el.classList.add(sel=='.startb'?'nudge':'shake')}};
-const nudge=e=>{const s=SW.getBoundingClientRect();HINT.textContent=T&&T.started?'⌨️ Commands only — type it in the sidebar':'Press ▶ START first';HINT.style.left=(e.clientX-s.left)+'px';HINT.style.top=(e.clientY-s.top)+'px';HINT.classList.add('show');clearTimeout(nudge.t);nudge.t=setTimeout(()=>HINT.classList.remove('show'),1400);shake(T&&T.started?'.term':'.startb')};
+const nudge=e=>{const s=SW.getBoundingClientRect();HINT.textContent=T&&T.started?'⌨️ Train the AI with commands in the sidebar':'Press ▶ START first';HINT.style.left=(e.clientX-s.left)+'px';HINT.style.top=(e.clientY-s.top)+'px';HINT.classList.add('show');clearTimeout(nudge.t);nudge.t=setTimeout(()=>HINT.classList.remove('show'),1400);shake(T&&T.started?'.term':'.startb')};
 const hideX=()=>{XV.style.display=XH.style.display='none';XY.textContent=''};
-SW.addEventListener('pointermove',e=>{if(!STG)return hideX();const r=STG.getBoundingClientRect(),s=SW.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)return hideX();
+SW.addEventListener('pointermove',e=>{if(!STG||STG.dataset.d3)return hideX();const r=STG.getBoundingClientRect(),s=SW.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)return hideX();
  XY.textContent='x '+Math.round((e.clientX-r.left)*STG.width/r.width)+'  y '+Math.round((e.clientY-r.top)*STG.height/r.height);
  XV.style.cssText=`display:block;left:${e.clientX-s.left}px;top:${r.top-s.top}px;width:1px;height:${r.height}px`;XH.style.cssText=`display:block;top:${e.clientY-s.top}px;left:${r.left-s.left}px;height:1px;width:${r.width}px`});
 SW.addEventListener('pointerleave',hideX);
@@ -641,8 +1113,9 @@ const block=card=>['pointerdown','pointerup','mousedown','mouseup','click','dblc
 
 /* AI output read-out under the stage */
 const ro=c=>{try{
+ if(c.api&&c.api.ro)return c.api.ro();
  if(c.querySelector('.o'))return eo(c);
- if(c.api&&c.api.pick)return c.api.O.map((o,i)=>['Red','Green','Orange'][i]+' block: '+(o[0]>540?'in the bin ✅':'on the floor')).join(' · ');
+ if(c.api&&c.api.pick)return c.api.O.map((o,i)=>['Red','Green','Orange'][i]+' block: '+(o[0]>540?'in the bin ✅':'on the table')).join(' · ');
  const q=c.querySelector('.qq');if(q){const f=q.querySelector('.fb'),h=q.querySelector('.mu');return f&&f.textContent?f.textContent.replace('Next →','').trim():h?h.textContent:q.textContent.replace('Play again','').trim()}
  if(c.querySelector('.gr'))return 'Gesture: '+c.querySelector('.gr').textContent;
  if(c.querySelector('#dt'))return c.querySelector('.st').textContent||'Scene ready — waiting for a detect command';
@@ -657,84 +1130,97 @@ setInterval(()=>{RO.innerHTML=T?'<b>AI output</b>  '+esc(ro(T.card)):'<b>AI outp
 /* ---------- sidebar: task list ---------- */
 function stopTask(){cur++;stopFns.forEach(f=>{try{f()}catch(e){}});stopFns=[];const o=SW.querySelector('.card');if(o)o.remove();STG=null;hideX()}
 function sideList(){stopTask();T=null;setSth();
- lock(true,'','');LOCK.innerHTML=`<div class="ia"><div class="t">AI INDUCTION WEEK</div><div class="s">Alrowad International Schools</div><img src="Images/logo.png" alt="Alrowad International Schools logo" onerror="this.style.display='none'"><div class="h">👈 Choose a task to switch an AI on</div></div>`;
- let n=0;SB.innerHTML=`<p class="intro">20 AI missions in 4 zones. Each one runs only on the commands you type.</p>`+C.map(c=>`<div class="cat">${c[0]}</div>`+c[1].map(t=>{const k=n++;return `<button class="it${done.has(k)?' dn':''}" data-n="${k}"><i>${done.has(k)?'✓':k+1}</i><span>${t[0]}</span></button>`}).join('')).join('');SB.scrollTop=0}
+ lock(true,'','');LOCK.innerHTML=`<div class="ia"><div class="t">AI INDUCTION WEEK</div><div class="s">Alrowad International Schools</div><img src="Images/logo.png" alt="Alrowad International Schools logo" onerror="this.style.display='none'"><div class="h">👈 Choose a mission and train its AI</div></div>`;
+ let h=`<p class="intro">${NT} AI missions in 4 zones. You train each AI by typing short rule codes.</p>`,lc='';ORD.forEach((k,i)=>{const c=catOf(k);if(c!=lc){lc=c;h+=`<div class="cat">${c}</div>`}const t=flat[k];h+=`<button class="it${done.has(k)?' dn':''}" data-n="${k}"><i>${done.has(k)?'✓':i+1}</i><span>${t[0]}</span>${NEW3D.has(k)?'<em>3D</em>':''}</button>`});SB.innerHTML=h;SB.scrollTop=0}
 
 /* ---------- load a task ---------- */
 function show(n){stopTask();sel=n;const t=flat[n],card=document.createElement('div');card.className='card';SW.prepend(card);
  t[3](card,t[4]);STG=card.querySelector('canvas.cv');if(STG)STG.classList.add('stage');block(card);
- T={n,card,id:cur,D:CMD[n](),mi:0,pi:0,parts:[],started:false,fin:false,busy:0,hist:[],used:{},logs:{}};
- lock(true,'🔒 The AI is switched off','Read the objective, press ▶ START in the sidebar, then program the AI step by step with commands.');
+ T={n,card,id:cur,D:CMD[n](),mi:0,pi:0,parts:[],started:false,fin:false,tok:0,hist:[],used:{},logs:{}};
+ lock(true,'🔒 The AI is switched off','Read the objective, press ▶ START in the sidebar, then train the AI step by step with commands.');
  sideTask();setSth();requestAnimationFrame(fit)}
-function sideTask(){const t=flat[T.n],N=T.D.m.length;
- SB.innerHTML=`<button class="back">← All tasks</button><div class="tn">Task ${T.n+1} of 20 · ${catOf(T.n)}</div><h2>${t[0]}</h2>
+function sideTask(){const t=flat[T.n],N=T.D.m.length,rb=T.n<9;
+ SB.innerHTML=`<button class="back">← All tasks</button><div class="tn">Task ${pos(T.n)} of ${NT} · ${catOf(T.n)}</div><h2>${t[0]}</h2>
  <section class="obj"><h3>🎯 Objective</h3><p>${t[1]}</p><p class="bn"><b>Bonus:</b> ${t[2].replace(/^Challenge:\s*/,'')}</p></section>
- <div class="note">⌨️ <b>You must type commands to make this AI fully work.</b> Clicking the stage does nothing. Each of the ${N} steps shows the exact command — type it with the same words, spaces and numbers, then press <b>Run</b>.</div>
+ <div class="note">${rb?`🧠 <b>You are the AI trainer.</b> Each of the ${N} steps shows a rule ending with <b>?</b>. Decide the correct action and feed the robot its short code, e.g. <code>stop-at /line</code>. A wrong decision shows its consequence on the stage — then retrain it.`:`⌨️ <b>Type short codes to make this AI work.</b> Clicking the stage does nothing. Each of the ${N} steps shows a code such as <code>mouth=8</code> or <code>?detect</code> — type it, then press <b>Run</b>.`}</div>
  <div class="ctl"></div><ol class="stl"></ol>
  ${t[5]?`<div class="lks"><span>Explore the real tools:</span>${t[5].map(l=>`<a target="_blank" rel="noopener" href="${l[1]}">↗ ${l[0]}</a>`).join('')}</div>`:''}
- <div class="pdfz"><label for="sn">Your name for the report (optional)</label><input id="sn" autocomplete="name" placeholder="e.g. Sara Ahmed"><button class="pdfb">📄 Download PDF report</button><div class="pst" aria-live="polite"></div></div>`;
+ <div class="pdfz"><h4>📄 Task report</h4><div class="two"><div><label for="sn">Student name <span class="req">*</span></label><input id="sn" autocomplete="name" placeholder="e.g. Sara Ahmed" value="${esc(STU.n)}" required aria-required="true"></div>
+ <div><label for="sg">Grade <span class="req">*</span></label><input id="sg" placeholder="e.g. 7B" value="${esc(STU.g)}" required aria-required="true" autocomplete="off"></div></div>
+ <button class="pdfb">Download PDF report</button><div class="pst" aria-live="polite"></div></div>`;
  renderCtl();renderSteps();SB.scrollTop=0}
 function renderCtl(){const c=$(SB,'.ctl');if(!c)return;
- c.innerHTML=!T.started?`<button class="startb">▶ START</button>`:T.fin?`<div class="finbox">🏁 <b>All ${T.D.m.length} steps complete!</b> The AI is fully working. Download your report below.<button class="rst">↺ Run the task again</button></div>`:`<div class="row2"><span class="live">● AI is on — follow the highlighted step</span><button class="rst">↺ Restart</button></div>`}
+ c.innerHTML=!T.started?`<button class="startb">▶ START</button>`:T.fin?`<div class="finbox">🏁 <b>All ${T.D.m.length} steps complete!</b> The AI is fully trained. Download your report below.<button class="rst">↺ Run the task again</button></div>`:`<div class="row2"><span class="live">● AI is on — follow the highlighted step</span><button class="rst">↺ Restart</button></div>`}
 function renderSteps(){const L=$(SB,'.stl');if(!L||!T)return;const M=T.D.m,N=M.length;
  L.innerHTML=M.map((m,i)=>{
-  if(T.started&&i<T.mi)return `<li class="fin"><div class="sh">✅ Step ${i+1} of ${N} complete</div><div class="ssum">${short(m[0])}</div>${(T.used[i]||[]).length?`<div class="chips sm">${T.used[i].map(c=>`<code>${esc(c)}</code>`).join('')}</div>`:''}<div class="lsn">💡 ${m[5]}</div></li>`;
+  if(T.started&&i<T.mi)return `<li class="fin"><div class="sh">✅ Step ${i+1} of ${N} complete</div><div class="ssum">${short(m[0])}</div>${(T.used[i]||[]).length?`<div class="chips sm">${T.used[i].map(c=>`<code title="${esc(c[1])}">${esc(c[0])}</code>`).join('')}</div>`:''}<div class="lsn">💡 ${m[5]}</div></li>`;
   if(!T.started||i>T.mi)return `<li class="todo"><div class="sh">Step ${i+1} of ${N}</div><div class="ssum">${short(m[0])}</div></li>`;
-  const ex=T.parts.find(p=>p.includes('<')),eg=ex?ex.replace(/<([^|>]+)[^>]*>/,'$1'):'';
-  return `<li class="cur" aria-current="step"><div class="sh">Task ${T.n+1} · Step ${i+1} of ${N}</div>
-   <div class="blk"><h4>📌 What this step is about</h4><p>${m[0]}</p></div>
-   <div class="blk"><h4>🔮 What will happen</h4><p>${m[5]}</p></div>
-   <div class="blk"><h4>⌨️ Command to type</h4><div class="chips"></div><p class="tip">${ex?`Replace the part in &lt; &gt; with ONE of the options, for example <code>${esc(eg)}</code>.`:'Type it exactly as shown.'}${T.parts.length>1?' Run the commands one at a time, in order.':''}</p></div>
-   <div class="term"><div class="pr"><span>&gt;</span><input class="ci" aria-label="Command" placeholder="type the command here" autocomplete="off" autocapitalize="off" spellcheck="false"><button class="runb">Run ▶</button></div></div>
+  const dec=T.parts.some(isDec),op=T.parts.find(p=>/<[^>]*\|/.test(p)),ox=op?expand(op,T.n):null,rh=op&&isDec(op)?/^if (.+?) then </.exec(op):null;
+  const lits=T.parts.filter(p=>p!==op).map(p=>expand(p,T.n)[0]);
+  const tip=(rh?`<div class="rule"><b>IF</b> ${esc(rh[1])} <b>THEN</b> <span class="q">?</span></div>`:'')+
+   (ox?`<p class="tip dec">🤔 <b>${rh?'Your decision':'Your answer'}:</b> pick ONE and type its code.</p><div class="opts">${ox.map(o=>`<div><span class="chip">${esc(o.short)}</span><span>${esc(o.opt)}</span></div>`).join('')}</div>`:'')+
+   (lits.length?`<p class="means">Means: ${lits.map(l=>`<i>${esc(l.full)}</i>`).join(' · ')}</p>`:'');
+  return `<li class="cur" aria-current="step"><div class="sh">Task ${pos(T.n)} · Step ${i+1} of ${N}</div>
+   <div class="blk"><h4>📌 Situation</h4><p>${shTxt(m[0],T.n)}</p></div>
+   ${dec?'':`<div class="blk"><h4>🔮 What will happen</h4><p>${m[5]}</p></div>`}
+   <div class="blk"><h4>⌨️ ${dec?'Rule to train':'Code to type'}</h4><div class="chips"${T.parts.length==1&&op?' hidden':''}></div>${tip}${T.parts.length>1?'<p class="tip">Run the commands one at a time, in order.</p>':''}</div>
+   <div class="term"><div class="pr"><span>&gt;</span><input class="ci" aria-label="Command" placeholder="type the code here" autocomplete="off" autocapitalize="off" spellcheck="false"><button class="runb">Run ▶</button></div></div>
    <div class="res"><h4>📊 Results</h4><div class="log">${(T.logs[i]||[]).map(([h,k])=>`<div class="${k||''}">${h}</div>`).join('')}</div></div></li>`}).join('');
  paintChips();const ci=$(L,'.ci');
  if(ci){ci.onkeydown=e=>{if(e.key=='Enter'){e.preventDefault();run()}};setTimeout(()=>{const li=$(L,'li.cur');li&&li.scrollIntoView({block:'nearest',behavior:'smooth'});if(matchMedia('(min-width:761px)').matches)ci.focus({preventScroll:true})},60)}}
-const paintChips=()=>{const el=$(SB,'li.cur .chips');if(el)el.innerHTML=T.parts.map((p,i)=>`<span class="chip ${i<T.pi?'ok':i==T.pi?'nx':''}">${esc(p)}</span>`).join('<span class="then">then</span>')};
+const paintChips=()=>{const el=$(SB,'li.cur .chips');if(el)el.innerHTML=T.parts.map((p,i)=>{const e=expand(p,T.n);return `<span class="chip ${i<T.pi?'ok':i==T.pi?'nx':''}">${e.length>1?'✱ your choice':esc(e[0].short)}</span>`}).join('<span class="then">then</span>')};
 const say=(h,k,mi)=>{if(!T)return;const i=mi==null?T.mi:mi;(T.logs[i]=T.logs[i]||[]).unshift([h,k]);if(i!==T.mi)return;const el=$(SB,'li.cur .log');if(el){const d=document.createElement('div');d.innerHTML=h;if(k)d.className=k;el.prepend(d)}};
 const applySetup=s=>{if(!s)return;typeof s=='function'?s(T.card):sv(T.card,s)};
 
 function startTask(){if(!T||T.started)return;T.started=true;T.mi=0;lock(false);toast('▶ AI switched on');flash('pulse');startStep()}
 function startStep(){const m=T.D.m[T.mi];if(!m)return finish();applySetup(m[2]);T.parts=cmdOf(T.n,T.mi,m);T.pi=0;renderCtl();renderSteps();setSth()}
-function finish(){T.fin=true;if(!done.has(T.n)){done.add(T.n);saveDone()}renderCtl();renderSteps();setSth();burst('🏁 Task complete — the AI is fully working!');const p=$(SB,'.pdfz');p&&p.scrollIntoView({block:'nearest',behavior:'smooth'})}
-function run(){if(!T||!T.started||T.fin)return;const inp=$(SB,'.ci');if(!inp)return;const s=norm(inp.value);if(!s){shake('.term');return}inp.value='';
- const id=T.id,mi=T.mi,m=T.D.m[mi];if(T.busy){say('⏳ Checking the last command — wait a moment.','ai');return}
- const exp=T.parts[T.pi],x=T.D.c.find(x=>x[2].test(s));
- if(!partRe(exp).test(s)||!x){say(`❌ <b>Command invalid:</b> <code>${esc(s)}</code><br>Retype it exactly: <code>${esc(exp)}</code>`,'bad');T.hist.push([mi,s,'invalid']);toast('✖ invalid: '+s,1);flash('err');shake('.term');return}
- if(T.pi==0)applySetup(m[2]);
- const cm=/ ([0-9]+) ([0-9]+)$/.exec(s),cb=T.n==3&&/(red|green|orange)/.exec(s);if(cm)ripple(+cm[1],+cm[2]);if(cb&&T.card.api){const o=T.card.api.O[COL[cb[1]]];ripple(o[0],o[1])}
- try{x[3](T.card,s.match(x[2]))}catch(e){say(`⚠️ ${esc(e.message)}`,'bad');T.hist.push([mi,s,'error: '+e.message]);toast('⚠ '+e.message,1);flash('err');return}
- T.hist.push([mi,s,'ok']);(T.used[mi]=T.used[mi]||[]).push(s);toast('▶ '+s);flash('pulse');T.pi++;paintChips();
- say(`▶ <code>${esc(s)}</code> — ${esc(x[1])}. Applied to the stage.`,'ok');
- setTimeout(()=>{if(T&&T.id==id&&T.mi==mi)say('🤖 '+esc(ro(T.card)),'ai')},450);
- if(T.pi<T.parts.length){say(`✅ Correct! Now type the next command: <code>${esc(T.parts[T.pi])}</code>`,'ok');return}
- T.busy=1;const t0=Date.now(),lim=m[6]||1500;
- const poll=()=>{if(!T||T.id!=id||T.mi!=mi)return;let ok=0;try{ok=m[3](T.card)}catch(e){}
-  if(ok){T.busy=0;say(`🎉 <b>Step ${mi+1} complete!</b> ${m[5]}`,'ok');T.hist.push([mi,'step complete','done']);burst(`✅ Step ${mi+1} complete!`);T.mi++;setSth();setTimeout(()=>{if(T&&T.id==id)startStep()},1700)}
+function finish(){T.fin=true;if(!done.has(T.n)){done.add(T.n);saveDone()}renderCtl();renderSteps();setSth();burst('🏁 Task complete — the AI is fully trained!');const p=$(SB,'.pdfz');p&&p.scrollIntoView({block:'nearest',behavior:'smooth'})}
+function run(){if(!T||!T.started||T.fin)return;const inp=$(SB,'.ci');if(!inp)return;const typed=norm(inp.value);if(!typed){shake('.term');return}inp.value='';
+ const id=T.id,mi=T.mi,m=T.D.m[mi];
+ if(T.pi>=T.parts.length){T.pi=0;T.used[mi]=[];paintChips()}
+ const exp=T.parts[T.pi],cands=expand(exp,T.n),k=cpk(typed),cd=cands.find(c=>cpk(c.short)==k||cpk(c.full)==k),s=cd?cd.full:typed,x=cd&&T.D.c.find(x=>x[2].test(s));
+ if(!cd||!x){say(`❌ <b>Code not recognised:</b> <code>${esc(typed)}</code><br>${cands.length>1?'Type ONE of these codes:':'Type this code:'} ${cands.map(c=>`<code>${esc(c.short)}</code>`).join(' ')}`,'bad');T.hist.push([mi,typed,'invalid','']);toast('✖ not recognised: '+typed,1);flash('err');shake('.term');return}
+ const tok=++T.tok;if(T.pi==0)applySetup(m[2]);
+ const cm=/ ([0-9]+) ([0-9]+)$/.exec(s),cb=T.n==3&&/(red|green|orange)/.exec(s);if(cm)ripple(+cm[1],+cm[2]);if(cb&&T.card.api&&T.card.api.O){const o=T.card.api.O[COL[cb[1]]];ripple(o[0],o[1])}
+ try{x[3](T.card,s.match(x[2]))}catch(e){say(`⚠️ ${esc(e.message)}`,'bad');T.hist.push([mi,typed,'error: '+e.message,s]);toast('⚠ '+e.message,1);flash('err');return}
+ const dc=isDec(exp),sh=cd.short;T.hist.push([mi,sh,'ok',s]);(T.used[mi]=T.used[mi]||[]).push([sh,s]);toast((dc?'🧠 ':'▶ ')+sh);flash('pulse');T.pi++;paintChips();
+ say(dc?`🧠 Rule trained: <code>${esc(sh)}</code> = <i>${esc(s)}</i>. Watch the stage to see how the AI behaves.`:`▶ <code>${esc(sh)}</code> — ${esc(x[1])}. Applied to the stage.`,'ok');
+ setTimeout(()=>{if(T&&T.id==id&&T.mi==mi)say('🤖 '+esc(ro(T.card)),'ai')},700);
+ if(T.pi<T.parts.length){const nx=expand(T.parts[T.pi],T.n);say(`✅ Accepted. Now type the next code: ${nx.length>1?'your choice from the list':`<code>${esc(nx[0].short)}</code>`}`,'ok');return}
+ const t0=Date.now(),lim=m[6]||1500;
+ const poll=()=>{if(!T||T.id!=id||T.mi!=mi||T.tok!=tok)return;let ok=0;try{ok=m[3](T.card)}catch(e){}
+  if(ok){say(`🎉 <b>Step ${mi+1} complete!</b> ${m[5]}`,'ok');T.hist.push([mi,'step complete','done','']);burst(`✅ Step ${mi+1} complete!`);T.mi++;setSth();setTimeout(()=>{if(T&&T.id==id)startStep()},1700)}
   else if(Date.now()-t0<lim)setTimeout(poll,250);
-  else{T.busy=0;T.pi=0;T.used[mi]=[];paintChips();say(`💡 Not solved yet. ${esc(m[4])} Type the commands again, starting from the first one.`,'bad');flash('err')}};
+  else{T.pi=0;T.used[mi]=[];paintChips();T.hist.push([mi,'step not solved','retry','']);say(`💡 Not solved yet. ${shTxt(esc(m[4]),T.n)} ${T.parts.some(isDec)?'Think about the decision again and type a new code.':'Type the codes again, starting from the first one.'}`,'bad');flash('err')}};
  setTimeout(poll,250)}
 
 /* ---------- PDF report ---------- */
 let DLP=null;const getDL=()=>DLP||(DLP=(async()=>{try{return window.claude&&window.claude.use?await window.claude.use('downloads'):null}catch(e){return null}})());getDL();
-async function pdf(){if(!T)return;const st=$(SB,'.pst'),J=window.jspdf&&window.jspdf.jsPDF;if(!J){st.textContent='The PDF tool is still loading — try again in a moment.';return}
+const cln=s=>plain(s).replace(/[→➜⇒]/g,'->').replace(/[–—]/g,'-').replace(/≤/g,'<=').replace(/≥/g,'>=').replace(/[“”]/g,'"').replace(/[‘’]/g,"'").replace(/…/g,'...').replace(/↔/g,'<->').replace(/[^\x20-\x7E\xA0-\xFF\n]/g,'').replace(/ {2,}/g,' ').trim();
+async function pdf(){if(!T)return;const st=$(SB,'.pst'),inN=$(SB,'#sn'),inG=$(SB,'#sg'),nm=inN.value.trim(),gd=inG.value;
+ inN.classList.toggle('bad',!nm);inG.classList.toggle('bad',!gd);st.className='pst';
+ if(!nm||!gd){st.className='pst bad';st.textContent='Enter your '+(!nm&&!gd?'name and grade':!nm?'name':'grade')+' to download the report.';(!nm?inN:inG).focus();return}
+ if(!cln(gd)){inG.classList.add('bad');st.className='pst bad';st.textContent='Type your grade in English letters or numbers, e.g. 7B.';inG.focus();return}
+ if(cln(nm).replace(/[^A-Za-z\xC0-\xFF]/g,'').length<2){inN.classList.add('bad');st.className='pst bad';st.textContent='Type your name in English letters so it prints in the PDF.';inN.focus();return}
+ STU={n:nm,g:gd};try{localStorage.setItem('aiwStu',JSON.stringify(STU))}catch(e){}
+ const J=window.jspdf&&window.jspdf.jsPDF;if(!J){st.textContent='The PDF tool is still loading — try again in a moment.';return}
  st.textContent='Building your PDF…';
- const t=flat[T.n],N=T.D.m.length,nm=($(SB,'#sn').value||'').trim(),d=new J({unit:'pt',format:'a4'}),W=d.internal.pageSize.getWidth(),H=d.internal.pageSize.getHeight(),M=44,BL=[31,95,214];let y=0;
- const cln=s=>plain(s).replace(/[→➜⇒]/g,'->').replace(/[–—]/g,'-').replace(/≤/g,'<=').replace(/≥/g,'>=').replace(/[“”]/g,'"').replace(/[‘’]/g,"'").replace(/…/g,'...').replace(/↔/g,'<->').replace(/[^\x20-\x7E\xA0-\xFF\n]/g,'').replace(/ {2,}/g,' ').trim();
+ const t=flat[T.n],N=T.D.m.length,d=new J({unit:'pt',format:'a4'}),W=d.internal.pageSize.getWidth(),H=d.internal.pageSize.getHeight(),M=44,BL=[31,95,214];let y=0;
  const tx=(s,z,b,col,ind)=>{d.setFont('helvetica',b?'bold':'normal');d.setFontSize(z);d.setTextColor(...(col||[11,37,69]));d.splitTextToSize(cln(s),W-2*M-(ind||0)).forEach(l=>{if(y>H-M){d.addPage();y=M+z}d.text(l,M+(ind||0),y);y+=z*1.4})};
- d.setFillColor(217,236,253);d.rect(0,0,W,84,'F');y=38;tx('AI Induction Week - Task Report',20,1,BL);tx('Task '+(T.n+1)+' of 20: '+t[0],13,1);y=108;
- tx('Student: '+(nm||'______________________')+'      Date: '+new Date().toLocaleDateString(),11);tx('Zone: '+catOf(T.n),11);
+ d.setFillColor(217,236,253);d.rect(0,0,W,84,'F');y=36;tx('AI Induction Week - Task Report',20,1,BL);tx('Alrowad International Schools',11,0,[75,101,135]);tx('Task '+pos(T.n)+' of '+NT+': '+t[0],13,1);y=110;
+ tx('Student: '+cln(nm)+'      Grade: '+cln(gd).replace(/^grade\s*/i,'')+'      Date: '+new Date().toLocaleDateString(),11,1);tx('Zone: '+catOf(T.n),11);
  const dn=Math.min(T.started?T.mi:0,N);tx('Progress: '+dn+' of '+N+' steps complete'+(T.fin?' - task complete':''),11,1,T.fin?[21,128,61]:[180,83,9]);y+=8;
  tx('Objective',13,1,BL);tx(t[1],11);tx(t[2],11);y+=8;
- tx('Steps',13,1,BL);
+ tx('Steps and trained decisions',13,1,BL);
  T.D.m.forEach((m,i)=>{const ok=T.started&&i<T.mi;tx('Step '+(i+1)+' of '+N+(ok?'  [complete]':'  [not done]'),11,1,ok?[21,128,61]:[120,120,120]);tx(m[0],10.5,0,null,12);
-  const used=T.used[i]||[];tx('Commands: '+(used.length?used.join('  |  '):cmdOf(T.n,i,m).join('  then  ')),10.5,0,[70,70,70],12);tx('What happens: '+m[5],10.5,0,null,12);y+=5});
- const acc=T.hist.filter(h=>h[2]=='ok').length,bad=T.hist.filter(h=>h[2]!='ok'&&h[2]!='done').length;y+=4;
- tx('Command log ('+acc+' accepted, '+bad+' invalid or failed)',13,1,BL);
+  const used=T.used[i]||[];tx((used.length?'Codes typed: '+used.map(u=>u[0]+'  (= '+u[1]+')').join('  |  '):'Code: '+cmdOf(T.n,i,m).map(p=>expand(p,T.n).map(e=>e.short).join(' / ')).join('  then  ')),10.5,0,[70,70,70],12);if(ok)tx('Result: '+m[5],10.5,0,null,12);y+=5});
+ const acc=T.hist.filter(h=>h[2]=='ok').length,bad=T.hist.filter(h=>h[2]=='invalid'||/^error/.test(h[2])).length,rt=T.hist.filter(h=>h[2]=='retry').length;y+=4;
+ tx('Command log ('+acc+' accepted, '+bad+' not recognised, '+rt+' retrained)',13,1,BL);
  if(!T.hist.length)tx('No commands typed yet.',10.5,0,[120,120,120],12);
- T.hist.slice(-80).forEach(h=>tx('Step '+(h[0]+1)+':  '+h[1]+'   ('+h[2]+')',10,0,h[2]=='ok'||h[2]=='done'?[21,128,61]:[194,38,29],12));
+ T.hist.slice(-80).forEach(h=>tx('Step '+(h[0]+1)+':  '+h[1]+(h[3]&&h[2]=='ok'?'  = '+h[3]:'')+'   ('+h[2]+')',10,0,h[2]=='ok'||h[2]=='done'?[21,128,61]:[194,38,29],12));
  if(STG){try{const iw=W-2*M,ih=iw*STG.height/STG.width;y+=10;if(y+ih+30>H-M){d.addPage();y=M+13}tx('Stage snapshot',13,1,BL);d.addImage(STG.toDataURL('image/png'),'PNG',M,y,iw,ih);y+=ih+18}catch(e){}}
- tx('AI output: '+ro(T.card),10.5,0,[70,70,70]);
- const fn='AI-Task-'+(T.n+1)+'-'+t[0].replace(/[^A-Za-z0-9]+/g,'-').replace(/^-+|-+$/g,'')+'.pdf';
+ tx('AI output: '+ro(T.card),10.5,0,[70,70,70]);y+=16;tx('Teacher signature: ______________________',11);
+ const fn='AI-Task-'+pos(T.n)+'-'+cln(nm).replace(/[^A-Za-z0-9]+/g,'-')+'-'+t[0].replace(/[^A-Za-z0-9]+/g,'-').replace(/^-+|-+$/g,'')+'.pdf';
  const dl=await getDL();
  if(dl){try{await dl.save({filename:fn,data:d.output('blob')});st.textContent='✅ PDF saved.'}catch(e){st.textContent=e&&e.code=='declined'?'Download cancelled.':'Could not save the PDF here ('+(e&&e.code||'error')+').'}}
  else{try{d.save(fn);st.textContent='✅ PDF downloaded.'}catch(e){st.textContent='Downloads are not available in this view.'}}}
@@ -743,6 +1229,7 @@ async function pdf(){if(!T)return;const st=$(SB,'.pst'),J=window.jspdf&&window.j
 SB.addEventListener('click',e=>{const q=s=>e.target.closest(s);let k;
  if(k=q('.it'))show(+k.dataset.n);else if(q('.back'))sideList();else if(q('.startb'))startTask();else if(q('.runb'))run();
  else if(q('.rst')){const n=T.n;show(n);startTask()}else if(q('.pdfb'))pdf()});
+SB.addEventListener('input',e=>{if(e.target.matches('#sn,#sg'))e.target.classList.remove('bad')});
 prog();sideList();
 </script>
 
