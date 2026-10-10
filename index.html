@@ -10,17 +10,20 @@
 :root{--bg:#d9ecfd;--pn:#e6f3ff;--pn2:#f4faff;--tx:#0b2545;--mu:#4b6587;--ac:#1f5fd6;--ln:#b6d5f2;--hv:#cde5fb;--st:#08142a;--ok:#15803d;--bad:#c2261d;
  --mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);height:100%}
 *{box-sizing:border-box}html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
-body{height:100%;margin:0;display:flex;flex-direction:column;overflow:hidden;padding-right:15px;font:15px/1.5 "Lexend",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--tx)}
+body{height:100%;margin:0;display:flex;flex-direction:column;overflow:hidden;font:15px/1.5 "Lexend",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--tx)}
 button{font:inherit;cursor:pointer;border-radius:10px;border:1px solid var(--ln);background:var(--pn2);color:var(--tx);padding:7px 12px}
 button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid #f59e0b;outline-offset:2px}
 code{font-family:var(--mono)}
 
 /* navbar + footer */
-#nav{flex:none;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:16px;padding:0px 0px;background:var(--pn);border-bottom:1px solid var(--ln)}
-#nav .brand{grid-column:2;grid-row:1;justify-self:center;display:flex;align-items:center;gap:14px;white-space:nowrap;font-family:"Oswald",Impact,sans-serif;font-weight:700;font-size:24px;letter-spacing:.06em;line-height:1}
+#nav{flex:none;position:relative;z-index:30;display:flex;align-items:center;gap:18px;padding:7px 16px;background:var(--pn);border-bottom:1px solid var(--ln)}
+#nav .brand{display:flex;align-items:center;gap:12px;white-space:nowrap;font-family:"Oswald",Impact,sans-serif;font-weight:700;font-size:23px;letter-spacing:.06em;line-height:1;color:var(--tx)}
 #nav .brand img{height:38px;width:auto;display:block}
-#nav .brand small{font-weight:400;color:var(--mu);font-size:13px}
-#nav .prog{grid-column:3;grid-row:1;justify-self:end;display:flex;align-items:center;gap:10px;font-size:13px;color:var(--mu);white-space:nowrap}
+#nav .prog{margin-left:auto;display:flex;align-items:center;gap:10px;font-size:13px;color:var(--mu);white-space:nowrap}
+#nav .adm{position:relative}
+#admb{font-weight:700;font-size:13px;letter-spacing:.06em;background:var(--tx);color:#fff;border:0;padding:8px 14px}
+#admm{position:absolute;right:0;top:calc(100% + 8px);min-width:230px;background:#fff;border:1px solid var(--ln);border-radius:12px;box-shadow:0 14px 34px rgba(11,37,69,.2);padding:12px 14px;display:flex;flex-direction:column;gap:4px;font-size:14px}
+#admm[hidden]{display:none}#admm small{color:var(--mu);font-size:12px}#admm a{color:var(--ac);text-decoration:none;font-weight:600}
 #nav .pb{width:170px;height:8px;border-radius:4px;background:var(--hv);overflow:hidden}#nav .pb i{display:block;height:100%;width:0;background:var(--ac);transition:width .4s}
 #ft{flex:none;padding:7px 18px;background:var(--pn);border-top:1px solid var(--ln);font-size:12.5px;color:var(--mu);display:flex;gap:18px;flex-wrap:wrap}
 #ft b{color:var(--tx);font-weight:600}
@@ -36,12 +39,16 @@ code{font-family:var(--mono)}
 #sth .led.on{background:#22c55e;box-shadow:0 0 10px #22c55e}
 #sth #stt{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 #sth .xy{margin-left:auto;font-family:var(--mono);color:#7dd3fc;white-space:nowrap}
-#sw{flex:1;position:relative;min-height:0;overflow:hidden;padding:0px;background:radial-gradient(ellipse at 50% 40%,#13294d 0,#08142a 72%)}
+#sw{flex:1;position:relative;min-height:0;overflow:hidden;background:radial-gradient(ellipse at 50% 40%,#13294d 0,#08142a 72%)}
 .card{position:absolute;inset:0;overflow:hidden}
 .card *{visibility:hidden}
-.card canvas.stage{visibility:visible;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);border-radius:12px;background:#0f1d36;padding:0px;box-shadow:0 0 0 1px #24406b,0 24px 60px rgba(0,0,0,.55);transition:box-shadow .35s;cursor:crosshair}
+.card canvas.stage{visibility:visible;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);border-radius:12px;background:#0f1d36;box-shadow:0 0 0 1px #24406b,0 24px 60px rgba(0,0,0,.55);transition:box-shadow .35s;cursor:crosshair}
 .card canvas.stage.pulse{box-shadow:0 0 0 3px #38bdf8,0 0 44px rgba(56,189,248,.6)}
 .card canvas.stage.err{box-shadow:0 0 0 3px #ef4444,0 0 44px rgba(239,68,68,.55)}
+.card canvas.stage.d3{left:0;top:0;transform:none;width:100%!important;height:100%!important;border-radius:0;box-shadow:none;cursor:default}
+.card canvas.stage.d3.pulse{box-shadow:none;outline:3px solid #38bdf8;outline-offset:-3px}.card canvas.stage.d3.err{box-shadow:none;outline:3px solid #ef4444;outline-offset:-3px}
+.optl{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:6px}.optl .chip{text-align:center;font-size:13px}
+details.key{margin-top:8px;font-size:12.5px;color:var(--mu)}details.key summary{cursor:pointer;font-weight:600;color:var(--ac)}details.key div{display:flex;gap:6px;margin-top:3px}details.key code{background:var(--hv);padding:0 5px;border-radius:5px;color:var(--tx)}
 #ro{flex:none;padding:9px 14px;background:#0d1c36;color:#e3eeff;border-top:1px solid #1b2f52;font-size:14px;min-height:44px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 #ro b{color:#7dd3fc;font-weight:600}
 .xl{position:absolute;pointer-events:none;background:rgba(125,211,252,.5);display:none;z-index:2}
@@ -79,7 +86,7 @@ code{font-family:var(--mono)}
 .it:hover{background:var(--hv)}
 .it i{font-style:normal;width:26px;height:26px;flex:none;border-radius:50%;background:var(--pn2);border:1px solid var(--ln);display:grid;place-items:center;font-size:12px;color:var(--mu)}
 .it.dn i{background:#16a34a;color:#fff;border-color:#16a34a}
-.it em{font-style:normal;font-size:10.5px;font-weight:700;color:#7c2d12;background:#fed7aa;border-radius:6px;padding:1px 6px;margin-left:auto}
+.it em{white-space:nowrap;font-style:normal;font-size:10.5px;font-weight:700;color:#7c2d12;background:#fed7aa;border-radius:6px;padding:1px 6px;margin-left:auto}
 
 /* sidebar: task */
 .back{border:0;background:none;color:var(--ac);padding:4px 2px;font-weight:600}
@@ -141,15 +148,16 @@ ol.stl>li.cur{border:2px solid var(--ac);background:#fff;box-shadow:0 6px 18px r
 .pst{font-size:13px;color:var(--mu);margin-top:6px;min-height:1em}
 .pst.bad{color:var(--bad);font-weight:600}
 
-@media(max-width:760px){#nav{grid-template-columns:1fr;justify-items:center;gap:4px;padding:8px 12px}#nav .brand,#nav .prog{grid-column:1;grid-row:auto;justify-self:center}#nav .brand{font-size:19px}#nav .brand img{height:30px}#wrap{flex-direction:column}#mn{order:-1;flex:none;height:46vh}#sb{width:100%;flex:1;border-right:0;border-top:1px solid var(--ln)}#ft{display:none}#nav .pb{width:70px}#nav .brand small{display:none}#sth .xy{display:none}}
+@media(max-width:760px){#nav{flex-wrap:wrap;gap:8px;padding:7px 10px}#nav .brand{font-size:17px}#nav .prog{order:3;width:100%;justify-content:center;margin:0}#nav .brand img{height:30px}#wrap{flex-direction:column}#mn{order:-1;flex:none;height:46vh}#sb{width:100%;flex:1;border-right:0;border-top:1px solid var(--ln)}#ft{display:none}#nav .pb{width:70px}#nav .brand small{display:none}#sth .xy{display:none}}
 @media(prefers-reduced-motion:reduce){#burst .cf,.rip{display:none}#burst .msg,.term.shake,.startb.nudge{animation:none}}
 </style></head><body>
-<header id="nav"><div class="prog"><span id="pgt"></span><span class="pb"><i id="pgb"></i></span></div></header>
+<header id="nav"><div class="brand"><img src="Images/logo.png" alt="Alrowad International Schools logo"style="height:18%;width:18%;"><span>AI LEARNING ACTIVITIES</span></div><div class="prog"><span id="pgt"></span><span class="pb"><i id="pgb"></i></span></div>
+<div class="adm"><button id="admb" aria-haspopup="true" aria-expanded="false" aria-controls="admm">ADMIN ▾</button><div id="admm" role="menu" hidden><small>Administrator</small><b>Lone Firdous</b><a href="mailto:f.lone@ais.sch.sa">f.lone@ais.sch.sa</a></div></div></header>
 <div id="wrap"><nav id="sb" aria-label="Tasks"></nav>
 <main id="mn"><div id="sth"><span class="led"></span><span id="stt"></span><span class="xy" id="xy"></span></div>
 <div id="sw"><div class="xl" id="xv"></div><div class="xl" id="xh"></div><div id="toast"></div><div id="hint"></div><div id="burst"></div><div id="lock"></div></div>
 <div id="ro"></div></main></div>
-<footer id="ft"><span><b>Train the AI with short codes:</b> read the rule, type its code (for example <code>stop-at /line</code>), then press Run.</span><span><b>Decisions:</b> when a rule ends with ?, pick the action you think is correct.</span></footer>
+<footer id="ft"><span><b>Program the AI:</b> each step lists up to 4 commands — type the ONE most related to the situation, then press Run.</span><span><b>Stuck?</b> Open the 🔑 Code key under the commands.</span></footer>
 <script>
 let cur=0,stopFns=[],sel=0,done=new Set();
 try{JSON.parse(localStorage.getItem('aiw2')||'[]').forEach(x=>done.add(x))}catch(e){}
@@ -557,10 +565,10 @@ function av(b,mo){
 const T_voice=b=>{V(b,0);av(b,0)},T_stt=b=>{V(b,1);av(b,1)},T_chat=b=>{T_bot(b);av(b,2)},T_prompt2=b=>{T_prompt(b);av(b,3)},T_music2=b=>{T_music(b);av(b,4)};
 
 /* ================= 3D robotics engine (three.js r128) ================= */
-const rr=(x,a,b,w,h,r)=>{x.beginPath();x.moveTo(a+r,b);x.arcTo(a+w,b,a+w,b+h,r);x.arcTo(a+w,b+h,a,b+h,r);x.arcTo(a,b+h,a,b,r);x.arcTo(a,b,a+w,b,r);x.closePath()};
+let HWg=640;const rr=(x,a,b,w,h,r)=>{x.beginPath();x.moveTo(a+r,b);x.arcTo(a+w,b,a+w,b+h,r);x.arcTo(a+w,b+h,a,b+h,r);x.arcTo(a,b+h,a,b,r);x.arcTo(a,b,a+w,b,r);x.closePath()};
 const HP=(x,a,b,w,L,ac)=>{x.save();x.fillStyle='rgba(8,20,42,.8)';rr(x,a,b,w,12+L.length*17,9);x.fill();x.strokeStyle=ac||'rgba(125,211,252,.5)';x.lineWidth=1.5;x.stroke();x.textAlign='left';
  L.forEach((l,i)=>{const[s,c]=Array.isArray(l)?l:[l];x.font=(i?'600 11.5px':'700 13px')+' Lexend,system-ui,sans-serif';x.fillStyle=c||(i?'#e3eeff':'#7dd3fc');x.fillText(s,a+10,b+19+i*17,w-18)});x.restore()};
-const BAN=(x,s,c)=>{x.save();x.font='700 13.5px Lexend,system-ui,sans-serif';const w=Math.min(610,x.measureText(s).width+30);x.fillStyle=c||'rgba(185,28,28,.92)';rr(x,320-w/2,344,w,28,14);x.fill();x.fillStyle='#fff';x.textAlign='center';x.fillText(s,320,363,w-20);x.restore()};
+const BAN=(x,s,c)=>{x.save();x.font='700 13.5px Lexend,system-ui,sans-serif';const w=Math.min(Math.max(240,HWg-330),x.measureText(s).width+30),cx=HWg/2;x.fillStyle=c||'rgba(185,28,28,.92)';rr(x,cx-w/2,344,w,28,14);x.fill();x.fillStyle='#fff';x.textAlign='center';x.fillText(s,cx,363,w-20);x.restore()};
 const RC=(R,k,lab,good)=>[(R[k]?'✔ ':'○ ')+lab,R[k]?(R[k]==good?'#86efac':'#fca5a5'):'#94a3b8'];
 const wrapA=a=>Math.atan2(Math.sin(a),Math.cos(a));
 function S3(b,o){o=o||{};let ren;
@@ -568,9 +576,9 @@ function S3(b,o){o=o||{};let ren;
  catch(e){const c=mk(),x=c.getContext('2d');b.append(c);x.fillStyle='#0f1d36';x.fillRect(0,0,640,380);x.font='bold 15px system-ui,sans-serif';x.fillStyle='#fca5a5';x.textAlign='center';x.fillText('The 3D engine could not start (no internet or no WebGL).',320,180);x.fillText('Reload the page in Chrome or Edge.',320,206);b.api={ro:()=>'3D engine not available',E:{},R:{},scen(){},rule(){}};return null}
  ren.setPixelRatio(Math.min(2,window.devicePixelRatio||1));ren.setSize(640,380,false);ren.shadowMap.enabled=true;ren.shadowMap.type=THREE.PCFSoftShadowMap;
  ren.outputEncoding=THREE.sRGBEncoding;ren.toneMapping=THREE.ACESFilmicToneMapping;ren.toneMappingExposure=o.exp||1.1;ren.autoClear=false;
- const cv=ren.domElement;cv.className='cv';cv.dataset.d3='1';b.append(cv);
+ const cv=ren.domElement;cv.className='cv d3';cv.dataset.d3='1';b.append(cv);const sys={boot:0,dep:0};
  const sc=new THREE.Scene(),sky=new THREE.Color(o.sky==null?0x9fc9ef:o.sky);sc.background=sky;sc.fog=new THREE.Fog(sky,o.fogN||60,o.fogF||180);
- const cam=new THREE.PerspectiveCamera(o.fov||42,640/380,.1,600);
+ const F0=o.fov||42,cam=new THREE.PerspectiveCamera(F0,640/380,.1,600);
  sc.add(new THREE.HemisphereLight(0xe8f2ff,0x5b4a3a,o.hemi||.65));
  const SX=o.sx==null?28:o.sx,SY=o.sy||46,SZ=o.sz==null?22:o.sz;
  const sun=new THREE.DirectionalLight(0xfff1dc,o.sun||1.15);sun.position.set(SX,SY,SZ);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);sun.shadow.bias=-.0005;
@@ -587,14 +595,19 @@ function S3(b,o){o=o||{};let ren;
   const sm=mat(0xffffff,.75,.05,{map:t}),rm=mat(0x5b6168,.9),k=shd(new THREE.Mesh(new THREE.BoxGeometry(w,h,d),[sm,sm,rm,rm,sm,sm]));k.position.set(x,h/2,z);sc.add(k);bx(w*.3,.6,d*.3,mat(0x8a9099,.7,.3),x,h+.3,z);return k};
  const tree=(x,z,s)=>{s=s||1;cy(.12*s,.18*s,1.6*s,mat(0x6b4a2f,.9),x,.8*s,z,null,8);const f=mat(new THREE.Color().setHSL(.27+Math.random()*.05,.5,.26+Math.random()*.08).getHex(),.85,0,{flatShading:true});
   [[0,2.2,0,1.1],[.35,2.9,.1,.85],[-.2,3.3,-.15,.7]].forEach(([a,y,c,r])=>{const k=shd(new THREE.Mesh(new THREE.IcosahedronGeometry(r*s,1),f));k.position.set(x+a*s,y*s,z+c*s);sc.add(k)})};
- const hc=document.createElement('canvas');hc.width=1280;hc.height=760;const hx=hc.getContext('2d'),ht=new THREE.CanvasTexture(hc);ht.encoding=THREE.sRGBEncoding;ht.minFilter=THREE.LinearFilter;ht.generateMipmaps=false;
+ let HW=640;const hc=document.createElement('canvas');hc.width=1280;hc.height=760;const hx=hc.getContext('2d');let ht;const mkT=()=>{ht=new THREE.CanvasTexture(hc);ht.encoding=THREE.sRGBEncoding;ht.minFilter=THREE.LinearFilter;ht.generateMipmaps=false};mkT();
  const hs=new THREE.Scene(),hcam=new THREE.OrthographicCamera(-1,1,1,-1,0,2),hm=new THREE.Mesh(new THREE.PlaneGeometry(2,2),new THREE.MeshBasicMaterial({map:ht,transparent:true,depthTest:false,depthWrite:false,toneMapped:false}));hm.position.z=-1;hs.add(hm);let hk=null;
- const hud=(k,f)=>{if(k===hk)return;hk=k;hx.setTransform(1,0,0,1,0,0);hx.clearRect(0,0,1280,760);hx.setTransform(2,0,0,2,0,0);f(hx);ht.needsUpdate=true};
+ const pill=(x,s,c,y)=>{x.font='700 11.5px Lexend,system-ui,sans-serif';const w=x.measureText(s).width+22;x.fillStyle=c;rr(x,HW-w-10,y,w,22,11);x.fill();x.fillStyle='#fff';x.textAlign='left';x.fillText(s,HW-w+1,y+15)};
+ const hud=(k,f)=>{k+='|'+sys.boot+sys.dep+'|'+HW;if(k===hk)return;hk=k;hx.setTransform(1,0,0,1,0,0);hx.clearRect(0,0,hc.width,hc.height);hx.setTransform(2,0,0,2,0,0);HWg=HW;f(hx);
+  pill(hx,sys.boot?'⚙ Sensors online':'⚙ Sensors offline',sys.boot?'rgba(21,128,61,.9)':'rgba(71,85,105,.9)',sys.dep?322:350);if(sys.dep)pill(hx,'🚀 Model v1 deployed','rgba(29,78,216,.92)',350);
+  if(!sys.boot)BAN(hx,'⚙ AI offline — boot its sensors to start','rgba(51,65,85,.94)');ht.needsUpdate=true};
+ const resize=(w,h)=>{w=Math.max(240,Math.round(w));h=Math.max(160,Math.round(h));ren.setSize(w,h,false);const a=w/h,A0=640/380;cam.aspect=a;cam.fov=a<A0?2*Math.atan(Math.tan(F0*Math.PI/360)*A0/a)*180/Math.PI:F0;cam.updateProjectionMatrix();
+  HW=380*a;hc.width=Math.round(HW*2);hc.height=760;ht.dispose();mkT();hm.material.map=ht;hm.material.needsUpdate=true;hk=null};
  let last=performance.now();
- const loop=f=>raf(()=>{const n=performance.now();let tot=Math.min(.3,(n-last)/1000);last=n;let tt=n/1000-tot;while(tot>1e-4){const d=Math.min(.04,tot);tot-=d;tt+=d;f(d,tt)}ren.clear();ren.render(sc,cam);ren.clearDepth();ren.render(hs,hcam)});
+ const loop=f=>raf(()=>{const n=performance.now();let tot=Math.min(.6,(n-last)/1000);last=n;let tt=n/1000-tot;if(!sys.boot){f(0,n/1000);tot=0}while(tot>1e-4){const d=Math.min(.04,tot);tot-=d;tt+=d;f(d,tt)}ren.clear();ren.render(sc,cam);ren.clearDepth();ren.render(hs,hcam)});
  stopFns.push(()=>{try{ren.dispose();ren.forceContextLoss()}catch(e){}});
  const follow=(x,z)=>{sun.position.set(x+SX,SY,z+SZ);sun.target.position.set(x,0,z);sun.target.updateMatrixWorld()};
- return{sc,cam,ren,mat,tex,bx,cy,sp,pl,noise,bld,tree,hud,loop,follow}}
+ const API={sc,cam,ren,mat,tex,bx,cy,sp,pl,noise,bld,tree,hud,loop,follow,sys,resize};b.S3=API;return API}
 
 /* ---------- R6. Self-driving car (3D) ---------- */
 function T_car(b){
@@ -663,7 +676,7 @@ function T_car(b){
   const n=['red','ped','school'].filter(k=>R[k]).length,el=E.test?Math.min(12,Math.floor((performance.now()-E.test)/1000)):-1;
   S.hud([st.kmh,st.lt,st.pedOn,dec,E.viol.length,el,JSON.stringify(R)].join('|'),x=>{
    HP(x,10,10,372,[['🚗 Self-driving car AI'],['Speed: '+st.kmh+' km/h   ·   Light: '+({red:'🔴 RED',yellow:'🟡 YELLOW',green:'🟢 GREEN'})[st.lt]],['Pedestrian: '+(st.pedOn?'🚶 on the crossing':'none detected')],['Decision: '+dec,warn?'#fca5a5':brk?'#fcd34d':'#86efac']]);
-   HP(x,452,10,178,[['🧠 Rules: '+n+'/3'],RC(R,'red','Traffic light','stop at the line'),RC(R,'ped','Pedestrian','brake and wait'),RC(R,'school','School zone','slow to 30 km/h')]);
+   HP(x,HWg-188,10,178,[['🧠 Rules: '+n+'/3'],RC(R,'red','Traffic light','stop at the line'),RC(R,'ped','Pedestrian','brake and wait'),RC(R,'school','School zone','slow to 30 km/h')]);
    if(E.viol.length)BAN(x,'🚨 '+E.viol[E.viol.length-1]+(E.viol.length>1?'  ('+E.viol.length+' violations)':''));else if(el>=0)BAN(x,'🧪 Test drive '+el+' / 12 s — no violations',el>=12?'rgba(21,128,61,.92)':'rgba(30,64,175,.92)')})})}
 
 /* ---------- R7. Robot vacuum cleaner (3D) ---------- */
@@ -799,7 +812,7 @@ function T_drone(b){
   st.dec=dec;const n=['tower','deliver','wind','batt'].filter(k=>R[k]).length,warn=/⚠️|💥/.test(dec);
   S.hud([st.y.toFixed(1),Math.round(st.bat),st.wind,ob?ob.h:0,dec,E.delivered,E.returned,E.landed,P.br,st.crash,JSON.stringify(R)].join('|'),x=>{
    HP(x,10,10,356,[['🚁 Delivery drone autopilot'],['Altitude: '+st.y.toFixed(1)+' m   ·   Battery: '+Math.round(st.bat)+'%',st.bat<25?'#fcd34d':0],['Wind: '+st.wind+' km/h'+(st.wind>40?'  ⚠️ strong':''),st.wind>40?'#fcd34d':0],['Lidar: '+(ob?'building '+ob.h.toFixed(0)+' m tall ahead':'path clear')],['Decision: '+dec,warn?'#fca5a5':'#86efac']]);
-   HP(x,452,10,178,[['🧠 Rules: '+n+'/4'],RC(R,'tower','Buildings','climb above it'),RC(R,'deliver','Delivery','lower the package on a rope'),RC(R,'wind','Strong wind','land safely'),RC(R,'batt','Battery','return to base')]);
+   HP(x,HWg-188,10,178,[['🧠 Rules: '+n+'/4'],RC(R,'tower','Buildings','climb above it'),RC(R,'deliver','Delivery','lower the package on a rope'),RC(R,'wind','Strong wind','land safely'),RC(R,'batt','Battery','return to base')]);
    const G2='rgba(21,128,61,.92)';if(st.crash)BAN(x,'💥 '+st.why);else if(P.br)BAN(x,'📦 The package broke — customers expect gentle deliveries');else if(st.mode=='mission'&&E.delivered&&E.returned)BAN(x,'🏁 Mission complete — delivered and back at base',G2);else if(E.delivered)BAN(x,'✅ Package delivered gently',G2);else if(E.returned)BAN(x,'✅ Back at base with battery to spare',G2);else if(E.landed)BAN(x,'✅ Landed safely out of the wind',G2)})})}
 
 /* ---------- R9. Smart factory quality inspection (3D) ---------- */
@@ -860,7 +873,7 @@ function T_fact(b){
   const L=st.last,n=['dmg','lbl','wt'].filter(k=>R[k]).length,F=E.log[0];
   S.hud([E.n,E.err,L?L.id:0,JSON.stringify(R)].join('|'),x=>{
    HP(x,10,10,330,[['🏭 Quality inspection AI'],L?['Box #'+L.id+':  '+(L.t.d?'damaged ✘':'no damage ✔')+'  ·  '+(L.t.l?'no label ✘':'label ✔')+'  ·  '+L.t.g+' g']:['Waiting for the first box…'],L?['Decision: '+(L.dec=='reject'?'REJECT ✖':'PASS → packing ✔')+(L.ok?'':'   ⚠️ wrong'),L.ok?'#86efac':'#fca5a5']:['Decision: —'],['Inspected '+E.n+'  ·  Correct '+E.ok+'  ·  Errors '+E.err]]);
-   HP(x,470,10,160,[['🧠 Rules: '+n+'/3'],RC(R,'dmg','Damage','reject it'),RC(R,'lbl','Missing label','reject it'),RC(R,'wt','Underweight','reject it')]);
+   HP(x,HWg-170,10,160,[['🧠 Rules: '+n+'/3'],RC(R,'dmg','Damage','reject it'),RC(R,'lbl','Missing label','reject it'),RC(R,'wt','Underweight','reject it')]);
    if(F&&!F.ok)BAN(x,'❌ Box #'+F.id+(F.dec=='pass'?' was shipped with a defect!':' was rejected but it was perfect!'));else if(E.n)BAN(x,'Accuracy '+Math.round(E.ok/E.n*100)+'%  ('+E.ok+' of '+E.n+' correct)','rgba(21,128,61,.92)')})})}
 
 /* ---------- Task catalogue ---------- */
@@ -1072,50 +1085,596 @@ const expand=(p,n)=>{const m=/<([^<>]*\|[^<>]*)>/.exec(p),nm=s=>String(s).toLowe
  if(!m)return[{full:nm(p),opt:null,short:SHORT(p,n)}];return m[1].split('|').map(o=>{const f=nm(p.replace(m[0],o));return{full:f,opt:o.trim(),short:SHORT(f,n)}})};
 const cpk=s=>String(s).toLowerCase().replace(/\s+/g,'');
 const shTxt=(h,n)=>String(h).replace(/<code>([^<]*)<\/code>/g,(z,a)=>'<code>'+SHORT(a,n)+'</code>').replace(/(Try|Type): (.*)$/,(z,a,b)=>a+': '+b.split(/ +then +/).map(x=>x.trim()).filter(Boolean).map(x=>'<code>'+esc(SHORT(x,n))+'</code>').join(' then '));
-/* display order: 3D labs first */
-const ORD=[5,6,7,8,0,1,2,3,4,...Array.from({length:15},(_,i)=>i+9)],pos=n=>ORD.indexOf(n)+1;
 
-/* ================= Command-only lab UI ================= */
-const flat=C.flatMap(c=>c[1]),NT=flat.length,SB=document.getElementById('sb'),SW=document.getElementById('sw'),RO=document.getElementById('ro'),STH=document.getElementById('sth'),LOCK=document.getElementById('lock'),
+/* ================= shared 3D helpers ================= */
+function ROVER(S,o){o=o||{};const{bx,cy,sp,mat}=S,g=new THREE.Group();S.sc.add(g);const s=o.s||1,body=mat(o.col||0xf59e0b,.45,.3),dk=mat(0x1f2937,.6,.4);
+ bx(1.4*s,.36*s,.96*s,body,0,.44*s,0,g);bx(1.08*s,.2*s,.78*s,dk,-.06*s,.72*s,0,g);bx(1.42*s,.06*s,.98*s,mat(0x111827,.5),0,.27*s,0,g);
+ const wg=new THREE.CylinderGeometry(.25*s,.25*s,.2*s,20);wg.rotateX(Math.PI/2);const wm=mat(0x161616,.9),hm=mat(0x9ca3af,.4,.7),hg=new THREE.CylinderGeometry(.1*s,.1*s,.22*s,10);hg.rotateX(Math.PI/2);
+ const wh=[[.47,.56],[.47,-.56],[-.47,.56],[-.47,-.56]].map(([x,z])=>{const w=new THREE.Mesh(wg,wm);w.castShadow=true;w.position.set(x*s,.25*s,z*s);w.add(new THREE.Mesh(hg,hm));g.add(w);return w});
+ const head=new THREE.Group();head.position.set(.56*s,.86*s,0);g.add(head);bx(.16*s,.22*s,.52*s,dk,0,0,0,head);
+ const eye=new THREE.MeshStandardMaterial({color:0x111111,emissive:0x38bdf8,emissiveIntensity:1.5});[-.14,.14].forEach(z=>sp(.06*s,eye,.08*s,0,z*s,head));
+ const led=new THREE.MeshStandardMaterial({color:0x111111,emissive:0x22c55e,emissiveIntensity:1.7});bx(.1*s,.06*s,.32*s,led,-.5*s,.85*s,0,g);
+ return{g,wh,head,led,eye,s,roll:d=>wh.forEach(w=>w.rotation.z-=d/(.25*s))}}
+function HUMAN(S,c1,c2,skinC){const{bx,sp,mat}=S,g=new THREE.Group();S.sc.add(g);const sk=mat(skinC||0xc68863,.7),sh=mat(c1||0x2563eb,.7),pa=mat(c2||0x1f2937,.8);
+ bx(.5,.7,.3,sh,0,1.33,0,g);sp(.19,sk,0,1.9,0,g);sp(.2,mat(0x2a1a10,.8),0,1.97,-.03,g);
+ const limb=(m,y,x,len,th)=>{const ge=new THREE.BoxGeometry(th,len,th);ge.translate(0,-len/2,0);const k=new THREE.Mesh(ge,m);k.position.set(x,y,0);k.castShadow=true;g.add(k);return k};
+ const lg=[limb(pa,.98,-.13,.95,.19),limb(pa,.98,.13,.95,.19)],am=[limb(sh,1.66,-.33,.68,.13),limb(sh,1.66,.33,.68,.13)];
+ return{g,walk:t=>{const w=Math.sin(t*9)*.55;lg[0].rotation.x=w;lg[1].rotation.x=-w;am[0].rotation.x=-w*.8;am[1].rotation.x=w*.8},still:()=>{lg.concat(am).forEach(k=>k.rotation.x=0)}}}
+function PTS(S,n,col,size,opa,add){const pos=new Float32Array(n*3).fill(-999),vel=new Float32Array(n*3),life=new Float32Array(n),ge=new THREE.BufferGeometry();ge.setAttribute('position',new THREE.BufferAttribute(pos,3));
+ const m=new THREE.PointsMaterial({color:col,size,transparent:true,opacity:opa==null?.85:opa,depthWrite:false,blending:add?THREE.AdditiveBlending:THREE.NormalBlending}),p=new THREE.Points(ge,m);p.frustumCulled=false;S.sc.add(p);let k=0;
+ return{p,m,emit:(x,y,z,vx,vy,vz,l)=>{const i=k++%n;pos.set([x,y,z],i*3);vel.set([vx,vy,vz],i*3);life[i]=l||1.5},
+  step:(dt,gr)=>{for(let i=0;i<n;i++){if(life[i]<=0)continue;life[i]-=dt;if(life[i]<=0){pos[i*3+1]=-999;continue}vel[i*3+1]-=(gr||0)*dt;pos[i*3]+=vel[i*3]*dt;pos[i*3+1]+=vel[i*3+1]*dt;pos[i*3+2]+=vel[i*3+2]*dt}ge.attributes.position.needsUpdate=true},
+  clear:()=>{life.fill(0);pos.fill(-999);ge.attributes.position.needsUpdate=true}}}
+function FLAME(S,x,y,z,sc){const g=new THREE.Group();g.position.set(x,y,z);S.sc.add(g);const ms=[0xff5a1f,0xffa31a,0xffe08a].map(c=>new THREE.MeshBasicMaterial({color:c,transparent:true,opacity:.85,blending:THREE.AdditiveBlending,depthWrite:false}));
+ const cs=[];for(let i=0;i<7;i++){const k=new THREE.Mesh(new THREE.ConeGeometry(.28+Math.random()*.2,1+Math.random()*.9,7),ms[i%3]);k.position.set((Math.random()-.5)*.9,.5,(Math.random()-.5)*.9);g.add(k);cs.push(k)}
+ const L=new THREE.PointLight(0xff7a2a,2.2,14);L.position.set(0,1.4,0);g.add(L);g.scale.setScalar(sc||1);let lvl=1;
+ return{g,set:v=>{lvl=Math.max(0,v);g.visible=lvl>.02},get lvl(){return lvl},step:t=>{cs.forEach((k,i)=>{const f=.75+.35*Math.sin(t*(9+i)+i*2);k.scale.set(lvl,lvl*f,lvl);k.position.y=.5*lvl*f});L.intensity=lvl*(1.8+Math.sin(t*23)*.5)}}}
+/* rules panel on the right of the HUD */
+const RPN=(x,title,lines,w)=>{w=w||188;HP(x,HWg-w-10,10,w,[[title]].concat(lines))};
+const GL0={'sys.boot':'start the AI and switch on the listed sensors','sys.halt':'shut the robot down','sys.reboot':'restart the computer','log.clear':'delete the history log','model.deploy':'install the trained AI on all robots','--fleet':'every robot in the group','test.run':'start the final test','--':'an option for the command','fw.update':'install new firmware'};
+
+/* ---------- 3D: Obstacle avoidance (warehouse test arena) ---------- */
+function T3_avoid(b){
+ const S=S3(b,{sky:0x1b2433,fogN:40,fogF:90,sh:14,sx:6,sy:20,sz:9,hemi:.9});if(!S)return;const{sc,cam,mat,tex,bx,cy,sp,pl,noise}=S;
+ cam.position.set(0,10.5,11.5);cam.lookAt(0,0,.6);const K=1/40,W=(px,py)=>[(px-320)*K,(py-190)*K];
+ pl(40,30,mat(0xffffff,.85,0,{map:tex(256,256,(x,w,h)=>{noise('#7c838c',22,5000)(x,w,h);x.strokeStyle='rgba(0,0,0,.25)';x.lineWidth=2;x.strokeRect(0,0,w,h)},10,8)}),0,0,0);
+ const hz=mat(0xf5c518,.6);[[0,-4.85,16.4,.12],[0,4.85,16.4,.12],[-8.1,0,.12,9.8],[8.1,0,.12,9.8]].forEach(([x,z,w,d])=>bx(w,.02,d,hz,x,.01,z));
+ const wl=mat(0x94a3b8,.6,.3);[[0,-5.05,16.6,.2],[0,5.05,16.6,.2],[-8.3,0,.2,10.3],[8.3,0,.2,10.3]].forEach(([x,z,w,d])=>bx(w,.5,d,wl,x,.25,z));
+ const crate=mat(0xffffff,.8,0,{map:tex(64,64,(x,w,h)=>{noise('#a0723f',30,600)(x,w,h);x.strokeStyle='#6b4423';x.lineWidth=5;x.strokeRect(3,3,w-6,h-6);x.beginPath();x.moveTo(3,3);x.lineTo(w-3,h-3);x.stroke()})}),barrel=mat(0x1d4ed8,.45,.4);
+ const R={x:60,y:190,a:0},O=[],M=[],K2={front:null,fa:'turn',side:null},E={hits:0,turns:0,crash:0,test:null};const rov=ROVER(S,{col:0x6366f1,s:.55});
+ const add=(px,py,r)=>{O.push([px,py,r||24]);const[x,z]=W(px,py),rr=(r||24)*K,k=O.length%2?bx(rr*1.5,rr*1.5,rr*1.5,crate,x,rr*.75,z):cy(rr,rr,rr*2.4,barrel,x,rr*1.2,z,null,20);M.push(k)};
+ const clear=()=>{M.forEach(k=>sc.remove(k));M.length=0;O.length=0};
+ const hit=(X,Y)=>X<0||Y<0||X>640||Y>380||O.some(o=>Math.hypot(X-o[0],Y-o[1])<o[2]+10),ray=a=>{for(let d=10;d<110;d+=5)if(hit(R.x+Math.cos(a)*d,R.y+Math.sin(a)*d))return d;return 110};
+ const RY=[-.6,0,.6].map(()=>{const l=new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(),new THREE.Vector3()]),new THREE.LineBasicMaterial({color:0x22c55e}));l.frustumCulled=false;sc.add(l);return l});
+ b.api={R,O,K:K2,E,add,clear,rand:n=>{for(let i=0;i<n;i++){let g=0,p;do{p=[150+Math.random()*450,40+Math.random()*300]}while(g++<50&&(Math.hypot(p[0]-R.x,p[1]-R.y)<90||O.some(o=>Math.hypot(o[0]-p[0],o[1]-p[1])<70)));add(p[0],p[1],22+Math.random()*10)}},
+  home:()=>Object.assign(R,{x:60,y:190,a:0}),ro:()=>`Front ${st.C} · Left ${st.L} · Right ${st.Q} → ${st.s}`};
+ const st={L:110,C:110,Q:110,s:''};
+ S.loop((dt,t)=>{const ns=Math.round(dt*60);for(let q=0;q<ns;q++){const L=ray(R.a-.6),C=ray(R.a),Q=ray(R.a+.6);let s='✅ Path clear → driving forward',v=2.2;
+   if(K2.front&&C<K2.front){if(K2.fa=='turn'){const tt=L>Q?-1:1;R.a+=tt*.09;v=C<=14?.2:.8;E.turns++;s='⚠️ Obstacle ahead → turning '+(tt<0?'left':'right')}else if(K2.fa=='stop'){v=0;s='⚠️ Obstacle ahead → stopped and waiting'}else if(C<=14){v=0;s='💥 Collision!';if(!E.crash){E.crash=1;E.hits++}}}
+   else if(C<=14){v=0;s='💥 Collision! No avoidance rule trained';if(!E.crash){E.crash=1;E.hits++}}
+   else if(K2.side&&(L<K2.side||Q<K2.side)){v=K2.sa=='slow'?1.1:2.2;s=K2.sa=='slow'?'🐢 Side obstacle close → slowing down':'Side obstacle close → full speed ⚠️'}
+   if(C>14)E.crash=0;R.x=Math.max(8,Math.min(632,R.x+Math.cos(R.a)*v));R.y=Math.max(8,Math.min(372,R.y+Math.sin(R.a)*v));Object.assign(st,{L,C,Q,s});rov.roll(v*K)}
+  const[x,z]=W(R.x,R.y);rov.g.position.set(x,0,z);rov.g.rotation.y=-R.a;rov.led.emissive.set(E.crash?0xef4444:/⚠️|🐢/.test(st.s)?0xf59e0b:0x22c55e);
+  [[st.L,-.6,K2.side||50],[st.C,0,K2.front||75],[st.Q,.6,K2.side||50]].forEach(([d,o,th],i)=>{const a=RY[i].geometry.attributes.position;a.setXYZ(0,x,.42,z);a.setXYZ(1,x+Math.cos(R.a+o)*d*K,.42,z+Math.sin(R.a+o)*d*K);a.needsUpdate=true;RY[i].material.color.set(d<th?0xef4444:0x22c55e)});
+  const el=E.test?Math.min(6,Math.floor((performance.now()-E.test.t0)/1000)):-1;
+  S.hud([st.s,st.C,st.L,st.Q,JSON.stringify(K2),el,E.hits].join('|'),x=>{HP(x,10,10,330,[['🤖 Obstacle-avoiding robot'],['Sonar  front '+st.C+' · left '+st.L+' · right '+st.Q],['Decision: '+st.s,/💥/.test(st.s)?'#fca5a5':/⚠️|🐢/.test(st.s)?'#fcd34d':'#86efac']]);
+   RPN(x,'🧠 Rules '+((K2.front?1:0)+(K2.side?1:0))+'/2',[RC({f:K2.front&&K2.fa},'f','Front sonar','turn'),RC({s:K2.side&&K2.sa},'s','Side sonar','slow')]);
+   if(el>=0)BAN(x,'🧪 Test drive '+el+' / 6 s · collisions '+(E.hits-E.test.h),E.hits>E.test.h?0:el>=6?'rgba(21,128,61,.92)':'rgba(30,64,175,.92)')})})}
+
+/* ---------- 3D: Sensor controller (rover in a tunnel) ---------- */
+function T3_sens(b){
+ const S=S3(b,{sky:0x0d1626,fogN:20,fogF:60,sh:12,sx:4,sy:14,sz:8,hemi:.9});if(!S)return;const{sc,cam,mat,tex,bx,cy,sp,pl,noise}=S;
+ cam.position.set(-4.6,3.4,5.2);cam.lookAt(1.2,.6,0);
+ const flT=tex(128,128,(x,w,h)=>{noise('#4b5563',26,2000)(x,w,h);x.fillStyle='#e5e7eb';x.fillRect(0,60,40,8)},20,2);pl(60,4,mat(0xffffff,.85,0,{map:flT}),5,0,0);
+ pl(60,30,mat(0x1f2937,.95),5,-.01,0);[-2.1,2.1].forEach(z=>bx(60,2.6,.15,mat(0x64748b,.85),5,1.3,z));
+ const wall=new THREE.Group();sc.add(wall);const brick=mat(0xffffff,.85,0,{map:tex(128,128,(x,w,h)=>{x.fillStyle='#8b3a24';x.fillRect(0,0,w,h);x.fillStyle='#d6c3a8';for(let r=0;r<8;r++){x.fillRect(0,r*16,w,2);for(let c=0;c<5;c++)x.fillRect((c*32+(r%2)*16)%w,r*16,2,16)}})});bx(.4,2.4,4,brick,0,1.2,0,wall);
+ const rov=ROVER(S,{col:0x0ea5e9,s:.9});
+ const hl=new THREE.SpotLight(0xfff3c4,0,14,.45,.5,1);hl.position.set(.7,.5,0);rov.g.add(hl);const tg=new THREE.Object3D();tg.position.set(6,0,0);rov.g.add(tg);hl.target=tg;
+ const lm=new THREE.MeshStandardMaterial({color:0x222222,emissive:0xfff3c4,emissiveIntensity:0});[-.3,.3].forEach(z=>bx(.05,.12,.16,lm,.64,.48,z,rov.g));
+ const fan=new THREE.Group();fan.position.set(-.3,1.05,0);rov.g.add(fan);for(let i=0;i<3;i++){const k=new THREE.Mesh(new THREE.BoxGeometry(.42,.02,.09),mat(0xe2e8f0,.4,.5));k.rotation.y=i*2.09;fan.add(k)}cy(.05,.05,.25,mat(0x334155,.5),-.3,.93,0,rov.g,8);
+ const bcn=new THREE.MeshStandardMaterial({color:0x330000,emissive:0xff2020,emissiveIntensity:0});sp(.11,bcn,-.05,1.0,.3,rov.g);
+ const hemi=sc.children.find(o=>o.isHemisphereLight),sun=sc.children.find(o=>o.isDirectionalLight);
+ const V={d:150,l:60,t:24,s:20},Rl=[],E={},st={mv:'Full speed',out:{}};
+ const act=()=>{const A=new Set();Rl.forEach(r=>{const v=V[r.k];if(r.op=='<'?v<r.v:v>r.v)A.add(r.a)});return A};
+ b.api={V,Rl,E,set:o=>Object.assign(V,o),rule:(k,op,v,a)=>{for(let i=Rl.length-1;i>=0;i--)if(Rl[i].k==k&&Rl[i].op==op&&Rl[i].v==v)Rl.splice(i,1);Rl.push({k,op,v,a})},out:()=>{const A=act(),mv=A.has('stop')?'Stop':A.has('slow')?'Slow (40%)':'Full speed';return{stop:mv=='Stop',slow:mv[0]=='S'&&mv!='Stop',head:A.has('head'),fan:A.has('fan'),alarm:A.has('alarm')}},ro:()=>`Distance ${V.d} cm · Light ${V.l}% · ${V.t}°C · Sound ${V.s} → ${st.mv}`};
+ let off=0;S.loop((dt,t)=>{const A=act(),mv=A.has('stop')?'Stop':A.has('slow')?'Slow (40%)':'Full speed',sp0=mv=='Stop'?0:mv[0]=='S'?1.2:4;
+  st.out={stop:mv=='Stop',slow:mv[0]=='S'&&mv!='Stop',head:A.has('head'),fan:A.has('fan'),alarm:A.has('alarm')};st.mv=mv;
+  off+=sp0*dt;flT.offset.x=off/3;rov.roll(sp0*dt);wall.position.x=.9+V.d/30;const dk=V.l<35;hemi.intensity=.25+.65*V.l/100;sun.intensity=.2+.9*V.l/100;
+  hl.intensity=st.out.head?3.2:0;lm.emissiveIntensity=st.out.head?2:0;fan.rotation.y+=st.out.fan?dt*25:0;bcn.emissiveIntensity=st.out.alarm?(Math.sin(t*14)>0?3:.2):0;
+  rov.led.emissive.set(mv=='Stop'?0xef4444:mv=='Full speed'?0x22c55e:0xf59e0b);
+  const w=[];if(V.d<30&&!st.out.stop)w.push('Wall '+V.d+' cm — not stopping!');if(dk&&!st.out.head)w.push('Dark — headlights off');if(V.t>30&&!st.out.fan)w.push('Motor overheating');if(V.s>80&&!st.out.alarm)w.push('Loud noise ignored');
+  S.hud([JSON.stringify(V),mv,JSON.stringify(st.out),Rl.length,w.join()].join('|'),x=>{
+   HP(x,10,10,312,[['🤖 Sensor controller'],['📏 Distance '+V.d+' cm   💡 Light '+V.l+' %'],['🌡 Temp '+V.t+' °C   🔊 Sound '+V.s],['Motor: '+mv,mv=='Stop'?'#fca5a5':mv=='Full speed'?'#86efac':'#fcd34d'],['Headlights '+(st.out.head?'ON':'off')+' · Fan '+(st.out.fan?'ON':'off')+' · Alarm '+(st.out.alarm?'ON':'off')]]);
+   RPN(x,'🧠 Rules '+Rl.length,Rl.slice(-5).map(r=>['IF '+({d:'dist',l:'light',t:'temp',s:'sound'})[r.k]+' '+r.op+' '+r.v+' → '+r.a,'#86efac']),210);if(w.length)BAN(x,'⚠️ '+w[0])})})}
+
+/* ---------- 3D: Line follower ---------- */
+function T3_line(b){
+ const S=S3(b,{sky:0x1e293b,fogN:40,fogF:90,sh:13,sx:5,sy:20,sz:9,hemi:.95});if(!S)return;const{sc,cam,mat,tex,bx,cy,sp,pl,noise}=S;
+ cam.position.set(0,9.6,10.2);cam.lookAt(0,0,.5);const K=1/40,W=(px,py)=>[(px-320)*K,(py-190)*K];
+ pl(40,30,mat(0x1f2937,.95),0,-.01,0);pl(17,10.4,mat(0xffffff,.85,0,{map:tex(128,128,noise('#e7e5e4',10,800),4,3)}),0,0,0);
+ const f=X=>190+80*Math.sin(X/75),pts=[];for(let X=0;X<=640;X+=8){const[x,z]=W(X,f(X));pts.push(new THREE.Vector3(x,.012,z))}
+ const crv=new THREE.CatmullRomCurve3(pts),tg=new THREE.TubeGeometry(crv,200,.07,4,false);const tape=new THREE.Mesh(tg,mat(0x0b0b0b,.8));tape.scale.y=.12;tape.position.y=.01;sc.add(tape);
+ const on=s=>Math.abs(s[1]-f(s[0]))<6,K2={L:null,R:null,lost:null,cal:0},E={laps:0,off:0,test:null};let R,lt=1;
+ const rs=()=>R={x:20,y:f(20),a:Math.atan(80/75*Math.cos(20/75))};rs();const rov=ROVER(S,{col:0x8b5cf6,s:.42});
+ const sm=[0,1].map(()=>new THREE.MeshStandardMaterial({color:0x111111,emissive:0xef4444,emissiveIntensity:1.6})),sd=sm.map(m=>sp(.05,m,0,.05,0));
+ const st={l:0,r:0,s:''};b.api={get R(){return R},rs,K:K2,E,sp:2,ro:()=>`IR left: ${st.l?'LINE':'floor'} · IR right: ${st.r?'LINE':'floor'} → ${st.s}`};
+ S.loop((dt,t)=>{const ns=Math.round(dt*60);for(let q=0;q<ns;q++){const co=Math.cos(R.a),si=Math.sin(R.a),F=[R.x+co*16,R.y+si*16],Lf=[F[0]+si*11,F[1]-co*11],Rt=[F[0]-si*11,F[1]+co*11],l=K2.cal&&on(Lf),r=K2.cal&&on(Rt),lost=!l&&!r&&Math.abs(F[1]-f(F[0]))>14;let s='Line between sensors → straight';
+   if(!K2.cal)s='IR sensors not calibrated → reading noise';
+   const doA=(a,side)=>{if(a=='L'){R.a-=.07;lt=-1;return side+' IR on line → steer left'}if(a=='R'){R.a+=.07;lt=1;return side+' IR on line → steer right'}return side+' IR on line → '+(a?'straight':'no rule')};
+   if(l&&!r)s=doA(K2.L,'Left');else if(r&&!l)s=doA(K2.R,'Right');else if(lost&&K2.cal){E.off++;if(K2.lost=='scan'){R.a+=lt*.04;s='Line lost → scanning arc'}else s='Line lost → '+(K2.lost=='stop'?'stopped':'driving blind ⚠️')}
+   const v=lost&&K2.lost=='stop'?0:b.api.sp;R.x+=Math.cos(R.a)*v;R.y+=Math.sin(R.a)*v;rov.roll(v*K);if(R.x>625){if(E.test)E.laps++;rs()}if(R.x<-10||R.y<-30||R.y>410)rs();
+   [[Lf,l],[Rt,r]].forEach(([p,o],i)=>{const[x,z]=W(p[0],p[1]);sd[i].position.set(x,.05,z);sm[i].emissive.set(o?0x22c55e:0xef4444)});Object.assign(st,{l,r,s})}
+  const[x,z]=W(R.x,R.y);rov.g.position.set(x,0,z);rov.g.rotation.y=-R.a;
+  S.hud([st.s,st.l,st.r,JSON.stringify(K2),b.api.sp,E.laps,!!E.test].join('|'),x=>{HP(x,10,10,330,[['🤖 Line-following robot'],['IR left: '+(st.l?'LINE':'floor')+'   ·   IR right: '+(st.r?'LINE':'floor')+'   ·   speed '+b.api.sp],['Decision: '+st.s,/no rule|blind|noise/.test(st.s)?'#fca5a5':'#86efac']]);
+   RPN(x,'🧠 Rules',[RC({c:K2.cal&&1},'c','IR calibrated',1),RC(K2,'L','Left IR','L'),RC(K2,'R','Right IR','R'),RC(K2,'lost','Line lost','scan')]);if(E.test)BAN(x,E.laps?'✅ Test lap finished':'🧪 Test lap running…',E.laps?'rgba(21,128,61,.92)':'rgba(30,64,175,.92)')})})}
+
+/* ---------- 3D: Robotic arm with camera ---------- */
+function T3_arm(b){
+ const S=S3(b,{sky:0x1c2531,fogN:30,fogF:80,sh:10,sx:5,sy:16,sz:10,hemi:.9});if(!S)return;const{sc,cam,mat,tex,bx,cy,sp,pl,noise}=S;
+ cam.position.set(0,4.6,8.4);cam.lookAt(0,1.6,0);const KK=1/60,W=(px,py)=>[(px-320)*KK,(370-py)*KK];
+ pl(30,20,mat(0xffffff,.85,0,{map:tex(128,128,noise('#6b7280',20,2000),8,6)}),0,0,0);bx(11,.12,3,mat(0x475569,.5,.4),0,-.06,0);
+ const tray=(px,col,lab)=>{const[x]=W(px,0),m=mat(col,.55);bx(1.3,.06,1.3,m,x,.03,0);[[0,.65,1.3,.06],[0,-.65,1.3,.06],[.65,0,.06,1.3],[-.65,0,.06,1.3]].forEach(([a,c,w,d])=>bx(w,.5,d,m,x+a,.25,c));
+  const k=new THREE.Mesh(new THREE.PlaneGeometry(1.2,.3),new THREE.MeshBasicMaterial({map:tex(256,64,g=>{g.fillStyle='#'+col.toString(16).padStart(6,'0');g.fillRect(0,0,256,64);g.fillStyle='#fff';g.font='bold 36px Lexend,sans-serif';g.textAlign='center';g.fillText(lab,128,46)}),toneMapped:false}));k.position.set(x,.3,.67);sc.add(k)};
+ tray(580,0x15803d,'BIN');tray(60,0xb91c1c,'REJECT');
+ const metal=mat(0xf59e0b,.4,.35),dk=mat(0x1f2937,.5,.5);cy(.5,.6,.35,dk,0,.18,0,null,28);
+ const seg=(r,m)=>{const k=new THREE.Mesh(new THREE.BoxGeometry(1,r,r),m);k.castShadow=true;sc.add(k);return k},S1=seg(.26,metal),S2=seg(.2,metal),J1=sp(.2,dk),J2=sp(.17,dk),J0=sp(.24,dk);
+ const fg=[0,1].map(()=>bx(.06,.28,.18,dk));const place=(k,a,c)=>{const dx=c[0]-a[0],dy=c[1]-a[1],L=Math.hypot(dx,dy);k.position.set((a[0]+c[0])/2,(a[1]+c[1])/2,0);k.scale.x=L;k.rotation.z=Math.atan2(dy,dx)};
+ const B=[320,370],L1=150,L2=130,bin=[580,345],rej=[60,345],NM=['red','green','orange'],COLS=[0xdc2626,0x16a34a,0xf59e0b];
+ const ik=(px,py)=>{const dx=px-B[0],dy=py-B[1],d=Math.min(Math.hypot(dx,dy),L1+L2-1),a2=Math.acos((d*d-L1*L1-L2*L2)/(2*L1*L2));return[Math.atan2(dy,dx)-Math.atan2(L2*Math.sin(a2),L1+L2*Math.cos(a2)),a2]};
+ let A=ik(420,190),tg=A,q=[],held=null;const O=[[110,352],[190,352],[470,352]],BM=O.map((o,i)=>bx(.4,.4,.4,mat(COLS[i],.45,.1)));
+ const crk=bx(.42,.04,.06,mat(0x111111,.9),0,0,0);
+ const st={scan:0,home:0,K:{},pend:[]};
+ const prog=(i,to)=>[['go',O[i][0],O[i][1]],['grab',i],['go',to[0],to[1]-60],['drop',to],['go',320,170]];
+ b.api={O,st,where:i=>O[i][0]>540?'bin':O[i][0]<120&&O[i][1]>350&&Math.abs(O[i][0]-60)<40?'reject':'table',home:()=>{q=[['go',320,170]];st.home=1},
+  reset:()=>{q=[];held=null;st.pend=[];[[110,352],[190,352],[470,352]].forEach((p,i)=>{O[i][0]=p[0];O[i][1]=p[1]})},
+  rule:(c,a)=>{st.K[c]=a;const i=NM.indexOf(c);if(a!='skip'&&!st.pend.some(p=>p[0]==i))st.pend.push([i,a=='bin'?bin:rej])},
+  ro:()=>NM.map((n,i)=>n+': '+b.api.where(i)).join(' · ')};
+ S.loop((dt,t)=>{if(!q.length&&held==null&&st.pend.length&&st.scan){const[i,to]=st.pend.shift();if(b.api.where(i)=='table')q=prog(i,to)}
+  for(let k=0;k<Math.round(dt*60);k++){if(q.length&&Math.abs(A[0]-tg[0])+Math.abs(A[1]-tg[1])<.05){const s=q.shift();if(s[0]=='go')tg=ik(s[1],s[2]);else if(s[0]=='grab')held=s[1];else if(s[0]=='drop'){const o=O[held];o[0]=s[1][0]-14+Math.random()*28;o[1]=s[1][1]+8;held=null}}
+   A=A.map((v,i)=>v+(tg[i]-v)*.08)}
+  const e=[B[0]+L1*Math.cos(A[0]),B[1]+L1*Math.sin(A[0])],h=[e[0]+L2*Math.cos(A[0]+A[1]),e[1]+L2*Math.sin(A[0]+A[1])];if(held!=null){O[held][0]=h[0];O[held][1]=h[1]+14}
+  const b0=W(...B),e0=W(...e),h0=W(...h);place(S1,b0,e0);place(S2,e0,h0);J0.position.set(b0[0],b0[1],0);J1.position.set(e0[0],e0[1],0);J2.position.set(h0[0],h0[1],0);
+  fg.forEach((k,i)=>k.position.set(h0[0]+(i?.12:-.12)*(held!=null?.7:1),h0[1]-.2,0));
+  O.forEach((o,i)=>{const[x,y]=W(o[0],o[1]);BM[i].position.set(x,Math.max(.2,y),0)});crk.position.copy(BM[2].position);crk.position.y+=.205;crk.rotation.y=.5;
+  const scanTxt=st.scan?'📷 3 objects found: '+NM.filter((n,i)=>b.api.where(i)=='table').join(', '):'📷 Camera idle';
+  S.hud([scanTxt,JSON.stringify(st.K),O.map((o,i)=>b.api.where(i)).join(),st.home].join('|'),x=>{
+   HP(x,10,10,330,[['🦾 Robotic arm + vision'],[scanTxt,st.scan?'#7dd3fc':'#94a3b8'],['Orange block: crack detected ⚠️','#fcd34d'],['Red '+b.api.where(0)+' · Green '+b.api.where(1)+' · Orange '+b.api.where(2)]]);
+   RPN(x,'🧠 Pick rules',[RC({h:st.home&&1},'h','Arm homed',1),RC(st.K,'red','Red','bin'),RC(st.K,'green','Green','bin'),RC(st.K,'orange','Orange (cracked)','reject')]);
+   if(b.api.where(2)=='bin')BAN(x,'❌ A cracked block went into the good BIN')})})}
+
+/* ---------- 3D: Traffic junction controller ---------- */
+function T3_traf(b){
+ const S=S3(b,{sky:0x9cc9ee,fogN:60,fogF:150,sh:30,sx:-16,sy:40,sz:20});if(!S)return;const{sc,cam,mat,tex,bx,cy,sp,pl,noise,bld,tree}=S;
+ cam.position.set(-17,21,23);cam.lookAt(0,0,0);
+ pl(200,200,mat(0xffffff,.95,0,{map:tex(128,128,noise('#5f8c43',28,1500),40,40)}),0,0,0);const asp=mat(0xffffff,.9,0,{map:tex(128,128,noise('#3c3f45',24,3000),20,2)});
+ pl(100,8,asp,0,.02,0);const v=pl(8,100,asp,0,.021,0);const W2=mat(0xf2f2ea,.5);
+ for(let i=-48;i<48;i+=4){if(Math.abs(i)>6){bx(2,.02,.15,W2,i,.03,0);bx(.15,.02,2,W2,0,.03,i)}}
+ [[-4.6,0,.25,8],[4.6,0,.25,8],[0,-4.6,8,.25],[0,4.6,8,.25]].forEach(([x,z,w,d])=>bx(w,.02,d,W2,x,.03,z));
+ [[-26,-22],[22,-24],[-24,22],[24,22]].forEach(([x,z],i)=>bld(x,z,14,12,8+i*4,['#cfd6de','#d8cfc2','#b8c2cc','#e0d7ca'][i]));for(let i=-40;i<=40;i+=10)if(Math.abs(i)>8){tree(i,-7,.8);tree(-7,i,.8)}
+ const sig=(x,z,ry)=>{const pm=mat(0x2b2f36,.45,.6);cy(.1,.12,4,pm,x,2,z);const h=bx(.5,1.3,.5,mat(0x111317,.5),x,4.4,z);const ms=[0xff2a1a,0x19e35c].map((c,i)=>{const m=new THREE.MeshStandardMaterial({color:0x111,emissive:c,emissiveIntensity:.05});const k=sp(.16,m,0,i?-.3:.3,.27);h.add(k);k.position.set(Math.sin(ry)*.27,i?-.3:.3,Math.cos(ry)*.27);return m});return ms};
+ const SG=[sig(-5.4,-5.4,Math.PI),sig(5.4,5.4,0),sig(5.4,-5.4,Math.PI/2),sig(-5.4,5.4,-Math.PI/2)];
+ const cars=[],pal=[0xdc2626,0x2563eb,0xf8fafc,0x16a34a,0xf59e0b,0x111827,0x7c3aed],mkc=c=>{const g=new THREE.Group();sc.add(g);bx(3.6,.8,1.7,mat(c,.35,.5),0,.6,0,g);bx(2,.6,1.5,mat(0x1a2533,.15,.6),-.2,1.25,0,g);return g};
+ for(let i=0;i<40;i++)cars.push(mkc(pal[i%7]));const amb=mkc(0xffffff);const ambL=new THREE.MeshStandardMaterial({color:0x220000,emissive:0xff0000,emissiveIntensity:1});bx(.3,.2,1.4,ambL,0,1.65,0,amb);bx(3.62,.18,1.72,mat(0xdc2626,.5),0,.75,0,amb);
+ const V={n:8,s:6,e:15,w:12,em:0},K={cnt:0,busy:null,empty:null,siren:null},E={};let ph=0;
+ const plan=()=>{const ns=V.n+V.s,ew=V.e+V.w,T=ns+ew||1;let g=30,mode='Fixed timer 30/30 s';
+  if(K.cnt&&K.busy=='more'){g=Math.round(10+40*ns/T);mode='Busier road gets more green'}if(K.cnt&&K.busy=='less'){g=Math.round(50-40*ns/T);mode='Busier road gets LESS green ⚠️'}
+  if(K.cnt&&K.empty=='skip'){if(!ns&&ew){g=0;mode='Empty N–S skipped'}else if(!ew&&ns){g=60;mode='Empty E–W skipped'}}if(K.cnt&&K.empty=='keep'&&(!ns||!ew))mode+=' · empty road keeps green ⚠️';
+  const emer=V.em&&K.siren=='pre';if(emer){g=60;mode='🚑 Siren priority on North'}const h=60-g,fx=ns*30+ew*30,ai=ns*h+ew*g;return{g,h,mode,emer,im:fx?Math.round((fx-ai)/fx*100):0}};
+ b.api={V,K,E,set:o=>Object.assign(V,o),plan,ro:()=>{const p=plan();return `N ${V.n} S ${V.s} E ${V.e} W ${V.w} · ${p.mode} · N–S ${p.g}s / E–W ${p.h}s · improvement ${p.im}%`}};
+ S.loop((dt,t)=>{const p=plan();ph=(ph+dt)%12;const nsG=ph<p.g/5;SG.forEach((m,i)=>{const g=i<2?nsG:!nsG;m[0].emissiveIntensity=g?.05:2.6;m[1].emissiveIntensity=g?2.6:.05});
+  let k=0;const lane=(cnt,go,fn)=>{for(let i=0;i<Math.min(9,cnt);i++){const c=cars[k++];c.visible=true;fn(c,i,go?((t*6)%5):0)}};
+  lane(V.n,nsG,(c,i,o)=>{c.position.set(-2,0,-7-i*5+o);c.rotation.y=-Math.PI/2});lane(V.s,nsG,(c,i,o)=>{c.position.set(2,0,7+i*5-o);c.rotation.y=Math.PI/2});
+  lane(V.e,!nsG,(c,i,o)=>{c.position.set(7+i*5-o,0,-2);c.rotation.y=Math.PI});lane(V.w,!nsG,(c,i,o)=>{c.position.set(-7-i*5+o,0,2);c.rotation.y=0});for(;k<cars.length;k++)cars[k].visible=false;
+  amb.visible=!!V.em;if(V.em){const z=p.emer&&nsG?-7+((t*9)%30)-6:-7-Math.min(9,V.n)*5;amb.position.set(-2,0,p.emer?(nsG?Math.min(30,-12+((t*9)%40)):-7):z);amb.rotation.y=-Math.PI/2;ambL.emissive.set(Math.sin(t*18)>0?0xff0000:0x2563eb)}
+  S.hud([JSON.stringify(V),p.mode,p.g,nsG,JSON.stringify(K)].join('|'),x=>{HP(x,10,10,350,[['🚦 Junction AI'],['Camera count: '+(K.cnt?`N ${V.n} · S ${V.s} · E ${V.e} · W ${V.w}`:'OFF')],['Plan: '+p.mode,/⚠️/.test(p.mode)?'#fca5a5':'#86efac'],['Green N–S '+p.g+' s · E–W '+p.h+' s · waiting −'+p.im+'%'],['Now green: '+(nsG?'North–South':'East–West')]]);
+   RPN(x,'🧠 Rules',[RC({c:K.cnt&&1},'c','Car counting',1),RC(K,'busy','Busy road','more'),RC(K,'empty','Empty road','skip'),RC(K,'siren','Ambulance','pre')]);if(V.em&&!p.emer)BAN(x,'🚑 Ambulance stuck at a red light!')})})}
+
+/* ---------- NEW: Mars rover explorer ---------- */
+function T_mars(b){
+ const S=S3(b,{sky:0xd8a27c,fogN:30,fogF:110,sh:26,sx:-14,sy:34,sz:18,hemi:.75,sun:1.25});if(!S)return;const{sc,cam,mat,tex,bx,cy,sp,pl,noise}=S;
+ pl(220,120,mat(0xffffff,.95,0,{map:tex(256,256,noise('#b5623a',40,9000),40,22)}),0,0,0);
+ const rk=mat(0x7a3b22,.95,0,{flatShading:true});const rock=(x,z,r,m)=>{const k=new THREE.Mesh(new THREE.IcosahedronGeometry(r,1),m||rk);k.position.set(x,r*.55,z);k.scale.y=.7;k.rotation.set(Math.random(),Math.random(),0);k.castShadow=k.receiveShadow=true;sc.add(k);return k};
+ for(let i=0;i<70;i++){const x=-40+Math.random()*80,z=(Math.random()<.5?-1:1)*(5+Math.random()*20);rock(x,z,.15+Math.random()*.5)}
+ for(let i=0;i<6;i++){const h=new THREE.Mesh(new THREE.SphereGeometry(14+i*3,20,10),mat(0x9a4d2c,1,0,{flatShading:true}));h.scale.y=.25;h.position.set(-60+i*26,-1,-48-i*3);sc.add(h)}
+ rock(-8,0,1.15);const crt=new THREE.Mesh(new THREE.TorusGeometry(2.5,.45,8,30),mat(0x8b4527,.95,0,{flatShading:true}));crt.rotation.x=Math.PI/2;crt.position.set(3,.1,0);sc.add(crt);
+ const hole=new THREE.Mesh(new THREE.CircleGeometry(2.3,30),mat(0x3b1a0f,1));hole.rotation.x=-Math.PI/2;hole.position.set(3,.02,0);sc.add(hole);
+ const ice=rock(10.5,1.5,.45,mat(0xdbeafe,.3,.1,{emissive:0x60a5fa,emissiveIntensity:.25,flatShading:true}));
+ const rov=ROVER(S,{col:0xe5e7eb,s:.9});const pnl=[1,-1].map(sd=>{const g=new THREE.Group();g.position.set(-.1,.95,sd*.4);rov.g.add(g);const k=bx(1.1,.04,.7,mat(0x1e3a8a,.25,.6),0,0,sd*.38,g);return g});
+ cy(.04,.04,.9,mat(0x9ca3af,.4,.6),.3,1.3,0,rov.g,8);bx(.18,.14,.28,mat(0x374151,.5),.32,1.78,0,rov.g);
+ const drill=new THREE.Group();drill.position.set(.75,.55,.3);rov.g.add(drill);bx(.7,.08,.08,mat(0x9ca3af,.4,.7),.35,0,0,drill);cy(.05,.01,.3,mat(0x52525b,.3,.8),.7,-.15,0,drill,8);
+ const dust=PTS(S,600,0xd9a27a,.35,.55);const fog=sc.fog,sun=sc.children.find(o=>o.isDirectionalLight);
+ const R={},E={},st={};const POS={rock:-15,crater:-4,sample:6.5,storm:13,mission:-19};
+ const scen=m=>{Object.assign(st,{m,x:POS[m],z:0,y:0,v:2.2,stop:0,dr:0,bat:m=='storm'?55:100,dust:m=='storm'?20:0,storm:m=='storm',hib:0,tilt:0,dec:''});Object.assign(E,{passRock:0,passCrater:0,sample:0,survived:0,done:0,fail:''});dust.clear()};scen('rock');
+ b.api={R,E,scen,rule:(k,v)=>R[k]=v,ro:()=>`x ${st.x.toFixed(1)} m · battery ${Math.round(st.bat)}% · dust ${Math.round(st.dust)}% · ${st.dec}`};
+ const V=new THREE.Vector3(),LA=new THREE.Vector3();cam.position.set(-24,7,12);
+ S.loop((dt,t)=>{let dec='Driving on the planned route';
+  if(E.fail){dec='💥 '+E.fail}else if(st.x>20.5){st.v=0;E.done=1;dec='🏁 Reached the end of today’s route'}
+  else{if(st.m=='mission'&&E.sample&&!st.storm&&!E.survived){st.storm=1}
+   if(st.storm&&!E.survived){st.dust=Math.min(90,st.dust+dt*18);if(st.dust>70){if(R.storm=='hib'){st.hib=1;dec='Dust storm → hibernating with panels folded';st.bat=Math.max(0,st.bat-dt*.3);st.stT=(st.stT||0)+dt;if(st.stT>5){E.survived=1;st.storm=0;st.hib=0;st.stT=0}}else{dec='Dust storm → '+(R.storm?'continuing ⚠️':'no rule ⚠️');st.bat=Math.max(0,st.bat-dt*9);if(st.bat<=0)E.fail='Battery dead in the dust storm'}}}
+   if(!st.storm&&st.dust>0)st.dust=Math.max(0,st.dust-dt*25);
+   let zT=0;if(R.rock=='detour'&&st.x>-12.5&&st.x<-4)zT=2.6;if(R.crater=='reroute'&&st.x>-2&&st.x<7.5)zT=-3.9;
+   const nearRock=Math.abs(st.x+8)<1.85&&Math.abs(st.z)<1.5;
+   if(nearRock&&!st.stop){if(R.rock=='climb'){st.tilt=Math.min(.5,st.tilt+dt);dec='Climbing the rock ⚠️';if(st.tilt>=.5)E.fail='Wheels stuck on the rock'}else{E.fail='Crashed into the rock'}}
+   if(Math.hypot(st.x-3,st.z)<2.2){E.fail='Fell into the crater'}
+   if(st.x>9.6&&!E.sample&&!st.passS){if(R.sample=='drill'){st.dr+=dt;dec='Ice detected → drilling a core sample';if(st.dr>2.5){E.sample=1}}else{st.passS=1;dec='Ice detected → '+(R.sample?'skipped ⚠️':'no rule')}}
+   const moving=!E.fail&&!st.hib&&!(st.x>9.6&&R.sample=='drill'&&!E.sample);
+   if(moving){st.x+=st.v*dt*(nearRock&&R.rock=='climb'?.3:1);st.z+=(zT-st.z)*Math.min(1,dt*1.6);rov.roll(st.v*dt)}
+   if(!nearRock&&Math.abs(zT)>0&&dec=='Driving on the planned route')dec=zT>0?'Big rock → detouring around it':'Crater edge → rerouting';
+   if(st.x>-5.5&&!E.fail)E.passRock=1;if(st.x>6&&!E.fail)E.passCrater=1}
+  if(E.fail=='Fell into the crater')st.y=Math.max(-1,st.y-dt*1.4);
+  for(let i=0;i<Math.round(st.dust/8);i++)dust.emit(st.x-12+Math.random()*24,Math.random()*5,-8+Math.random()*16,7+Math.random()*4,(Math.random()-.5),0,2);dust.step(dt,0);
+  fog.near=30-st.dust*.3;fog.far=110-st.dust*.95;sun.intensity=1.25-st.dust*.009;
+  rov.g.position.set(st.x,st.y,st.z);rov.g.rotation.z=st.tilt;pnl.forEach((g,i)=>g.rotation.x+=(((st.hib?1.4:0)*(i?1:-1))-g.rotation.x)*Math.min(1,dt*3));drill.rotation.z=E.sample||st.dr>0?-.6:0;if(st.dr>0&&!E.sample)drill.children[1].rotation.y+=dt*30;
+  rov.led.emissive.set(E.fail?0xef4444:/⚠️/.test(dec)?0xf59e0b:0x22c55e);st.dec=dec;
+  cam.position.lerp(V.set(st.x-9,6.5,9.5),.05);LA.lerp(V.set(st.x+3,.5,0),.08);cam.lookAt(LA);S.follow(st.x,0);
+  const n=['rock','crater','sample','storm'].filter(k=>R[k]).length,warn=/⚠️|💥/.test(dec);
+  S.hud([Math.round(st.x),Math.round(st.bat),Math.round(st.dust),dec,E.sample,E.survived,JSON.stringify(R)].join('|'),x=>{
+   HP(x,10,10,350,[['🔴 Mars rover — Sol 214'],['Battery '+Math.round(st.bat)+'%   ·   Dust '+Math.round(st.dust)+'%',st.dust>70?'#fcd34d':0],['Spectrometer: '+(st.x>8.5?'H2O ice ❄️':'basalt'),'#7dd3fc'],['Samples collected: '+(E.sample?1:0)],['Decision: '+dec,warn?'#fca5a5':'#86efac']]);
+   RPN(x,'🧠 Rules '+n+'/4',[RC(R,'rock','Big rock','detour'),RC(R,'crater','Crater','reroute'),RC(R,'sample','Ice found','drill'),RC(R,'storm','Dust storm','hib')]);
+   if(E.fail)BAN(x,'💥 '+E.fail);else if(E.done)BAN(x,'🏁 Route complete'+(E.sample?' with a sample':''),'rgba(21,128,61,.92)');else if(E.survived)BAN(x,'✅ Survived the dust storm','rgba(21,128,61,.92)')})})}
+
+/* ---------- NEW: Warehouse order-picking robot ---------- */
+function T_amr(b){
+ const S=S3(b,{sky:0x161d29,fogN:40,fogF:100,sh:22,sx:8,sy:26,sz:12,hemi:.95,sun:.9});if(!S)return;const{sc,cam,mat,tex,bx,cy,sp,pl,noise}=S;
+ pl(80,40,mat(0xffffff,.85,0,{map:tex(256,256,(x,w,h)=>{noise('#8d939b',22,6000)(x,w,h);x.strokeStyle='rgba(0,0,0,.2)';x.strokeRect(0,0,w,h)},16,8)}),0,0,0);
+ const yl=mat(0xf5c518,.6);[-1.35,1.35].forEach(z=>bx(34,.01,.12,yl,-1,.006,z));
+ const rack=mat(0x1d4ed8,.5,.5),bxm=[0xc08a55,0xa16207,0xd6b07a].map(c=>mat(c,.85));
+ const shelf=(x,z)=>{[-1,1].forEach(a=>[-.45,.45].forEach(c=>bx(.08,3.2,.08,rack,x+a,1.6,z+c)));[.6,1.6,2.6].forEach(y=>{bx(2.1,.06,1,mat(0xf97316,.5,.4),x,y,z);for(let i=0;i<3;i++)if(Math.random()<.8)bx(.5,.45,.6,bxm[(i+y*3)%3|0],x-.6+i*.6,y+.26,z)})};
+ for(let x=-14;x<=12;x+=2.4){shelf(x,-3);shelf(x,3.2)}
+ bx(1.6,1,1,mat(0x334155,.5,.4),-15.6,.5,0);const chg=new THREE.MeshStandardMaterial({color:0x111,emissive:0x22c55e,emissiveIntensity:1.4});bx(.05,.3,.5,chg,-14.78,.6,0);
+ bx(2.2,1,2.2,mat(0x15803d,.6),15,.5,0);bx(2.4,.1,2.4,mat(0x14532d,.6),15,1.05,0);
+ const tgt=new THREE.Mesh(new THREE.RingGeometry(.5,.7,30),new THREE.MeshBasicMaterial({color:0x22d3ee,transparent:true,opacity:.8,side:THREE.DoubleSide}));tgt.rotation.x=-Math.PI/2;tgt.position.set(6,.03,-1.9);sc.add(tgt);
+ const g=new THREE.Group();sc.add(g);bx(1.2,.32,.9,mat(0xf97316,.4,.3),0,.22,0,g);bx(1.0,.06,.8,mat(0x1f2937,.5),0,.41,0,g);const led=new THREE.MeshStandardMaterial({color:0x111,emissive:0x22c55e,emissiveIntensity:1.6});bx(.06,.06,.6,led,.61,.3,0,g);
+ const lid=new THREE.Mesh(new THREE.CylinderGeometry(.12,.12,.12,16),mat(0x111827,.3,.5));lid.position.set(.4,.5,0);g.add(lid);
+ const tote=bx(.6,.4,.5,mat(0x2563eb,.5),0,0,0);const tl=new THREE.MeshBasicMaterial({color:0x22c55e});const tlab=new THREE.Mesh(new THREE.PlaneGeometry(.3,.15),tl);tote.add(tlab);tlab.position.set(0,.05,.26);
+ const fb=bx(.9,.7,.7,mat(0xb07a45,.85),1,.35,0);fb.rotation.y=.3;const wk=HUMAN(S,0xf59e0b,0x1f2937);wk.g.rotation.y=Math.PI/2;
+ const R={},E={},st={};
+ const scen=m=>{const s={human:[-9,100],blocked:[-3,100],scan:[3,100],battery:[-8,22],shift:[-13,100]}[m]||[-13,100];
+  Object.assign(st,{m,x:s[0],z:0,bat:s[1],v:0,phase:'go',t0:0,wrongFirst:m=='scan'||m=='shift',hasTote:0,toteOK:0,wk:-6,wkOn:m=='human'||m=='shift',box:m=='blocked'||m=='shift',chg:0,dec:''});
+  Object.assign(E,{miss:0,push:0,wrong:0,delivered:0,charged:0,dead:0,waitT:0,returned:0,passHuman:0,passBox:0});tote.position.set(6,1.85,-3);fb.position.set(1,st.box?.35:-5,0);fb.rotation.z=0};scen('human');
+ b.api={R,E,scen,rule:(k,v)=>R[k]=v,st,ro:()=>`Order ${st.order?'#1042 · SKU B7':'not loaded'} · battery ${Math.round(st.bat)}% · ${st.dec}`};
+ const V=new THREE.Vector3(),LA=new THREE.Vector3();cam.position.set(-16,8,9);
+ S.loop((dt,t)=>{let dec='Driving to shelf B3',v=2.2;
+  if(!st.order){v=0;dec='Waiting for an order from the WMS'}
+  if(E.dead){v=0;dec='🪫 Battery empty — stranded in the aisle'}
+  const dW=st.wk;if(st.wkOn){st.wk+=1.4*dt;if(st.wk>6)st.wk=-6;wk.g.position.set(-4,0,st.wk);wk.walk(t)}else wk.g.position.set(-4,0,-30);
+  if(st.order&&!E.dead){
+   if(st.wkOn&&st.x>-7&&st.x<-3.8&&Math.abs(st.wk)<1.6){if(R.human=='stop'){v=0;dec='Lidar: person within 2 m → stopped, waiting';st.hold=1}else{dec='Lidar: person ahead → '+(R.human=='beep'?'beeping and passing ⚠️':'driving on ⚠️');if(st.x>-5.2&&!E.miss)E.miss=1}}else st.hold=0;
+   if(st.x>-3.6)E.passHuman=1;
+   if(st.box&&st.x>(R.block=='replan'?-2.4:-1)&&st.x<1.8){if(R.block=='replan'){st.z+=(1.0-st.z)*Math.min(1,dt*3);dec='Aisle blocked → replanned a path around the box'}else if(R.block=='push'){dec='Pushing the fallen box ⚠️';fb.position.x=st.x+.95;fb.rotation.z=Math.min(.5,fb.rotation.z+dt);E.push=1}else{v=0;dec=R.block=='wait'?'Aisle blocked → waiting forever ⚠️':'Aisle blocked → no rule, stuck';E.waitT+=dt}}
+   else if(st.z>0&&st.x>=1.8)st.z=Math.max(0,st.z-dt*1.2);
+   if(st.x>1.6)E.passBox=1;
+   if(st.bat<20&&!st.chg&&R.batt=='dock'){st.chg=1}
+   if(st.chg==1){dec='Battery low → returning to charger';v=0;st.x-=2.6*dt;if(st.x<=-14.6){st.x=-14.6;st.chg=2}}
+   else if(st.chg==2){v=0;st.bat=Math.min(100,st.bat+25*dt);dec='🔌 Charging…';if(st.bat>=60){st.chg=3;E.charged=1}}
+   else if(st.bat<20&&!R.batt){dec='Battery '+Math.round(st.bat)+'% → no rule'}else if(st.bat<20&&R.batt=='cont')dec='Battery low → continuing ⚠️';
+   if(st.phase=='go'&&st.x>=6&&st.chg!=1&&st.chg!=2){v=0;st.phase='lift';st.t0=0}
+   if(st.phase=='lift'){v=0;st.t0+=dt;dec=st.t0<1.2?'Lifting tote from shelf B3':'Scanning barcode…';tote.position.lerp(V.set(st.x,.62,st.z),Math.min(1,dt*4));const wrong=st.wrongFirst&&!st.returnedOnce;tl.color.set(wrong?0xef4444:0x22c55e);
+    if(st.t0>2){if(wrong){if(R.scan=='return'){dec='Wrong SKU → returning tote and re-picking';st.returnedOnce=1;E.returned=1;tote.position.set(6,1.85,-3);st.t0=0}else{if(R.scan=='pack'){st.phase='deliver';E.wrong=1}else dec='Wrong SKU scanned → no rule'}}else{st.phase='deliver'}}}
+   if(st.phase=='deliver'){dec=E.wrong?'Delivering the WRONG item ⚠️':'Correct SKU → delivering to packing';tote.position.set(st.x,.62,st.z);if(st.x>=14){v=0;tote.position.set(15,1.3,0);if(!E.delivered){E.delivered=1}st.phase='done'}}
+   if(st.phase=='done'){v=0;dec=E.wrong?'❌ Wrong item delivered to the customer':'✅ Order #1042 packed'}
+   if(st.phase=='lift'||st.chg==1||st.chg==2)v=0;
+   st.x+=v*dt;st.bat=Math.max(0,st.bat-(v>0?(st.m=='battery'?3:.25):.02)*dt);if(st.bat<=0&&st.chg!=2){E.dead=1}}
+  g.position.set(st.x,0,st.z);lid.rotation.y+=dt*8;led.emissive.set(/⚠️|❌|🪫/.test(dec)?0xef4444:/stopped|waiting|Charging/.test(dec)?0xf59e0b:0x22c55e);st.dec=dec;
+  cam.position.lerp(V.set(st.x-7,7,8.5),.05);LA.lerp(V.set(st.x+3,.6,0),.08);cam.lookAt(LA);S.follow(st.x,0);
+  const n=['human','block','scan','batt'].filter(k=>R[k]).length;
+  S.hud([st.order,Math.round(st.bat),dec,st.phase,E.delivered,JSON.stringify(R)].join('|'),x=>{
+   HP(x,10,10,350,[['📦 Warehouse AMR-07'],['Order: '+(st.order?'#1042 · SKU B7 · shelf B3':'— none —'),st.order?'#7dd3fc':'#94a3b8'],['Battery '+Math.round(st.bat)+'%',st.bat<20?'#fcd34d':0],['Decision: '+dec,/⚠️|❌|🪫/.test(dec)?'#fca5a5':'#86efac']]);
+   RPN(x,'🧠 Rules '+n+'/4',[RC(R,'human','Person ahead','stop'),RC(R,'block','Aisle blocked','replan'),RC(R,'scan','Wrong SKU','return'),RC(R,'batt','Battery < 20%','dock')]);
+   if(E.miss)BAN(x,'🚨 Near miss with a worker!');else if(E.push)BAN(x,'💥 Pushed the fallen box — goods damaged');else if(E.wrong)BAN(x,'❌ Wrong item shipped');else if(E.dead)BAN(x,'🪫 Battery died before the order was packed');else if(E.delivered)BAN(x,'✅ Order packed correctly','rgba(21,128,61,.92)')})})}
+
+/* ---------- NEW: Farm harvesting robot ---------- */
+function T_farm(b){
+ const S=S3(b,{sky:0xa9d6f5,fogN:45,fogF:130,sh:22,sx:-14,sy:34,sz:20});if(!S)return;const{sc,cam,mat,tex,bx,cy,sp,pl,noise,tree}=S;
+ pl(200,120,mat(0xffffff,.95,0,{map:tex(128,128,noise('#6b8f3a',28,1500),40,24)}),0,0,0);
+ [1.6,-3.6].forEach(z=>pl(60,1.6,mat(0xffffff,.95,0,{map:tex(128,128,noise('#6b4a2f',40,2500),20,1)}),0,.012,z));
+ for(let i=-40;i<=40;i+=9)tree(i,-12,1);
+ const glass=mat(0xdbeafe,.1,.1,{transparent:true,opacity:.12,side:THREE.DoubleSide});bx(46,.1,14,glass,0,6,-1);[[0,-8],[0,6]].forEach(([x,z])=>bx(46,6,.06,glass,x,3,z));
+ for(let x=-22;x<=22;x+=4){bx(.1,6,.1,mat(0xe5e7eb,.4,.6),x,3,-8);bx(.1,6,.1,mat(0xe5e7eb,.4,.6),x,3,6)}
+ const COL={R:0xdc2626,G:0x65a30d,B:0x6b3f1d},leaf=mat(0x2f7d32,.8,0,{flatShading:true});
+ const P=[];for(let i=0;i<9;i++){const x=-10+i*2.6;cy(.04,.05,1.4,mat(0x166534,.8),x,.7,1.6,null,6);bx(.03,1.6,.03,mat(0x9ca3af,.5,.5),x+.2,.8,1.6);
+  [[.25,.6,.1],[-.2,.9,-.1],[.15,1.2,.15]].forEach(([a,y,c])=>{const k=new THREE.Mesh(new THREE.IcosahedronGeometry(.32,0),leaf);k.position.set(x+a,y,1.6+c);k.scale.set(1,.5,1);k.castShadow=true;sc.add(k)});
+  const tm=sp(.17,mat(COL.R,.4,.05),x,.95,1.35);P.push({x,tm,c:'R'})}
+ for(let i=0;i<9;i++){const x=-10+i*2.6;cy(.04,.05,1.3,mat(0x166534,.8),x,.65,-3.6,null,6);const k=new THREE.Mesh(new THREE.IcosahedronGeometry(.4,0),leaf);k.position.set(x,1,-3.6);sc.add(k)}
+ const rov=ROVER(S,{col:0x16a34a,s:.95});const crate=new THREE.Group();crate.position.set(-.3,.95,-.05);rov.g.add(crate);const cm=mat(0xc08a55,.85);
+ [[0,0,.7,.06,.6],[0,.15,.7,.3,.04,0,.28],[0,.15,.7,.3,.04,0,-.28],[.34,.15,.04,.3,.6],[-.34,.15,.04,.3,.6]].forEach(a=>bx(a[2],a[3],a[4],cm,a[0],a[1],a[6]||0,crate));
+ const slots=[0,1,2,3].map(i=>sp(.13,mat(COL.R,.4),(i%2?.15:-.15),.16,(i<2?.12:-.12),crate));
+ const wbin=new THREE.Group();wbin.position.set(-.55,.6,-.62);rov.g.add(wbin);bx(.36,.4,.3,mat(0x4d7c0f,.7),0,0,0,wbin);
+ const arm=new THREE.Group();arm.position.set(.4,1.0,.35);rov.g.add(arm);const am1=bx(.8,.08,.08,mat(0xf59e0b,.4,.4),.4,0,0,arm);const grip=sp(.07,mat(0x1f2937,.5),.8,0,0,arm);
+ const R={},E={},st={};const SEQ={red:'RRR',green:'RGRG',brown:'BRBG',full:'RRRRRR',test:''};
+ const scen=m=>{let q=SEQ[m];if(m=='test'){const a=[...'RRRGBRGRB'];for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}q=a.join('')}
+  P.forEach((p,i)=>{p.c=q[i]||'';p.tm.visible=!!p.c;if(p.c)p.tm.material.color.set(COL[p.c]);p.tm.position.set(p.x,.95,1.35);p.tm.scale.set(1,1,1);p.done=0});
+  Object.assign(st,{m,x:-11.6,i:0,ph:'drive',t:0,crate:[],waste:0,fly:null,dec:''});Object.assign(E,{err:0,crateR:0,crateG:0,crateB:0,wasteB:0,wasteR:0,wasteG:0,skipR:0,crushed:0,unloaded:0,done:0,n:q.length})};scen('red');
+ b.api={R,E,scen,rule:(k,v)=>R[k]=v,ro:()=>`Crate ${st.crate.length}/4 · waste ${st.waste} · errors ${E.err} · ${st.dec}`};
+ const NM={R:'RED (ripe)',G:'GREEN (unripe)',B:'BROWN (rotten)'},V=new THREE.Vector3(),LA=new THREE.Vector3();cam.position.set(-18,5,9);
+ S.loop((dt,t)=>{let dec=st.dec||'Driving along row 1';const p=P[st.i];
+  if(st.ph=='drive'){if(!p||!p.c){E.done=1;if(st.x<14){st.x+=3*dt;rov.roll(3*dt);dec='Driving along row 1'}else{E.done=1;dec='🏁 Row finished'}}else{st.x+=3*dt;rov.roll(3*dt);dec='Driving to plant '+(st.i+1);if(st.x>=p.x-.4){st.x=p.x-.4;st.ph='scan';st.t=0}}}
+  else if(st.ph=='scan'){st.t+=dt;dec='📷 Camera: fruit is '+NM[p.c];if(st.t>.5){const a=R[p.c];st.t=0;
+    if(a=='crate'&&st.crate.length>=4){if(R.full=='unload'){st.ph='unload';dec='Crate full → unloading'}else if(R.full=='skip'){st.ph='next';E.err++;E.skipR+=p.c=='R';dec='Crate full → skipping ripe fruit ⚠️'}else{st.ph='fly';st.fly={to:'ground'};dec='Crate full → fruit falls and gets crushed ⚠️'}}
+    else if(a=='crate'){st.ph='fly';st.fly={to:'crate'};dec='Picking → crate'}else if(a=='waste'){st.ph='fly';st.fly={to:'waste'};dec='Picking → waste bin'}else{st.ph='next';dec=a=='skip'?'Leaving it on the plant':'No rule for this colour → skipped';if(p.c=='R'){E.err++;E.skipR++}if(p.c=='B'){E.err++}}}}
+  else if(st.ph=='unload'){st.t+=dt;st.crate.length&&st.t>1.6&&(st.crate=[],E.unloaded++);if(st.t>2){st.t=0;st.ph='fly';st.fly={to:'crate'}}dec='Crate full → unloading at the row end'}
+  else if(st.ph=='fly'){st.t+=dt;const u=Math.min(1,st.t/.8),f=st.fly;const tg=f.to=='crate'?V.set(st.x-.3,1.15,-.05):f.to=='waste'?V.set(st.x-.55,.85,-.62):V.set(p.x,.12,.9);p.tm.position.lerp(tg,u*.2+.05);arm.rotation.y=-.5*(1-u);
+   if(u>=1){p.tm.visible=f.to=='ground';if(f.to=='ground'){p.tm.scale.set(1.3,.4,1.3);E.crushed++;E.err++}
+    else if(f.to=='crate'){st.crate.push(p.c);E['crate'+p.c]++;if(p.c!='R')E.err++}else{st.waste++;E['waste'+p.c]++;if(p.c!='B')E.err++}st.ph='next'}}
+  else if(st.ph=='next'){st.i++;st.ph='drive';st.t=0}
+  slots.forEach((k,i)=>{k.visible=i<st.crate.length;if(k.visible)k.material.color.set(COL[st.crate[i]])});
+  rov.g.position.set(st.x,0,0);arm.rotation.z=st.ph=='scan'||st.ph=='fly'?-.2:0;st.dec=dec;rov.led.emissive.set(/⚠️/.test(dec)?0xef4444:0x22c55e);
+  cam.position.lerp(V.set(st.x-6,4.2,6.8),.05);LA.lerp(V.set(st.x+1.5,.9,.8),.08);cam.lookAt(LA);S.follow(st.x,0);
+  const n=['R','G','B','full'].filter(k=>R[k]).length;
+  S.hud([st.i,st.ph,dec,st.crate.join(''),st.waste,E.err,JSON.stringify(R)].join('|'),x=>{
+   HP(x,10,10,330,[['🍅 Harvest robot H-3'],['Plant '+Math.min(st.i+1,E.n)+' / '+E.n+'   ·   crate '+st.crate.length+'/4   ·   waste '+st.waste],['Decision: '+dec,/⚠️/.test(dec)?'#fca5a5':'#86efac'],['Errors: '+E.err,E.err?'#fca5a5':'#86efac']]);
+   RPN(x,'🧠 Rules '+n+'/4',[RC(R,'R','Red fruit','crate'),RC(R,'G','Green fruit','skip'),RC(R,'B','Brown fruit','waste'),RC(R,'full','Crate full','unload')]);
+   if(E.done)BAN(x,E.err?'⚠️ Row finished with '+E.err+' error'+(E.err>1?'s':''):'✅ Row harvested perfectly',E.err?0:'rgba(21,128,61,.92)')})})}
+
+/* ---------- NEW: Firefighting robot ---------- */
+function T_fire(b){
+ const S=S3(b,{sky:0x0b0f17,fogN:22,fogF:70,sh:20,sx:6,sy:22,sz:12,hemi:.45,sun:.4});if(!S)return;const{sc,cam,mat,tex,bx,cy,sp,pl,noise}=S;
+ pl(90,30,mat(0xffffff,.9,0,{map:tex(128,128,noise('#3a3d42',24,3000),20,7)}),0,0,0);bx(70,8,.3,mat(0x4b5563,.9),0,4,-5);
+ for(let x=-30;x<=30;x+=6)bx(.4,8,.4,mat(0x6b7280,.6,.4),x,4,-4.6);
+ const HZ={wood:-12,elec:-4,person:4,gas:11,hot:18};
+ [0,1,2].forEach(i=>bx(1.2,.15,1,mat(0x8b5a2b,.9),HZ.wood+(i-1)*.3,.08+i*.16,.2*i));const F1=FLAME(S,HZ.wood,.3,0,1.1);
+ bx(1,2.2,.6,mat(0x9ca3af,.5,.6),HZ.elec,1.1,-.6);bx(.6,.4,.05,mat(0xfacc15,.5),HZ.elec,1.6,-.28);const F2=FLAME(S,HZ.elec,1.1,-.1,.8);
+ const vic=HUMAN(S,0x7c3aed,0x1f2937);vic.g.rotation.z=Math.PI/2;vic.g.position.set(HZ.person+1.1,.2,.2);
+ [-.4,0,.4].forEach(z=>cy(.25,.25,1.2,mat(0x16a34a,.4,.3),HZ.gas,.6,z-1.2,null,14));const haze=new THREE.Mesh(new THREE.SphereGeometry(3,20,14),new THREE.MeshBasicMaterial({color:0x84cc16,transparent:true,opacity:.22,depthWrite:false}));haze.position.set(HZ.gas,1,-.6);sc.add(haze);
+ const vents=[0,1].map(i=>{const g=new THREE.Group();g.position.set(HZ.gas-2+i*4,6.5,-4.75);sc.add(g);for(let k=0;k<4;k++){const bl=new THREE.Mesh(new THREE.BoxGeometry(.9,.12,.03),mat(0xd1d5db,.4,.6));bl.rotation.z=k*Math.PI/4;g.add(bl)}return g});
+ const furn=bx(2.4,2.6,1.6,mat(0x1f2937,.5,.5,{emissive:0xff4d00,emissiveIntensity:.5}),HZ.hot+1.2,1.3,-.4);const FL=new THREE.PointLight(0xff5a00,2,10);FL.position.set(HZ.hot,1.5,0);sc.add(FL);
+ const rb=new THREE.Group();sc.add(rb);const red=mat(0xb91c1c,.45,.3),dk=mat(0x1f2937,.6,.4);[-.5,.5].forEach(z=>bx(1.6,.4,.3,dk,0,.22,z,rb));bx(1.3,.45,.8,red,0,.62,0,rb);
+ const tur=new THREE.Group();tur.position.set(.1,.95,0);rb.add(tur);cy(.3,.34,.25,red,0,0,0,tur,18);const nz=cy(.08,.1,.9,mat(0xd1d5db,.3,.8),.5,.12,0,tur,12);nz.rotation.z=Math.PI/2;
+ const bcn=new THREE.MeshStandardMaterial({color:0x111,emissive:0x2563eb,emissiveIntensity:0});sp(.1,bcn,-.4,1.1,0,rb);const led=new THREE.MeshStandardMaterial({color:0x111,emissive:0x22c55e,emissiveIntensity:1.5});bx(.04,.1,.4,led,.66,.7,0,rb);
+ const wat=PTS(S,500,0x7dd3fc,.12,.9),co2=PTS(S,500,0xf1f5f9,.2,.7),smk=PTS(S,500,0x555b66,.5,.45),spk=PTS(S,200,0xffd166,.12,1,true);
+ const R={},E={},st={};const ORDER=['wood','elec','person','gas','hot'];
+ const scen=m=>{const L=m=='op'?ORDER:[m];Object.assign(st,{m,L,k:0,x:(m=='op'?-21:HZ[L[0]]-9),ph:'drive',t:0,lv:{wood:1.1,elec:.8},boom:0,dec:'',hz:1});
+  Object.assign(E,{wood:0,elec:0,person:0,gas:0,hot:0,fail:'',done:0});F1.set(L.includes('wood')?1:0);F2.set(L.includes('elec')?1:0);haze.material.opacity=L.includes('gas')?.22:0;haze.visible=true;[wat,co2,spk].forEach(p=>p.clear())};scen('wood');
+ const temp=()=>{const d=Math.abs(HZ.hot-st.x);return Math.round(60+900/(1+.15*d*d))};
+ b.api={R,E,scen,rule:(k,v)=>R[k]=v,ro:()=>`Robot x ${st.x.toFixed(1)} · temperature ${temp()}°C · ${st.dec}`};
+ const V=new THREE.Vector3(),LA=new THREE.Vector3();cam.position.set(-24,6,10);
+ const spray=(P,sp)=>{for(let i=0;i<6;i++)P.emit(st.x+1.1,1.1,0,sp*(.8+Math.random()*.4),.6+Math.random()*.6,(Math.random()-.5)*.6,.9)};
+ S.loop((dt,t)=>{let dec=st.dec||'Patrolling';const H=st.L[st.k];
+  if(E.fail){dec='💥 '+E.fail}else if(!H){E.done=1;dec='🏁 Zone A is safe'}
+  else{const hx=HZ[H],stopAt=H=='gas'&&R.gas=='vent'?hx-6:hx-3,r=R[H];
+   if(st.ph=='drive'){st.x+=2*dt;dec='Advancing to the next alarm';if(H=='gas'&&st.x>hx-6.5)dec='Gas sensor: LPG detected';if(st.x>=stopAt){st.x=stopAt;st.ph='act';st.t=0}
+    if(H=='gas'&&r!='vent'&&st.x>hx-3.2){E.fail='Gas explosion — the robot drove into the gas cloud';st.boom=1}if(H=='hot'&&temp()>400&&r!='retreat'&&st.ph=='act'){} }
+   else if(st.ph=='act'){st.t+=dt;
+    if(H=='wood'){if(r=='water'){spray(wat,6);F1.set(F1.lvl-dt*.35);dec='Class A fire → water jet';if(F1.lvl<=0){E.wood=1;st.ph='next'}}else if(r=='co2'){spray(co2,5);F1.set(.5+.4*Math.sin(st.t));dec='CO₂ cannot smother burning wood ⚠️';if(st.t>5)E.fail='The wood fire kept burning'}else{F1.set(Math.min(1.8,F1.lvl+dt*.15));dec=r=='retreat'?'Retreating — the fire spreads ⚠️':'Fire detected → no rule ⚠️';if(r=='retreat')st.x-=dt*.8;if(st.t>5)E.fail='The fire spread through the warehouse'}}
+    else if(H=='elec'){if(r=='co2'){spray(co2,5);F2.set(F2.lvl-dt*.3);dec='Class E fire → CO₂ (no water near electricity)';if(F2.lvl<=0){E.elec=1;st.ph='next'}}else if(r=='water'){spray(wat,6);if(st.t>.6){for(let i=0;i<8;i++)spk.emit(hx,1.4,-.2,(Math.random()-.5)*6,Math.random()*5,(Math.random()-.5)*6,.8);dec='Water on live electrics → short circuit ⚠️';if(st.t>2.2)E.fail='Short circuit — the robot was damaged'}}else{dec=r=='fwd'?'Driving into the electrical fire ⚠️':'Electrical fire → no rule ⚠️';if(r=='fwd')st.x+=dt;if(st.t>4)E.fail='The electrical fire was not put out'}}
+    else if(H=='person'){if(r=='alert'){dec='Thermal: human 37 °C → sending GPS to rescue team';bcn.emissiveIntensity=Math.sin(t*12)>0?3:.2;if(st.t>2.5){E.person=1;st.ph='next';bcn.emissiveIntensity=0}}else if(r=='water'){spray(wat,6);dec='Spraying water on a person ⚠️';if(st.t>1.5)E.fail='The robot sprayed the casualty'}else{dec=r=='retreat'?'Leaving the casualty behind ⚠️':'Person detected → no rule ⚠️';if(r=='retreat')st.x-=dt;if(st.t>3.5)E.fail='The casualty was not reported'}}
+    else if(H=='gas'){dec='Gas leak → stopped at a safe distance, opening vents';vents.forEach(v=>v.rotation.z+=dt*12);haze.material.opacity=Math.max(0,haze.material.opacity-dt*.06);if(haze.material.opacity<=0.01){E.gas=1;st.ph='next'}}
+    else if(H=='hot'){if(r=='retreat'){if(st.t<2.5){st.x-=1.4*dt;dec='Heat '+temp()+' °C → retreating to cool down'}else{E.hot=1;st.ph='next'}}else{dec=r=='water'?'Water evaporates — overheating ⚠️':r=='fwd'?'Driving into 600 °C ⚠️':'Extreme heat → no rule ⚠️';if(r=='fwd')st.x+=dt*.8;if(st.t>3)E.fail='Electronics overheated'}}}
+   else if(st.ph=='next'){st.k++;st.ph='drive';st.t=0}}
+  [F1,F2].forEach(F=>{F.step(t);if(F.lvl>.05&&Math.random()<.6)smk.emit(F.g.position.x+(Math.random()-.5),1.6*F.lvl,F.g.position.z,(Math.random()-.5)*.3,1.2,(Math.random()-.5)*.3,3)});
+  [wat,co2].forEach(p=>p.step(dt,6));smk.step(dt,-.1);spk.step(dt,9);
+  if(st.boom){const k=Math.max(0,1-(st.bT=(st.bT||0)+dt)*.8);haze.material.color.set(0xff8a00);haze.material.opacity=.7*k;haze.scale.setScalar(1+st.bT*1.5)}else{haze.scale.setScalar(1);haze.material.color.set(0x84cc16)}
+  rb.position.set(st.x,0,0);tur.rotation.z=st.ph=='act'&&/water|CO₂|Spraying/.test(dec)?.12:0;led.emissive.set(/⚠️|💥/.test(dec)?0xef4444:0x22c55e);st.dec=dec;
+  cam.position.lerp(V.set(st.x-8,5.5,8.5),.05);LA.lerp(V.set(st.x+3,1,0),.08);cam.lookAt(LA);S.follow(st.x,0);
+  const n=ORDER.filter(k=>R[k]).length,tp=temp();
+  S.hud([Math.round(st.x*2),tp,dec,JSON.stringify(E),JSON.stringify(R)].join('|'),x=>{
+   HP(x,10,10,350,[['🚒 Firefighting robot FR-2'],['🌡 '+tp+' °C   ·   🧪 LPG '+(H=='gas'&&Math.abs(st.x-HZ.gas)<7?'42% LEL':'0%')],['Thermal camera: '+(H=='person'&&st.ph!='drive'?'HUMAN 37 °C':H&&st.ph!='drive'&&(H=='wood'||H=='elec')?'FLAME '+(H=='wood'?'class A (wood)':'class E (electric)'):'scanning'),'#7dd3fc'],['Decision: '+dec,/⚠️|💥/.test(dec)?'#fca5a5':'#86efac']]);
+   RPN(x,'🧠 Rules '+n+'/5',[RC(R,'wood','Wood fire','water'),RC(R,'elec','Electric fire','co2'),RC(R,'person','Casualty','alert'),RC(R,'gas','Gas leak','vent'),RC(R,'hot','Over 400 °C','retreat')]);
+   if(E.fail)BAN(x,'💥 '+E.fail);else if(E.done)BAN(x,'✅ All hazards handled safely','rgba(21,128,61,.92)')})})}
+
+/* ---------- NEW: Autonomous metro train ---------- */
+function T_metro(b){
+ const S=S3(b,{sky:0xa7cdee,fogN:80,fogF:220,sh:40,sx:-20,sy:44,sz:26});if(!S)return;const{sc,cam,mat,tex,bx,cy,sp,pl,noise,bld,tree}=S;
+ pl(400,200,mat(0xffffff,.95,0,{map:tex(128,128,noise('#6f8f4a',26,1500),70,35)}),0,0,0);
+ pl(230,4.4,mat(0xffffff,.95,0,{map:tex(128,128,noise('#6b6560',40,4000),50,1)}),5,.02,0);
+ const sl=new THREE.InstancedMesh(new THREE.BoxGeometry(.25,.14,2.6),mat(0x5b4636,.9),300),dm=new THREE.Object3D();for(let i=0;i<300;i++){dm.position.set(-108+i*.75,.08,0);dm.updateMatrix();sl.setMatrixAt(i,dm.matrix)}sl.receiveShadow=true;sc.add(sl);
+ [-.72,.72].forEach(z=>bx(230,.14,.1,mat(0xb8bec6,.3,.9),5,.22,z));
+ const PL0=10,PL1=30;bx(PL1-PL0,1.1,3.4,mat(0xd1d5db,.8),(PL0+PL1)/2,.55,3.6);bx(PL1-PL0,.04,.3,mat(0xf5c518,.6),(PL0+PL1)/2,1.12,2.1);
+ bx(PL1-PL0,.2,4,mat(0x334155,.5,.4),(PL0+PL1)/2,5,3.8);[PL0+1,(PL0+PL1)/2,PL1-1].forEach(x=>bx(.2,3.9,.2,mat(0x64748b,.5,.4),x,3.05,5.3));
+ const stS=new THREE.Mesh(new THREE.PlaneGeometry(4,.8),new THREE.MeshBasicMaterial({map:tex(256,52,g=>{g.fillStyle='#1d4ed8';g.fillRect(0,0,256,52);g.fillStyle='#fff';g.font='bold 30px Lexend,sans-serif';g.textAlign='center';g.fillText('AL ROWAD',128,37)}),toneMapped:false}));stS.position.set(20,4.4,5.75);stS.rotation.y=Math.PI;sc.add(stS);
+ const DX=[13.4,15.6,19.4,21.6,25.4,27.6];const psd=DX.map(x=>{const g=bx(1.1,1.8,.05,mat(0xbfe3ff,.1,.2,{transparent:true,opacity:.45}),x,2,2.05);return{g,x}});
+ for(let i=PL0;i<=PL1;i+=2.2)bx(.1,2,.12,mat(0x94a3b8,.4,.6),i,2.1,2.05);
+ const pax=[0,1,2].map(i=>{const h=HUMAN(S,[0xdc2626,0x0ea5e9,0xf59e0b][i],0x1f2937);h.g.position.set(14.5+i*5,1.1,3.4);h.g.rotation.y=Math.PI;return h});
+ const pm=mat(0x2b2f36,.45,.6);cy(.12,.14,4.6,pm,-22,2.3,-2.4);const sh=bx(.6,1.3,.5,mat(0x111317,.5),-22,4.7,-2.4);const SR=new THREE.MeshStandardMaterial({color:0x111,emissive:0xff2a1a,emissiveIntensity:2.6}),SG=new THREE.MeshStandardMaterial({color:0x111,emissive:0x19e35c,emissiveIntensity:.05});
+ sp(.17,SR,-21.7,5.0,-2.4);sp(.17,SG,-21.7,4.4,-2.4);
+ const sgn=new THREE.Mesh(new THREE.CircleGeometry(.7,28),new THREE.MeshBasicMaterial({map:tex(128,128,g=>{g.fillStyle='#fff';g.beginPath();g.arc(64,64,62,0,7);g.fill();g.lineWidth=12;g.strokeStyle='#d21f1f';g.stroke();g.fillStyle='#111';g.font='bold 54px Lexend,sans-serif';g.textAlign='center';g.fillText('40',64,82)}),toneMapped:false}));sgn.position.set(41,3,-2.3);sgn.rotation.y=Math.PI/2;sc.add(sgn);cy(.06,.06,2.6,pm,41,1.3,-2.3);
+ for(let x=45;x<65;x+=2)bx(.9,.02,.2,mat(0xf5c518,.6),x,.24,-1.6);
+ const OBX=98,obst=bx(1.4,1,1,mat(0x8b5a2b,.9),OBX,.6,0);obst.rotation.y=.4;
+ for(let x=-100;x<=110;x+=13){bld(x,-20-Math.random()*6,8,7,6+Math.random()*16,['#cfd6de','#b8c2cc','#d8cfc2'][Math.random()*3|0]);if(Math.random()<.7)tree(x+5,-9,1)}
+ const tr=new THREE.Group();sc.add(tr);const body=mat(0xe5e7eb,.3,.6),win=mat(0x162030,.15,.7),blu=mat(0x1d4ed8,.4,.3);const doors=[];
+ for(let c=0;c<3;c++){const cx=-3.1-c*6.2;bx(6,2.5,2.4,body,cx,1.65,0,tr);bx(6.02,.55,2.42,win,cx,2.15,0,tr);bx(6.02,.18,2.42,blu,cx,1.15,0,tr);
+  [-1.1,1.1].forEach(o=>[1,-1].forEach(sd=>{const d=bx(1,1.9,.04,mat(0x9ca3af,.35,.6),cx+o,1.55,sd*1.23,tr);doors.push({d,sd,x0:cx+o,o})}))}
+ bx(.3,1.6,2.2,win,.05,2,0,tr);const hdl=new THREE.MeshStandardMaterial({color:0x111,emissive:0xfff7d6,emissiveIntensity:1.2});[-.7,.7].forEach(z=>bx(.06,.2,.3,hdl,.1,1.1,z,tr));
+ const bag=bx(.4,.5,.25,mat(0x7c2d12,.8),0,0,0);bag.visible=false;
+ const R={},E={},st={};const KM=6;
+ const scen=m=>{const s={signal:[-70,12],doors:[-20,12],block:[28,0],curve:[14,12],obst:[66,8],line:[-70,12]}[m];
+  Object.assign(st,{m,x:s[0],v:s[1],sig:m=='signal'||m=='line'?'red':'green',sigT:0,ph:m=='block'?'closing':'run',t:0,dO:m=='block'?1:0,side:m=='block'?1:0,psdO:m=='block'?1:0,bag:m=='block'||m=='line',vmaxZ:0,dec:'',stn:m=='block'?2:m=='curve'||m=='obst'?3:0,horn:0,bagOK:0});pax.forEach(h=>h.g.position.z=3.4);
+  Object.assign(E,{sigOK:0,doorsOK:0,obstOK:0,curveOK:0,stopOK:0,fail:'',done:0});obst.position.set(OBX,.6,0);obst.visible=m=='obst'||m=='line';bag.visible=!!st.bag&&m=='block'};scen('signal');
+ b.api={R,E,scen,rule:(k,v)=>R[k]=v,ro:()=>`Speed ${Math.round(st.v*KM)} km/h · signal ${st.sig} · ${st.dec}`};
+ const V=new THREE.Vector3(),LA=new THREE.Vector3();cam.position.set(-84,7,13);
+ S.loop((dt,t)=>{let dec='ATO cruising',tv=12,br=2;
+  if(E.fail){tv=0;br=4;dec='💥 '+E.fail}else{
+   if(st.sig=='red'&&st.x<-22&&st.x>-60){if(R.signal=='stop'){const d=-23-st.x;tv=d<.3?0:Math.min(12,Math.sqrt(2*2*Math.max(0,d-.2)));dec='Red signal → service brake to stop';if(st.v<.05&&d<1.5){st.sigT+=dt;if(st.sigT>2){st.sig='green';E.sigOK=1}}}else{tv=R.signal=='boost'?16:12;dec='Red signal → '+(R.signal?'ignored ⚠️':'no rule ⚠️')}}
+   if(st.x>-22&&st.sig=='red'&&!E.sigOK){E.fail='Passed a red signal (SPAD)'}
+   if(st.stn==0&&st.x>-15&&st.x<29){if(R.door=='cont'){dec='Station → not stopping ⚠️';if(st.x>28.5)E.fail='Skipped the station — passengers stranded'}else{const d=28-st.x;tv=d<.2?0:Math.min(12,Math.sqrt(2*2*Math.max(0,d-.1)));dec='Arriving at Al Rowad station';if(st.v<.05&&d<1){st.stn=1;st.t=0}}}
+   if(st.stn==1){tv=0;st.t+=dt;if(R.door=='R'){st.side=1;st.dO=Math.min(1,st.dO+dt*1.2);st.psdO=st.dO;dec='Right-side doors + platform screen doors open';if(st.t>3.2){st.stn=2;st.ph='closing';if(st.m=='line')st.bag=1}}else if(R.door=='L'){st.side=-1;st.dO=Math.min(1,st.dO+dt*1.2);dec='Doors opened on the TRACK side ⚠️';if(st.t>1.5)E.fail='Doors opened on the wrong side'}else if(R.door=='cont'){st.stn=3}else dec='Stopped — no door rule'}
+   if(st.stn==2){tv=0;st.t+=dt;if(st.bag&&!st.bagOK){bag.visible=true;bag.position.set(st.x-4.2,1,1.3);st.dO=Math.max(.35,st.dO-dt);st.psdO=st.dO;dec='Door sensor: obstruction at door 2';
+     if(st.dO<=.36){if(R.block=='reopen'){st.dO=1;st.psdO=1;st.bagOK=1;bag.visible=false;dec='Obstruction → doors reopened, bag removed'}else if(R.block=='force'){E.fail='Bag trapped — doors forced shut'}else if(R.block=='cont'){E.fail='Departed with a door open'}else dec='Door blocked → no rule'}}
+    else{st.dO=Math.max(0,st.dO-dt);st.psdO=st.dO;dec='Doors closing';if(st.dO<=0){st.stn=3;E.doorsOK=1;if(st.bagOK)E.obstOK=1}}}
+   if(st.stn==3)st.side=st.side;
+   if(st.x>10&&st.x<65&&st.stn!=1&&st.stn!=2){if(R.curve=='40'){tv=Math.min(tv,st.x<45?Math.max(6.67,Math.sqrt(6.67*6.67+2*2*(45-st.x))):6.67);dec='Curve ahead → limiting to 40 km/h'}else if(st.x>44)dec='Curve at '+Math.round(st.v*KM)+' km/h ⚠️'}
+   if(st.x>45&&st.x<65){st.vmaxZ=Math.max(st.vmaxZ,st.v);if(st.v>7.5)E.fail='Over-speed in the curve — emergency stop'}if(st.x>=65&&st.vmaxZ>0&&st.vmaxZ<=7.5)E.curveOK=1;
+   if(obst.visible&&st.x>OBX-30&&st.x<OBX){if(R.obst=='emg'){tv=0;br=3.5;dec='Radar: object on track → EMERGENCY BRAKE';if(st.v<.05&&st.x<OBX-1){E.obstOK2=1;E.stopOK=1}}else{dec='Radar: object on track → '+(R.obst=='horn'?'horn only ⚠️':R.obst?'continuing ⚠️':'no rule ⚠️');st.horn=R.obst=='horn'}if(st.x>OBX-1.5&&!E.stopOK)E.fail='Collision with the object on the track'}
+   if(st.x>OBX+12){tv=0;E.done=1;dec='🏁 End of line'}}
+  if(st.stn==1||st.stn==2)tv=0;const dv=tv-st.v;st.v=Math.max(0,st.v+(dv>0?Math.min(dv,1.2*dt):Math.max(dv,-br*dt)));st.x+=st.v*dt;
+  tr.position.set(st.x,0,0);doors.forEach(d=>{d.d.position.x=d.x0+(d.sd==st.side?(d.o<0?-.7:.7)*st.dO:0)});psd.forEach(p=>p.g.position.x=p.x+(p.x%4<2?-.6:.6)*st.psdO);
+  SR.emissiveIntensity=st.sig=='red'?2.6:.05;SG.emissiveIntensity=st.sig=='green'?2.6:.05;st.dec=dec;
+  pax.forEach((h,i)=>{if(st.stn==1&&R.door=='R'&&st.dO>.8){h.g.position.z=Math.max(-.3,h.g.position.z-dt*1.2);h.walk(t)}else h.still();h.g.visible=h.g.position.z>-.2||st.stn<2});
+  cam.position.lerp(V.set(st.x-13,6.5,13),.05);LA.lerp(V.set(st.x-3,1.6,0),.08);cam.lookAt(LA);S.follow(st.x,0);
+  const n=['signal','door','block','curve','obst'].filter(k=>R[k]).length,warn=/⚠️|💥/.test(dec);
+  S.hud([Math.round(st.v*KM),st.sig,dec,st.stn,JSON.stringify(E),JSON.stringify(R)].join('|'),x=>{
+   HP(x,10,10,350,[['🚇 Driverless metro M-12'],['Speed '+Math.round(st.v*KM)+' km/h   ·   Signal '+(st.sig=='red'?'🔴':'🟢')],['Doors: '+(st.dO>.05?(st.side>0?'RIGHT open':'LEFT open'):'closed')+'   ·   Radar: '+(obst.visible&&st.x>OBX-30&&st.x<OBX?'OBJECT '+Math.round(OBX-st.x)+' m':'clear')],['Decision: '+dec,warn?'#fca5a5':'#86efac']]);
+   RPN(x,'🧠 Rules '+n+'/5',[RC(R,'signal','Red signal','stop'),RC(R,'door','Station doors','R'),RC(R,'block','Door blocked','reopen'),RC(R,'curve','Curve 40','40'),RC(R,'obst','Object on track','emg')]);
+   if(E.fail)BAN(x,'💥 '+E.fail);else if(E.done)BAN(x,'🏁 Line run complete — no incidents','rgba(21,128,61,.92)')})})}
+
+/* ================= Robotics zone: catalogue + command-line steps ================= */
+const RB=C[0][1];
+RB[0]=['Robot Obstacle Avoidance','A warehouse test robot reads three sonar sensors. It starts untrained: you program when to turn and when to slow down.','Pass a 6-second test drive with zero collisions.',T3_avoid];
+RB[1]=['AI Sensor Controller','Four sensors (distance, light, temperature, sound) feed the controller. You program one IF–THEN rule per sensor.','Pass the full sensor test: STOP, headlights, fan and alarm together.',T3_sens];
+RB[2]=['Line-Following Robot','Two infrared sensors detect black tape. Calibrate them, then program the steering rules.','Finish a test lap at speed 3 without losing the line.',T3_line];
+RB[3]=['Robotic Arm with Camera','A camera finds each block and spots defects; the arm solves its joint angles and sorts the blocks.','Good blocks in the BIN, the cracked block in REJECT.',T3_arm];
+RB[4]=['AI Traffic Controller','A junction on a fixed timer. Give it a car-counting camera, then program smarter timing and ambulance priority.','Beat the fixed timer by over 40% in rush hour.',T3_traf];
+const NEWT=[
+ ['Mars Rover Explorer','A rover 225 million km from Earth must drive itself: avoid rocks and craters, collect ice samples and survive dust storms.','Complete Sol 214 with a sample and no failures.',T_mars],
+ ['Warehouse Order-Picking Robot','An autonomous mobile robot (AMR) collects order #1042. Program it to stay safe around people, handle blocked aisles, wrong items and low battery.','Complete a full shift with zero incidents.',T_amr],
+ ['Farm Harvesting Robot','A greenhouse robot classifies every tomato by colour. Program what to pick, what to leave and what to throw away.','Harvest a random row with zero errors.',T_farm],
+ ['Firefighting Robot','A robot enters a burning warehouse. Choose the right extinguisher, protect casualties and avoid gas and extreme heat.','Clear all five hazards in Zone A.',T_fire],
+ ['Driverless Metro Train','An automatic metro line: obey signals, open the correct doors, handle obstructions, respect speed limits and brake for objects on the track.','Run the line with zero incidents.',T_metro]];
+const D3=new Set([0,1,2,3,4,5,6,7,8,24,25,26,27,28]);
+const mix=(a,s)=>a.map((o,i)=>[(Math.sin(s*12.9898+i*78.233)*43758.5453)%1,o]).sort((p,q)=>p[0]-q[0]).map(p=>p[1]);
+const BOOT=(code,wrong,sens,w)=>({s:'The robot is <b>offline</b>. Start its computer and switch on the sensors this robot needs: <b>'+sens+'</b>.',o:[[code,c=>{c.S3.sys.boot=1},'start the AI with '+sens],[wrong[0],null,wrong[1]],['sys.halt',null,'shuts the robot down'],['log.clear',null,'deletes the history log']],ok:c=>c.S3.sys.boot,h:'Pick the boot command that lists the right sensors.',w:w||'The sensors come online and the AI can now see its world.'});
+const DEPL=(code,what)=>({s:'All tests passed. Install the trained AI on '+what+'.',o:[[code,c=>{c.S3.sys.dep=1},'install the trained model on '+what],['model.delete --all',null,'deletes the model you trained'],['sys.reboot',null,'just restarts this robot'],['log.clear',null,'deletes the history log']],ok:c=>c.S3.sys.dep,h:'Which command installs the model?',w:'Model v1 is deployed — every robot now uses the rules you trained.'});
+const SC=(k,v,mean)=>[c=>c.api.rule(k,v),mean];
+const CMD2={
+5:()=>({gl:{brk:'brake','-s':'stop at','-w':'wait for',drv:'drive','.cont':'continue',acc:'accelerate',hrn:'horn','-p':'and pass',wpr:'wipers','spd.lim':'speed limit',lgt:'lights'},s:[
+ BOOT('sys.boot --cam --lidar',['sys.boot --sonar','a short-range sonar only — a car needs camera and lidar'],'camera + lidar'),
+ {s:'The camera sees a red light, but the driving AI has <b>no rule</b> for it yet.',r:'traffic_light == RED',set:c=>c.api.scen('red'),o:[['drv.cont',...SC('red','keep driving','keep driving')],['brk -s LINE',...SC('red','stop at the line','brake and stop at the stop line')],['acc +20',...SC('red','speed up','accelerate by 20 km/h')],['wpr.on',null,'switch on the wipers']],ok:c=>c.api.E.stopRed,lim:8000,h:'Red means every vehicle must wait behind the white line.',w:'The car brakes smoothly, waits behind the line and drives on when the light turns green.'},
+ {s:'A pedestrian is about to step onto the zebra crossing.',r:'crossing.pedestrian == TRUE',set:c=>c.api.scen('ped'),o:[['hrn -p',...SC('ped','honk and pass','sound the horn and pass')],['drv.cont',...SC('ped','keep driving','keep driving')],['brk -w PED',...SC('ped','brake and wait','brake and wait for the pedestrian')],['lgt.hi',null,'switch on high beams']],ok:c=>c.api.E.brakePed,lim:11000,h:'People on a crossing always have priority.',w:'The car stops before the crossing and waits until the pedestrian is safe.'},
+ {s:'The camera reads a School Zone 30 sign, but the car is doing 50 km/h.',r:'sign == SCHOOL_ZONE_30',set:c=>c.api.scen('school'),o:[['spd.lim 50',...SC('school','keep 50 km/h','keep the limit at 50 km/h')],['acc +20',...SC('school','keep 50 km/h','accelerate')],['spd.lim 30',...SC('school','slow to 30 km/h','set the speed limit to 30 km/h')],['wpr.on',null,'switch on the wipers']],ok:c=>c.api.E.zoneOk,lim:10000,h:'Obey the number on the sign.',w:'The car drops to 30 km/h through the zone, then returns to 50.'},
+ {s:'Final exam: a 12-second drive through town with changing lights and pedestrians. Zero violations allowed.',o:[['test.stop',null,'stops a test'],['test.run --t 12s',c=>c.api.scen('test'),'start the 12-second test drive'],['log.clear',null,'deletes the history log'],['cam.off',null,'switches off the camera']],ok:c=>{const E=c.api.E;return !!E.test&&performance.now()-E.test>12000&&!E.viol.length},lim:16000,h:'If a violation appeared, retrain that rule and test again.',w:'12 seconds, zero violations — your rules work together like a real driver-assist system.'},
+ DEPL('model.deploy --fleet','every car in the fleet')]}),
+6:()=>({gl:{vac:'vacuum','.pwr':'power',mv:'move','.rev':'reverse','--turn':'then turn','.fwd':'forward',nav:'navigate','.dock':'to the charging dock',job:'cleaning job',bat:'battery',brush:'side brush'},s:[
+ BOOT('sys.boot --ir --bump --dirt',['sys.boot --gps','GPS does not work indoors'],'cliff IR, bumper and dirt sensor'),
+ {s:'The robot drives over a trail of dirt with its suction off.',r:'dirt_sensor == DETECTED',set:c=>c.api.scen('dirt'),o:[['vac.pwr 0',...SC('dirt','ignore it','set suction to 0')],['brush.stop',...SC('dirt','ignore it','stop the brushes')],['vac.pwr MAX',...SC('dirt','turn on strong suction','boost suction to maximum')],['mv.turn 90',null,'turn 90°']],ok:c=>c.api.E.cleaned>=4,lim:11000,h:'Cleaning dirt is the robot’s job.',w:'Each time dirt is sensed the suction boosts and the dirt disappears.'},
+ {s:'The robot is heading toward the open staircase.',r:'cliff_ir == DROP',set:c=>c.api.scen('cliff'),o:[['mv.fwd',...SC('cliff','keep going','keep moving forward')],['mv.rev --turn',...SC('cliff','reverse and turn','reverse, then turn away')],['vac.pwr MAX',null,'boost suction'],['led.red',null,'turn the LED red']],ok:c=>c.api.E.cliffOK&&!c.api.E.falls,lim:7000,h:'A fall down the stairs breaks the robot.',w:'The cliff sensor feels empty space and the robot backs away safely.'},
+ {s:'The robot is about to hit the TV cabinet.',r:'bumper == HIT',set:c=>c.api.scen('bump'),o:[['mv.push +50%',...SC('bump','push harder','push 50% harder')],['mv.turn 90',...SC('bump','turn 90 degrees','turn 90°')],['mv.fwd',...SC('bump','push harder','keep driving forward')],['vac.pwr 0',null,'switch suction off']],ok:c=>c.api.E.bumpOK,lim:5000,h:'Pushing furniture only gets the robot stuck.',w:'The bumper presses, the robot turns 90° and cleans in a new direction.'},
+ {s:'The battery is at 24% and dropping.',r:'battery < 20%',set:c=>c.api.scen('battery'),o:[['job.cont',...SC('batt','keep cleaning','continue the cleaning job')],['bat.off',null,'cuts the power — the robot dies'],['nav.dock',...SC('batt','return to dock','navigate to the charging dock')],['mv.turn 90',null,'turn 90°']],ok:c=>c.api.E.docked,lim:14000,h:'An empty battery leaves the robot stranded.',w:'Below 20% the robot plans a route to the dock and starts charging.'},
+ {s:'Final exam: a full cleaning run with 10 dirt spots. Clean 7 or more without falling.',o:[['clean.run --full',c=>c.api.scen('test'),'start a full cleaning run'],['clean.stop',null,'stops cleaning'],['log.clear',null,'deletes the history log'],['vac.pwr 0',null,'switch suction off']],ok:c=>c.api.E.cleaned>=7&&!c.api.E.falls,lim:32000,h:'All four rules must be correct.',w:'The robot cleans the room safely on its own — four sensors, four rules.'},
+ DEPL('model.deploy --fleet','every robot vacuum')]}),
+7:()=>({gl:{alt:'altitude','--clear':'until clear',nav:'navigate','.straight':'straight ahead','.cont':'continue',winch:'rope winch',pkg:'package',grip:'gripper','.rtb':'return to base',pwr:'power','.eco':'eco mode',land:'land'},s:[
+ BOOT('sys.boot --gps --lidar --imu',['sys.boot --sonar','sonar only reaches 2 m — a drone needs GPS, lidar and a balance sensor'],'GPS, lidar and IMU (balance sensor)'),
+ {s:'Lidar sees a 15 m tower on the route; the drone cruises at 8 m.',r:'lidar.obstacle_height > cruise_alt',set:c=>c.api.scen('tower'),o:[['nav.straight',...SC('tower','fly straight','fly straight ahead')],['alt.down 2',...SC('tower','fly straight','descend 2 m')],['pkg.drop',null,'drop the package'],['alt.up --clear',...SC('tower','climb above it','climb until the path is clear')]],ok:c=>c.api.E.passTower,lim:13000,h:'The tower is taller than the flying height.',w:'The drone climbs over the tower and returns to cruise height.'},
+ {s:'The drone has reached the customer’s garden. The parcel is fragile.',r:'gps == TARGET',set:c=>c.api.scen('deliver'),o:[['grip.open',...SC('deliver','drop the package from the sky','open the gripper')],['winch.lower',...SC('deliver','lower the package on a rope','lower the package on the winch rope')],['pkg.drop',...SC('deliver','drop the package from the sky','drop the package')],['alt.up --clear',null,'climb']],ok:c=>c.api.E.delivered,lim:13000,h:'Fragile parcels must touch down gently.',w:'The package is winched down gently onto the target.'},
+ {s:'A 55 km/h gust is coming. Small drones lose control in strong wind.',r:'wind_kmh > 40',set:c=>c.api.scen('wind'),o:[['nav.cont',...SC('wind','keep flying','continue the route')],['land.safe',...SC('wind','land safely','land in the nearest safe spot')],['alt.up --clear',...SC('wind','keep flying','climb higher')],['winch.lower',null,'lower the package']],ok:c=>c.api.E.landed,lim:13000,h:'Safety first — wait for the wind to drop.',w:'The drone lands safely instead of being blown away.'},
+ {s:'Battery 27% and falling fast.',r:'battery < 25%',set:c=>c.api.scen('battery'),o:[['pwr.eco',null,'dims the LEDs — saves almost nothing'],['nav.cont',...SC('batt','continue delivery','continue the delivery')],['nav.rtb',...SC('batt','return to base','return to base')],['land.safe',null,'land in the street and wait (stranded)']],ok:c=>c.api.E.returned,lim:22000,h:'A drone with an empty battery falls from the sky.',w:'The drone turns back, climbs over the tower and lands at base with power to spare.'},
+ {s:'Final exam: take off, avoid the tower, deliver gently and return to base.',o:[['mission.abort',null,'cancels the mission'],['mission.run --full',c=>c.api.scen('mission'),'fly the full mission'],['log.clear',null,'deletes the history log'],['pkg.drop',null,'drop the package']],ok:c=>{const E=c.api.E;return E.delivered&&E.returned&&!E.crashes},lim:45000,h:'All rules must be correct.',w:'Mission complete! The autopilot chained four decisions together.'},
+ DEPL('model.deploy --fleet','every delivery drone')]}),
+8:()=>({gl:{qc:'quality control',belt:'conveyor belt',lbl:'label',scale:'weighing scale','.tare':'reset to zero','--batch':'number of boxes'},s:[
+ BOOT('sys.boot --cam --scale',['sys.boot --mic','a microphone cannot see damage or weigh boxes'],'camera + weighing scale'),
+ {s:'Damaged boxes are being shipped to customers.',r:'vision.damage == TRUE',set:c=>c.api.scen('damage'),o:[['qc.pass',...SC('dmg','pass it','pass the box to packing')],['belt.stop',null,'stop the whole line'],['qc.reject',...SC('dmg','reject it','push the box into REJECT')],['lbl.print',null,'print a new label']],ok:c=>c.api.E.n>=4&&!c.api.E.err,lim:22000,h:'Would a customer accept a crushed box?',w:'Damaged boxes go to REJECT; good ones continue to packing.'},
+ {s:'Some boxes have no barcode label, so they can’t be tracked.',r:'barcode == NONE',set:c=>c.api.scen('label'),o:[['lbl.skip',...SC('lbl','pass it','skip the label check')],['qc.reject',...SC('lbl','reject it','push the box into REJECT')],['qc.pass',...SC('lbl','pass it','pass the box')],['scale.tare',null,'zero the scale']],ok:c=>c.api.E.n>=4&&!c.api.E.err,lim:22000,h:'A box without a label gets lost in the warehouse.',w:'Unlabelled boxes are rejected for relabelling.'},
+ {s:'A full box weighs about 500 g. Under 450 g means items are missing.',r:'weight_g < 450',set:c=>c.api.scen('weight'),o:[['scale.tare',null,'zero the scale'],['qc.pass',...SC('wt','pass it','pass the box')],['belt.fast',null,'speed up the belt'],['qc.reject',...SC('wt','reject it','push the box into REJECT')]],ok:c=>c.api.E.n>=4&&!c.api.E.err,lim:22000,h:'Underweight means the customer gets less than they paid for.',w:'Underweight boxes are rejected — the scale reading became a decision.'},
+ {s:'Final exam: a mixed batch. Sort 8 boxes with 100% accuracy.',o:[['belt.stop',null,'stop the belt'],['log.clear',null,'deletes the history log'],['belt.run --batch 10',c=>c.api.scen('run'),'run a mixed batch of boxes'],['qc.pass',null,'pass everything']],ok:c=>c.api.E.n>=8&&!c.api.E.err,lim:30000,h:'Check the rule for whichever defect was sorted wrongly.',w:'100% accuracy — three inspection rules check every box.'},
+ DEPL('model.deploy --line 1-4','all four production lines')]}),
+24:()=>({gl:{nav:'navigation','.detour':'drive around','.reroute':'plan a new route','-L':'to the left',arm:'robotic arm','--core':'core sample',pwr:'power','.hib':'hibernate','--fold':'fold solar panels',uplink:'radio link to Earth','--dsn':'Deep Space Network',sol:'a Mars day'},s:[
+ BOOT('sys.boot --navcam --spectro',['sys.boot --gps','there is no GPS on Mars'],'navigation camera + spectrometer'),
+ {s:'A big rock blocks the route. Earth is 20 minutes away by radio — the rover must decide alone.',r:'hazcam.rock_height > 0.5 m',set:c=>c.api.scen('rock'),o:[['nav.fwd',...SC('rock','fwd','drive straight on')],['nav.climb',...SC('rock','climb','climb over it')],['nav.detour +2m',...SC('rock','detour','drive around it with 2 m clearance')],['arm.drill --core',null,'drill a sample']],ok:c=>c.api.E.passRock&&!c.api.E.fail,lim:10000,h:'Rover wheels can’t climb rocks this big.',w:'The rover steers around the rock and returns to its route.'},
+ {s:'The terrain ahead drops into a steep crater.',r:'terrain.slope > 25°',set:c=>c.api.scen('crater'),o:[['cam.pan 360',null,'take a panorama photo'],['nav.reroute -L',...SC('crater','reroute','plan a new route around the edge')],['nav.fwd',...SC('crater','fwd','drive straight on')],['nav.climb',...SC('crater','fwd','drive down the slope')]],ok:c=>c.api.E.passCrater&&!c.api.E.fail,lim:10000,h:'A rover that falls into a crater can never get out.',w:'The rover reroutes along the crater edge.'},
+ {s:'The spectrometer detects water ice in a rock — the mission’s main goal!',r:'spectro == H2O_ICE',set:c=>c.api.scen('sample'),o:[['nav.skip',...SC('sample','skip','drive past it')],['pwr.hib --fold',null,'hibernate'],['arm.drill --core',...SC('sample','drill','drill a core sample')],['cam.off',null,'switch the camera off']],ok:c=>c.api.E.sample,lim:9000,h:'Finding water is why the rover was sent.',w:'The rover stops and drills a core sample of ice.'},
+ {s:'A dust storm is rolling in; sunlight on the solar panels is dropping fast.',r:'dust > 70%',set:c=>c.api.scen('storm'),o:[['nav.cont',...SC('storm','cont','keep driving')],['pwr.hib --fold',...SC('storm','hib','hibernate and fold the panels')],['nav.fwd +fast',...SC('storm','cont','drive faster to escape')],['arm.drill --core',null,'drill a sample']],ok:c=>c.api.E.survived,lim:14000,h:'Without sunlight the battery can’t recharge.',w:'The rover hibernates, saves power and wakes up when the storm passes.'},
+ {s:'Final exam: drive all of Sol 214 — rock, crater, ice sample and a dust storm.',o:[['sol.abort',null,'cancel today’s drive'],['log.clear',null,'deletes the history log'],['sol.run --full',c=>c.api.scen('mission'),'drive the full Sol 214 route'],['sys.halt',null,'shut down']],ok:c=>{const E=c.api.E;return E.done&&E.sample&&E.survived&&!E.fail},lim:42000,h:'Every rule must be correct.',w:'Sol 214 complete — the rover handled every hazard on its own.'},
+ DEPL('uplink.tx --dsn','the rover’s twin and send the data to Earth')]}),
+25:()=>({gl:{wms:'warehouse management system','.pull':'download','--order':'order number',mv:'move','--wait':'until clear',hrn:'horn',nav:'navigate','.replan':'calculate a new path',tote:'storage box','--repick':'and pick again','.dock':'go to charger',job:'current task',lift:'lifting top'},s:[
+ BOOT('sys.boot --lidar --qr',['sys.boot --gps','GPS does not work inside a warehouse'],'lidar + floor QR reader'),
+ {s:'The robot is idle. Download the next order from the warehouse system.',o:[['wms.del --order 1042',null,'delete order 1042'],['qr.print',null,'print a QR code'],['wms.pull --order 1042',c=>{c.api.st.order=1;c.api.scen('human')},'download order #1042'],['bat.off',null,'switch the battery off']],ok:c=>c.api.st.order,h:'Which command gets the order?',w:'Order #1042 loaded: SKU B7 from shelf B3.'},
+ {s:'A worker is crossing the aisle ahead.',r:'lidar.person < 2 m',set:c=>c.api.scen('human'),o:[['mv.fwd',...SC('human','fwd','keep driving')],['hrn.beep --pass',...SC('human','beep','beep and pass')],['lift.up',null,'raise the lift'],['mv.stop --wait',...SC('human','stop','stop and wait until clear')]],ok:c=>c.api.E.passHuman&&!c.api.E.miss,lim:12000,h:'People always come first.',w:'The robot stops, waits for the worker and continues.'},
+ {s:'A fallen box blocks the aisle.',r:'aisle.path == BLOCKED',set:c=>c.api.scen('blocked'),o:[['nav.replan',...SC('block','replan','calculate a new path')],['nav.push',...SC('block','push','push through')],['nav.wait --inf',...SC('block','wait','wait forever')],['hrn.beep --pass',null,'beep']],ok:c=>c.api.E.passBox&&!c.api.E.push,lim:9000,h:'Pushing damages goods; waiting forever stops the order.',w:'The robot calculates a new path around the box.'},
+ {s:'The barcode on the picked tote doesn’t match the order.',r:'tote.sku != order.sku',set:c=>c.api.scen('scan'),o:[['tote.pack',...SC('scan','pack','deliver it to packing anyway')],['lift.down',null,'lower the lift'],['qr.print',null,'print a QR code'],['tote.return --repick',...SC('scan','return','put it back and pick again')]],ok:c=>c.api.E.delivered&&c.api.E.returned&&!c.api.E.wrong,lim:18000,h:'The customer must get exactly what they ordered.',w:'The wrong tote goes back and the correct one is delivered.'},
+ {s:'The battery reads 22% and drops quickly while driving.',r:'battery < 20%',set:c=>c.api.scen('battery'),o:[['nav.dock --chg',...SC('batt','dock','go to the charger')],['job.cont',...SC('batt','cont','continue the job')],['bat.off',null,'switch the battery off'],['mv.stop --wait',null,'stop and wait']],ok:c=>c.api.E.charged,lim:14000,h:'A dead robot blocks the aisle for everyone.',w:'The robot charges to 60%, then finishes the order.'},
+ {s:'Final exam: a full shift — worker, fallen box and a wrong tote.',o:[['shift.end',null,'end the shift'],['shift.run --orders 1',c=>c.api.scen('shift'),'run a full shift'],['log.clear',null,'deletes the history log'],['nav.push',null,'push through']],ok:c=>{const E=c.api.E;return E.delivered&&!E.wrong&&!E.miss&&!E.push&&!E.dead},lim:34000,h:'Check whichever rule caused the incident.',w:'Shift complete with zero incidents.'},
+ DEPL('fleet.deploy --amr 20','all 20 warehouse robots')]}),
+26:()=>({gl:{arm:'robot arm','.pick':'pick','>crate':'into the crate','>waste':'into the waste bin','.skip':'leave it on the plant',crate:'harvest crate','.unload':'empty it',spray:'water sprayer',rgbcam:'colour camera'},s:[
+ BOOT('sys.boot --rgbcam --arm',['sys.boot --thermal','heat does not show ripeness — colour does'],'colour camera + arm'),
+ {s:'The camera sees ripe red tomatoes.',r:'fruit.rgb == RED',set:c=>c.api.scen('red'),o:[['arm.skip',...SC('R','skip','leave it')],['arm.pick >crate',...SC('R','crate','pick it into the crate')],['spray.on',null,'water the plant'],['arm.pick >waste',...SC('R','waste','pick it into waste')]],ok:c=>c.api.E.done&&c.api.E.crateR==3,lim:20000,h:'Ripe fruit is what customers buy.',w:'Every ripe tomato goes into the crate.'},
+ {s:'Some tomatoes are still green.',r:'fruit.rgb == GREEN',set:c=>c.api.scen('green'),o:[['arm.pick >crate',...SC('G','crate','pick it into the crate')],['arm.pick >waste',...SC('G','waste','pick it into waste')],['arm.skip',...SC('G','skip','leave it to ripen')],['cam.flash',null,'flash the camera']],ok:c=>{const E=c.api.E;return E.done&&!E.crateG&&!E.wasteG&&E.crateR==2},lim:22000,h:'Green fruit will ripen in a few days.',w:'Green tomatoes stay on the plant to ripen.'},
+ {s:'Some tomatoes have rotted and turned brown.',r:'fruit.rgb == BROWN',set:c=>c.api.scen('brown'),o:[['arm.pick >waste',...SC('B','waste','pick it into waste')],['arm.skip',...SC('B','skip','leave it')],['spray.on',null,'water the plant'],['arm.pick >crate',...SC('B','crate','pick it into the crate')]],ok:c=>{const E=c.api.E;return E.done&&E.wasteB==2&&!E.crateB},lim:22000,h:'Rotten fruit spreads disease if left.',w:'Rotten tomatoes are removed into the waste bin.'},
+ {s:'The crate only holds 4 tomatoes, but this row has 6 ripe ones.',r:'crate.count == 4 (FULL)',set:c=>c.api.scen('full'),o:[['mv.stop',null,'stop moving'],['arm.skip',...SC('full','skip','skip the remaining fruit')],['crate.unload',...SC('full','unload','empty the crate first')],['arm.pick >crate',...SC('full','pick','keep picking into the crate')]],ok:c=>{const E=c.api.E;return E.done&&!E.crushed&&E.unloaded>=1&&!E.skipR},lim:32000,h:'An overfull crate drops fruit on the ground.',w:'The robot empties the crate, then keeps picking.'},
+ {s:'Final exam: a random row of red, green and brown tomatoes.',o:[['harvest.stop',null,'stop harvesting'],['harvest.run --row 1',c=>c.api.scen('test'),'harvest row 1'],['log.clear',null,'deletes the history log'],['spray.on',null,'water the plants']],ok:c=>c.api.E.done&&!c.api.E.err,lim:55000,h:'One wrong rule creates errors — retrain it.',w:'Perfect harvest: every fruit sorted correctly.'},
+ DEPL('model.deploy --fleet','every harvesting robot')]}),
+27:()=>({gl:{nzl:'nozzle','--jet':'strong jet','.co2':'carbon-dioxide gas',mv:'move','.retreat':'move backwards',rescue:'rescue team','.tx':'send','--gps':'location','--vent':'open the vents',alarm:'siren',thermal:'heat camera',lel:'explosive gas level',op:'operation'},s:[
+ BOOT('sys.boot --thermal --gas',['sys.boot --mic','a microphone cannot see fire or smell gas'],'thermal camera + gas sensor'),
+ {s:'A pile of wooden pallets is burning (class A fire).',r:'flame.class == A',set:c=>c.api.scen('wood'),o:[['nzl.co2',...SC('wood','co2','spray CO₂ gas')],['mv.retreat -3m',...SC('wood','retreat','back away 3 m')],['nzl.water --jet',...SC('wood','water','spray a water jet')],['alarm.mute',null,'silence the siren']],ok:c=>c.api.E.wood,lim:12000,h:'Water cools burning wood best.',w:'The water jet cools the wood and the fire goes out.'},
+ {s:'An electrical cabinet is on fire (class E fire). The power is still live.',r:'flame.class == E',set:c=>c.api.scen('elec'),o:[['nzl.water --jet',...SC('elec','water','spray a water jet')],['nzl.co2',...SC('elec','co2','spray CO₂ gas')],['mv.fwd',...SC('elec','fwd','drive forward')],['alarm.mute',null,'silence the siren']],ok:c=>c.api.E.elec,lim:12000,h:'Water conducts electricity.',w:'CO₂ smothers the electrical fire with no risk of shock.'},
+ {s:'The thermal camera finds a person lying on the floor.',r:'thermal.target == HUMAN_37C',set:c=>c.api.scen('person'),o:[['mv.retreat -3m',...SC('person','retreat','back away')],['cam.off',null,'switch off the camera'],['rescue.tx --gps',...SC('person','alert','send the location to the rescue team')],['nzl.water --jet',...SC('person','water','spray water')]],ok:c=>c.api.E.person,lim:9000,h:'Robots find people; humans rescue them.',w:'The beacon flashes and the rescue team receives the exact location.'},
+ {s:'The gas sensor detects leaking LPG ahead.',r:'gas.lpg > 20% LEL',set:c=>c.api.scen('gas'),o:[['mv.stop --vent',...SC('gas','vent','stop and open the vents')],['torch.on',null,'switch on a work light'],['nzl.water --jet',...SC('gas','water','spray water')],['mv.fwd',...SC('gas','fwd','drive forward')]],ok:c=>c.api.E.gas,lim:10000,h:'A single spark can ignite gas.',w:'The robot stops at a safe distance while the vents clear the gas.'},
+ {s:'The temperature near the furnace is over 400 °C.',r:'temp_c > 400',set:c=>c.api.scen('hot'),o:[['mv.fwd',...SC('hot','fwd','drive forward')],['nzl.water --jet',...SC('hot','water','spray water')],['alarm.mute',null,'silence the siren'],['mv.retreat -3m',...SC('hot','retreat','back away 3 m')]],ok:c=>c.api.E.hot,lim:10000,h:'Electronics fail above about 400 °C.',w:'The robot backs away until it is cool enough.'},
+ {s:'Final exam: clear all five hazards in Zone A.',o:[['op.abort',null,'cancel the operation'],['log.clear',null,'deletes the history log'],['op.run --zone A',c=>c.api.scen('op'),'run the full Zone A operation'],['alarm.mute',null,'silence the siren']],ok:c=>{const E=c.api.E;return E.wood&&E.elec&&E.person&&E.gas&&E.hot&&!E.fail},lim:55000,h:'Each hazard needs its own correct rule.',w:'Zone A is safe — five hazards, five correct decisions.'},
+ DEPL('model.deploy --fleet','every firefighting robot')]}),
+28:()=>({gl:{atp:'automatic train protection',brk:'brake','.svc':'normal service brake','.emg':'emergency brake',trc:'traction (motor)','.cont':'continue','.boost':'more power',door:'train doors','-R':'right side','-L':'left side','.reopen':'open again','.force':'force shut',spd:'speed',hrn:'horn',stn:'station'},s:[
+ BOOT('sys.boot --atp --radar',['sys.boot --gps','GPS is too inaccurate for stopping at platforms'],'train protection + radar'),
+ {s:'The signal ahead shows red.',r:'signal.aspect == RED',set:c=>c.api.scen('signal'),o:[['trc.cont',...SC('signal','cont','keep going')],['hrn.on',null,'sound the horn'],['trc.boost',...SC('signal','boost','accelerate')],['brk.svc --stop',...SC('signal','stop','brake to a stop before the signal')]],ok:c=>c.api.E.sigOK,lim:14000,h:'Passing a red signal is the most serious railway error.',w:'The train stops before the signal and continues when it turns green.'},
+ {s:'The train stops at Al Rowad station. The platform is on the RIGHT.',r:'station.platform_side == RIGHT',set:c=>c.api.scen('doors'),o:[['door.open -L',...SC('door','L','open the left doors')],['door.open -R',...SC('door','R','open the right doors')],['trc.cont',...SC('door','cont','skip the station')],['hrn.on',null,'sound the horn']],ok:c=>c.api.E.doorsOK,lim:16000,h:'Which side is the platform on?',w:'Train doors and platform screen doors open together on the right.'},
+ {s:'A bag is caught in door 2 while the doors close.',r:'door.sensor == OBSTRUCTED',set:c=>c.api.scen('block'),o:[['door.reopen',...SC('block','reopen','open the doors again')],['door.force',...SC('block','force','force the doors shut')],['hrn.on',null,'sound the horn'],['trc.cont',...SC('block','cont','depart now')]],ok:c=>c.api.E.obstOK,lim:9000,h:'Never trap a passenger or their belongings.',w:'The doors reopen, the bag is freed and the doors close safely.'},
+ {s:'A sharp curve with a 40 km/h limit is ahead. The train cruises at 72 km/h.',r:'track.limit == 40 km/h',set:c=>c.api.scen('curve'),o:[['spd.set 80',...SC('curve','80','set speed to 80 km/h')],['spd.set 40',...SC('curve','40','set speed to 40 km/h')],['trc.boost',...SC('curve','80','accelerate')],['door.open -R',null,'open the right doors']],ok:c=>c.api.E.curveOK&&!c.api.E.fail,lim:12000,h:'Too fast in a curve can derail a train.',w:'The train slows to 40 km/h through the curve.'},
+ {s:'Radar detects an object on the track ahead.',r:'radar.object_on_track < 30 m',set:c=>c.api.scen('obst'),o:[['hrn.on',...SC('obst','horn','sound the horn only')],['brk.emg',...SC('obst','emg','apply the emergency brake')],['door.open -R',null,'open the right doors'],['trc.cont',...SC('obst','cont','keep going')]],ok:c=>c.api.E.stopOK,lim:10000,h:'A horn cannot move a fallen object.',w:'The emergency brake stops the train well before the object.'},
+ {s:'Final exam: run the line — signal, station, door obstruction, curve and an object on the track.',o:[['line.stop',null,'stop the service'],['line.run --stn 1',c=>c.api.scen('line'),'run the full line'],['log.clear',null,'deletes the history log'],['trc.boost',null,'accelerate']],ok:c=>{const E=c.api.E;return E.sigOK&&E.doorsOK&&E.obstOK&&E.curveOK&&E.stopOK&&!E.fail},lim:50000,h:'Every rule must be correct.',w:'The whole line ran with zero incidents.'},
+ DEPL('model.deploy --fleet','every train on the line')]}),
+0:()=>({gl:{obj:'obstacle','.add':'add at x,y','--rand':'random places',bot:'robot',mv:'move','--open':'toward the open side','.fwd':'forward',spd:'speed',snd:'sound',sonar:'distance sensor'},s:[
+ BOOT('sys.boot --sonar x3',['sys.boot --gps','GPS is useless inside a test arena'],'three sonar sensors'),
+ {s:'The robot sits at (60, 190) facing right. Put a crate right in its path to see what an <b>untrained</b> robot does.',set:c=>{c.api.home();c.api.clear();c.api.E.hits=0},o:[['obj.add 600,40',c=>c.api.add(600,40),'add a crate in the far corner'],['obj.add 160,190',c=>c.api.add(160,190),'add a crate at (160, 190)'],['obj.clear',c=>c.api.clear(),'remove all crates'],['bot.home',c=>c.api.home(),'move the robot home']],ok:c=>c.api.E.hits>0,lim:5000,h:'The crate must be on the robot’s line: y = 190.',w:'The robot crashes — without a rule its sensor numbers mean nothing.'},
+ {s:'Program the front sonar.',r:'sonar.front < 70',set:c=>{c.api.home();c.api.E.turns=0},o:[['mv.stop',c=>{c.api.K.front=70;c.api.K.fa='stop'},'stop and wait'],['mv.turn --open',c=>{c.api.K.front=70;c.api.K.fa='turn'},'turn toward the open side'],['mv.fwd',c=>{c.api.K.front=70;c.api.K.fa='fwd'},'keep driving'],['snd.beep',null,'beep']],ok:c=>c.api.E.turns>=3,lim:5000,h:'The crate won’t move by itself.',w:'The robot turns toward the side with more space.'},
+ {s:'Program the side sonars.',r:'sonar.left < 40 OR sonar.right < 40',o:[['spd.set 100%',c=>{c.api.K.side=40;c.api.K.sa='full'},'keep full speed'],['led.off',null,'switch off the LED'],['spd.set 50%',c=>{c.api.K.side=40;c.api.K.sa='slow'},'slow to half speed'],['mv.turn --open',null,'turning is the front rule’s job']],ok:c=>c.api.K.side==40&&c.api.K.sa=='slow',h:'Close to walls, careful robots slow down.',w:'Near side obstacles the robot drops to half speed.'},
+ {s:'Build a harder exam arena.',set:c=>c.api.home(),o:[['obj.clear',c=>c.api.clear(),'remove all crates'],['obj.add --rand 3',c=>c.api.rand(3),'add 3 crates in random places'],['bot.home',c=>c.api.home(),'move the robot home'],['sys.halt',null,'shut down']],ok:c=>c.api.O.length>=4,h:'You need more obstacles, not fewer.',w:'Three new crates appear in random places.'},
+ {s:'Final exam: a 6-second drive with zero collisions.',set:c=>c.api.home(),o:[['test.stop',null,'stop a test'],['log.clear',null,'deletes the history log'],['test.run --t 6s',c=>{c.api.E.test={t0:performance.now(),h:c.api.E.hits}},'start the 6-second test drive'],['obj.clear',c=>c.api.clear(),'remove all crates']],ok:c=>{const E=c.api.E;return !!E.test&&performance.now()-E.test.t0>6000&&E.hits==E.test.h},lim:9000,h:'If it crashed, check the front rule.',w:'Six seconds, zero collisions.'},
+ DEPL('model.deploy --fleet','every warehouse robot')]}),
+1:()=>({gl:{us:'ultrasonic distance sensor',ldr:'light sensor',temp:'thermometer',mic:'microphone',mtr:'motor','.fwd':'forward at % power',led:'light','.head':'headlights',fan:'cooling fan',alarm:'siren',hrn:'horn'},s:[
+ BOOT('sys.boot --us --ldr --temp --mic',['sys.boot --gps','GPS gives position, not distance to a wall'],'distance, light, temperature and sound sensors'),
+ {s:'A wall is only 20 cm ahead.',r:'ultrasonic.cm < 30',set:c=>{c.api.Rl.length=0;c.api.set({d:20,l:70,t:24,s:20})},o:[['mtr.fwd 100',c=>c.api.rule('d','<',30,'go'),'drive at full power'],['mtr.fwd 40',c=>c.api.rule('d','<',30,'slow'),'drive at 40% power'],['mtr.stop',c=>c.api.rule('d','<',30,'stop'),'stop the motors'],['hrn.on',null,'sound the horn']],ok:c=>c.api.out().stop,h:'20 cm is an emergency.',w:'The motors stop before the wall.'},
+ {s:'The wall is 55 cm away — not an emergency, but close.',r:'ultrasonic.cm < 70',set:c=>c.api.set({d:55,l:70,t:24,s:20}),o:[['mtr.stop',c=>c.api.rule('d','<',70,'stop'),'stop the motors'],['mtr.fwd 40',c=>c.api.rule('d','<',70,'slow'),'drive at 40% power'],['led.blink',null,'blink the LED'],['mtr.fwd 100',c=>c.api.rule('d','<',70,'go'),'drive at full power']],ok:c=>c.api.out().slow,h:'Between 30 and 70 cm keep moving — carefully.',w:'Two distance rules give a graded response: slow, then stop.'},
+ {s:'Night falls: the light sensor reads 20%.',r:'ldr.light < 35%',set:c=>c.api.set({d:150,l:20,t:24,s:20}),o:[['led.head ON',c=>c.api.rule('l','<',35,'head'),'switch the headlights on'],['mtr.stop',c=>c.api.rule('l','<',35,'stop'),'stop the motors'],['led.head OFF',c=>c.api.rule('l','<',35,'headoff'),'switch the headlights off'],['fan.on',null,'switch the fan on']],ok:c=>c.api.out().head,h:'Darkness needs light.',w:'The headlights switch on automatically in the dark.'},
+ {s:'The motor is overheating at 38 °C.',r:'temp.c > 30',set:c=>c.api.set({d:150,l:70,t:38,s:20}),o:[['led.head ON',null,'switch the headlights on'],['fan.off',c=>c.api.rule('t','>',30,'fanoff'),'switch the fan off'],['mtr.fwd 100',null,'drive at full power'],['fan.on',c=>c.api.rule('t','>',30,'fan'),'switch the fan on']],ok:c=>c.api.out().fan,h:'Too hot needs cooling.',w:'The cooling fan spins up above 30 °C.'},
+ {s:'A very loud noise is detected nearby.',r:'mic.level > 80',set:c=>c.api.set({d:150,l:70,t:24,s:92}),o:[['alarm.mute',c=>c.api.rule('s','>',80,'mute'),'silence the siren'],['alarm.on',c=>c.api.rule('s','>',80,'alarm'),'sound the siren'],['fan.on',null,'switch the fan on'],['mtr.fwd 100',null,'drive at full power']],ok:c=>c.api.out().alarm,h:'A loud noise could be a crash or a call for help.',w:'The siren beacon flashes when the sound level passes 80.'},
+ {s:'Final exam: wall 25 cm, darkness, 40 °C and a loud bang — all at once.',o:[['test.stop',null,'stop a test'],['test.run --all',c=>c.api.set({d:25,l:15,t:40,s:90}),'run the full sensor test'],['log.clear',null,'deletes the history log'],['sys.halt',null,'shut down']],ok:c=>{const o=c.api.out();return o.stop&&o.head&&o.fan&&o.alarm},h:'All four rules must be correct.',w:'Every rule fires together — a real controller checks every sensor all the time.'},
+ DEPL('model.deploy --fleet','every patrol robot')]}),
+2:()=>({gl:{ir:'infrared line sensor','.cal':'calibrate',str:'steer','-L':'left','-R':'right',' 0':'straight',scan:'search','.arc':'in an arc',mtr:'motor',spd:'speed',lap:'one lap'},s:[
+ BOOT('sys.boot --ir x2',['sys.boot --gps','GPS is not accurate enough to follow tape'],'two infrared sensors'),
+ {s:'The IR sensors must learn what the black tape and white floor look like.',set:c=>c.api.rs(),o:[['ir.cal --red',null,'there is no red in this arena'],['ir.cal --black --white',c=>{c.api.K.cal=1},'calibrate on black tape and white floor'],['mtr.stop',null,'stop the motors'],['log.clear',null,'deletes the history log']],ok:c=>c.api.K.cal,h:'Which two colours are on the track?',w:'The sensors can now tell tape from floor.'},
+ {s:'Program the LEFT sensor.',r:'ir.left == LINE',set:c=>c.api.rs(),o:[['str -R',c=>{c.api.K.L='R'},'steer right'],['str 0',c=>{c.api.K.L='S'},'go straight'],['str -L',c=>{c.api.K.L='L'},'steer left'],['mtr.stop',null,'stop']],ok:c=>c.api.K.L=='L',h:'Move toward the sensor that sees the line.',w:'When the left sensor sees the line the robot steers left.'},
+ {s:'Program the RIGHT sensor.',r:'ir.right == LINE',set:c=>c.api.rs(),o:[['str -R',c=>{c.api.K.R='R'},'steer right'],['str -L',c=>{c.api.K.R='L'},'steer left'],['mtr.stop',null,'stop'],['str 0',c=>{c.api.K.R='S'},'go straight']],ok:c=>c.api.K.R=='R',h:'Mirror the left rule.',w:'Both sensors trained — the robot zig-zags along the line.'},
+ {s:'On sharp bends both sensors can lose the line.',r:'ir.left == FLOOR AND ir.right == FLOOR',o:[['mtr.stop',c=>{c.api.K.lost='stop'},'stop the motors'],['mtr.fwd 100',c=>{c.api.K.lost='blind'},'drive straight on'],['scan.arc',c=>{c.api.K.lost='scan'},'search in an arc'],['str -R',null,'steer right']],ok:c=>c.api.K.lost=='scan',h:'A stopped robot never finishes the track.',w:'The robot turns back toward where it last saw the line.'},
+ {s:'Race rules: the robot must run at speed level 3.',o:[['spd.set 5',c=>{c.api.sp=5},'set speed to 5'],['spd.set 0',c=>{c.api.sp=0},'set speed to 0'],['spd.set 3',c=>{c.api.sp=3},'set speed to 3'],['str -L',null,'steer left']],ok:c=>c.api.sp==3,h:'Read the race rules.',w:'Speed 3 — faster, but can the sensors keep up?'},
+ {s:'Final exam: one full lap without losing the line.',o:[['test.lap --n 1',c=>{c.api.E.test={};c.api.E.laps=0;c.api.rs()},'run one test lap'],['test.stop',null,'stop a test'],['log.clear',null,'deletes the history log'],['spd.set 0',null,'stop the robot']],ok:c=>c.api.E.test&&c.api.E.laps>=1,lim:15000,h:'Check the three rules, then run the lap again.',w:'Lap complete — simple rules, smart behaviour.'},
+ DEPL('model.deploy --fleet','every line-following robot')]}),
+3:()=>({gl:{servo:'motor joint',cam:'camera','--obj':'detect objects',arm:'robot arm','.home':'safe start position','.free':'release motors',grip:'gripper',pnp:'pick and place','--to':'destination',BIN:'good bin',REJ:'reject tray',obj:'object'},s:[
+ BOOT('sys.boot --servo x3 --cam',['sys.boot --gps','an arm bolted to a table does not need GPS'],'three servo joints + camera'),
+ {s:'Before moving, an arm must go to its known safe position.',set:c=>{c.api.reset();c.api.st.scan=0;c.api.st.home=0;c.api.st.K={}},o:[['arm.free',null,'releases the motors — the arm collapses'],['grip.open 100',null,'open the gripper'],['arm.home',c=>c.api.home(),'move to the home position'],['log.clear',null,'deletes the history log']],ok:c=>c.api.st.home,h:'Which command means “safe start position”?',w:'The arm moves to its home position — every joint angle is now known.'},
+ {s:'The arm is blind until its camera finds the blocks.',o:[['cam.rec 10s',null,'record a video'],['cam.scan --obj',c=>{c.api.st.scan=1},'scan the table for objects'],['cam.off',null,'switch the camera off'],['arm.home',c=>c.api.home(),'go home again']],ok:c=>c.api.st.scan,h:'Object detection comes first.',w:'Three blocks found — and the orange one has a crack.'},
+ {s:'Program the RED block (no defects).',r:'object.color == RED',set:c=>{const O=c.api.O;if(c.api.where(0)!='table'){O[0][0]=110;O[0][1]=352}},o:[['pnp --to REJ',c=>c.api.rule('red','reject'),'place it in REJECT'],['obj.skip',c=>c.api.rule('red','skip'),'leave it'],['grip.close',null,'close the gripper'],['pnp --to BIN',c=>c.api.rule('red','bin'),'place it in the good BIN']],ok:c=>c.api.where(0)=='bin',lim:14000,h:'A perfect block is a good product.',w:'The arm solves its joint angles and places the red block in the BIN.'},
+ {s:'Program the GREEN block (no defects).',r:'object.color == GREEN',set:c=>{const O=c.api.O;if(c.api.where(1)!='table'){O[1][0]=190;O[1][1]=352}},o:[['pnp --to BIN',c=>c.api.rule('green','bin'),'place it in the good BIN'],['grip.close',null,'close the gripper'],['pnp --to REJ',c=>c.api.rule('green','reject'),'place it in REJECT'],['obj.skip',c=>c.api.rule('green','skip'),'leave it']],ok:c=>c.api.where(1)=='bin',lim:14000,h:'Same as red.',w:'The green block joins the red one in the BIN.'},
+ {s:'The camera found a <b>crack</b> in the orange block.',r:'object.color == ORANGE AND crack == TRUE',set:c=>{const O=c.api.O;if(c.api.where(2)!='table'){O[2][0]=470;O[2][1]=352}},o:[['obj.skip',c=>c.api.rule('orange','skip'),'leave it'],['pnp --to BIN',c=>c.api.rule('orange','bin'),'place it in the good BIN'],['pnp --to REJ',c=>c.api.rule('orange','reject'),'place it in REJECT'],['grip.close',null,'close the gripper']],ok:c=>c.api.where(2)=='reject',lim:14000,h:'Defective products must never reach customers.',w:'The cracked block goes to REJECT — vision plus rules make quality control.'},
+ DEPL('model.deploy --cell 1-6','all six robot cells')]}),
+4:()=>({gl:{cv:'computer vision','.count':'count cars','--lanes':'number of roads',t:'traffic light','.green':'green time','--busy+':'more to the busier road','--busy-':'less to the busier road','.fix':'fixed timer','.skip':'skip its turn','.keep':'keep its turn','.pre':'give priority','.queue':'wait in line',sig:'signal'},s:[
+ BOOT('sys.boot --cam x4',['sys.boot --gps','GPS cannot count queuing cars'],'four road cameras'),
+ {s:'The junction runs a fixed 30/30 s timer and can’t see the queues.',set:c=>{Object.assign(c.api.K,{cnt:0,busy:null,empty:null,siren:null});c.api.set({n:3,s:2,e:25,w:20,em:0})},o:[['cv.off',c=>{c.api.K.cnt=0},'switch vision off'],['sig.fix 30/30',null,'keep the fixed timer'],['cv.count --lanes 4',c=>{c.api.K.cnt=1},'count cars on all 4 roads'],['log.clear',null,'deletes the history log']],ok:c=>c.api.K.cnt,h:'The AI needs data first.',w:'The cameras now report every queue.'},
+ {s:'East–West has 45 cars waiting, North–South only 5.',r:'queue(E–W) > queue(N–S)',set:c=>c.api.set({n:3,s:2,e:25,w:20,em:0}),o:[['t.green --busy-',c=>{c.api.K.busy='less'},'give the busier road LESS green'],['t.fix 30/30',c=>{c.api.K.busy=null},'keep 30/30'],['t.green --busy+',c=>{c.api.K.busy='more'},'give the busier road MORE green'],['t.red --all',null,'make every light red']],ok:c=>c.api.plan().im>20,h:'The longer queue needs the light for longer.',w:'East–West gets most of the green and waiting drops by about 40%.'},
+ {s:'North–South is completely empty but still gets green time.',r:'queue(N–S) == 0',set:c=>c.api.set({n:0,s:0,e:15,w:12,em:0}),o:[['t.keep N-S',c=>{c.api.K.empty='keep'},'keep its green turn'],['t.skip N-S',c=>{c.api.K.empty='skip'},'skip its green turn'],['t.red --all',null,'make every light red'],['t.fix 30/30',null,'keep 30/30']],ok:c=>/skipped/.test(c.api.plan().mode),h:'Green time on an empty road helps nobody.',w:'The empty road is skipped; East–West keeps moving.'},
+ {s:'An ambulance with its siren on is waiting on the North road.',r:'audio.siren == DETECTED',set:c=>c.api.set({n:2,s:1,e:25,w:20,em:1}),o:[['hrn.on',null,'sound a horn'],['t.queue --siren',c=>{c.api.K.siren='queue'},'make it wait in line'],['t.red --all',null,'make every light red'],['t.pre --siren',c=>{c.api.K.siren='pre'},'give its road priority']],ok:c=>c.api.plan().emer,h:'Saving lives matters more than queue length.',w:'The ambulance gets an immediate green light.'},
+ {s:'Final exam: rush hour — beat the fixed timer by more than 40%.',o:[['test.run --rush',c=>c.api.set({n:2,s:1,e:28,w:26,em:0}),'run the rush-hour test'],['sig.fix 30/30',null,'go back to the fixed timer'],['log.clear',null,'deletes the history log'],['cv.off',null,'switch vision off']],ok:c=>c.api.plan().im>40,h:'Both timing rules must be correct.',w:'The trained junction beats the fixed timer by more than 40%.'},
+ DEPL('model.deploy --city','every junction in the city')]})};
+
+/* ================= Lab UI ================= */
+const flat=C.flatMap(c=>c[1]).concat(NEWT),NT=flat.length,SB=document.getElementById('sb'),SW=document.getElementById('sw'),RO=document.getElementById('ro'),STH=document.getElementById('sth'),LOCK=document.getElementById('lock'),
 TOAST=document.getElementById('toast'),HINT=document.getElementById('hint'),BURST=document.getElementById('burst'),XV=document.getElementById('xv'),XH=document.getElementById('xh'),XY=document.getElementById('xy');
+const ORD=[5,6,7,8,24,25,26,27,28,0,1,2,3,4,...Array.from({length:15},(_,i)=>i+9)],pos=n=>ORD.indexOf(n)+1;
 let STG=null,T=null,STU={n:'',g:''};try{STU=Object.assign(STU,JSON.parse(localStorage.getItem('aiwStu')||'{}'))}catch(e){}
-const catOf=k=>{let i=0;for(const c of C){if(k<i+c[1].length)return c[0];i+=c[1].length}return''},
+const catOf=k=>{if(k>=24)return C[0][0];let i=0;for(const c of C){if(k<i+c[1].length)return c[0];i+=c[1].length}return''},
 plain=s=>{const e=document.createElement('div');e.innerHTML=String(s);return e.textContent},
-short=s=>{s=plain(s.replace(/<code>([^<]*)<\/code>/g,(z,a)=>'<code>'+SHORT(a,T?T.n:0)+'</code>'));return s.length>92?s.slice(0,90)+'…':s},
+short=s=>{s=plain(s);return s.length>92?s.slice(0,90)+'…':s},
 norm=s=>String(s).toLowerCase().trim().split(/\s+/).filter(Boolean).join(' '),
-reE=s=>s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),
-partRe=p=>new RegExp('^'+norm(p).split(/(<[^>]+>)/).map(g=>g[0]=='<'?(g.includes('|')?'('+g.slice(1,-1).split('|').map(reE).join('|')+')':'(.+)'):reE(g)).join('')+'$'),
-isDec=p=>/ then </.test(p);
+reE=s=>s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),isDec=p=>/ then </.test(p);
 
-const prog=()=>{document.getElementById('pgt').textContent=done.size+' of '+NT+' tasks complete';document.getElementById('pgb').style.width=(done.size/NT*100)+'%'};
+/* admin menu */
+const AB=document.getElementById('admb'),AM=document.getElementById('admm');
+AB.addEventListener('click',e=>{e.stopPropagation();const o=AM.hidden;AM.hidden=!o;AB.setAttribute('aria-expanded',String(o))});
+document.addEventListener('click',e=>{if(!AM.hidden&&!e.target.closest('.adm')){AM.hidden=true;AB.setAttribute('aria-expanded','false')}});
+document.addEventListener('keydown',e=>{if(e.key=='Escape'&&!AM.hidden){AM.hidden=true;AB.setAttribute('aria-expanded','false');AB.focus()}});
+
+/* legacy tasks (other zones) → option steps */
+const legacy=n=>{const D=CMD[n](),all=[];D.m.forEach((m,i)=>cmdOf(n,i,m).forEach(p=>expand(p,n).forEach(e=>all.push(e.short))));const uniq=[...new Set(all)],S=[];
+ D.m.forEach((m,i)=>{const P=cmdOf(n,i,m);P.forEach((p,j)=>{const ex=expand(p,n),last=j==P.length-1,run=e=>c=>{const x=D.c.find(x=>x[2].test(e.full));if(!x)throw new Error('Command not available');x[3](c,e.full.match(x[2]))};
+  let o=ex.map(e=>[e.short,run(e),e.opt?e.opt:e.full]);const own=new Set(ex.map(e=>cpk(e.short))),dis=uniq.filter(u=>!own.has(cpk(u)));let k=(i*3+j*5)%Math.max(1,dis.length),g=0;
+  while(o.length<4&&dis.length&&g++<20){const d=dis[k++%dis.length];if(!o.some(q=>cpk(q[0])==cpk(d)))o.push([d,null,'a command for a different step'])}
+  if(ex.length<4)o=o.map((q,z)=>[(z*7+i*3+j*5)%11,q]).sort((a,b)=>a[0]-b[0]).map(z=>z[1]);
+  S.push({s:shTxt(m[0],n)+(P.length>1?` <i>(part ${j+1} of ${P.length})</i>`:''),o,set:j==0?m[2]:null,ok:last?m[3]:()=>1,h:shTxt(esc(m[4]),n),w:last?m[5]:'Done — now the next part.',lim:last?m[6]:600})})});return{s:S,gl:{}}};
+const steps=n=>CMD2[n]?CMD2[n]():legacy(n);
+
+const prog=()=>{document.getElementById('pgt').textContent=done.size+' of '+NT+' complete';document.getElementById('pgb').style.width=(done.size/NT*100)+'%'};
 const saveDone=()=>{try{localStorage.setItem('aiw2',JSON.stringify([...done]))}catch(e){}prog()};
 const lock=(on,a,b)=>{LOCK.hidden=!on;if(on)LOCK.innerHTML=`<div class="lk1">${a}</div><div class="lk2">${b}</div>`};
 const setSth=()=>{const L=$(STH,'.led'),t=$(STH,'#stt');if(!T){L.className='led';t.textContent='AI stage — no task loaded';return}
- L.className='led'+(T.started?' on':'');t.textContent=flat[T.n][0]+' — '+(T.fin?'all steps complete':T.started?'step '+Math.min(T.mi+1,T.D.m.length)+' of '+T.D.m.length:'AI switched off')};
-const fit=()=>{if(!STG)return;const pw=SW.clientWidth-28,ph=SW.clientHeight-28,s=Math.max(.05,Math.min(pw/640,ph/(640*STG.height/STG.width)));STG.style.width=Math.floor(640*s)+'px';STG.style.height=Math.floor(640*STG.height/STG.width*s)+'px'};
+ L.className='led'+(T.started?' on':'');t.textContent=flat[T.n][0]+' — '+(T.fin?'all steps complete':T.started?'step '+Math.min(T.mi+1,T.S.length)+' of '+T.S.length:'AI switched off')};
+const fit=()=>{if(!STG)return;if(STG.dataset.d3){T&&T.card.S3&&T.card.S3.resize(SW.clientWidth,SW.clientHeight);return}
+ const pw=SW.clientWidth-8,ph=SW.clientHeight-8,s=Math.max(.05,Math.min(pw/STG.width,ph/STG.height));STG.style.width=Math.floor(STG.width*s)+'px';STG.style.height=Math.floor(STG.height*s)+'px'};
 new ResizeObserver(fit).observe(SW);
 
 /* stage feedback */
 const toast=(s,bad)=>{TOAST.textContent=s;TOAST.className='show'+(bad?' bad':'');clearTimeout(toast.t);toast.t=setTimeout(()=>TOAST.className=bad?'bad':'',1600)};
 const flash=k=>{if(!STG)return;STG.classList.remove('pulse','err');void STG.offsetWidth;STG.classList.add(k);clearTimeout(flash.t);flash.t=setTimeout(()=>STG&&STG.classList.remove(k),650)};
-const ripple=(x,y)=>{if(!STG||STG.dataset.d3)return;const r=STG.getBoundingClientRect(),s=SW.getBoundingClientRect(),d=document.createElement('div');d.className='rip';d.style.left=(r.left-s.left+x*r.width/STG.width)+'px';d.style.top=(r.top-s.top+y*r.height/STG.height)+'px';SW.append(d);setTimeout(()=>d.remove(),950)};
 const burst=m=>{BURST.innerHTML=`<div class="msg">${m}</div>`+Array.from({length:28},(_,i)=>`<i class="cf" style="background:hsl(${i*37},85%,60%);--dx:${Math.round((Math.random()-.5)*760)}px;--dy:${Math.round((Math.random()-.7)*440)}px;--r:${Math.round(Math.random()*720)}deg"></i>`).join('');clearTimeout(burst.t);burst.t=setTimeout(()=>BURST.innerHTML='',1700)};
 const shake=sel=>{const el=$(SB,sel);if(el){el.classList.remove('shake','nudge');void el.offsetWidth;el.classList.add(sel=='.startb'?'nudge':'shake')}};
-const nudge=e=>{const s=SW.getBoundingClientRect();HINT.textContent=T&&T.started?'⌨️ Train the AI with commands in the sidebar':'Press ▶ START first';HINT.style.left=(e.clientX-s.left)+'px';HINT.style.top=(e.clientY-s.top)+'px';HINT.classList.add('show');clearTimeout(nudge.t);nudge.t=setTimeout(()=>HINT.classList.remove('show'),1400);shake(T&&T.started?'.term':'.startb')};
+const nudge=e=>{const s=SW.getBoundingClientRect();HINT.textContent=T&&T.started?'⌨️ Program the AI from the sidebar':'Press ▶ START first';HINT.style.left=(e.clientX-s.left)+'px';HINT.style.top=(e.clientY-s.top)+'px';HINT.classList.add('show');clearTimeout(nudge.t);nudge.t=setTimeout(()=>HINT.classList.remove('show'),1400);shake(T&&T.started?'.term':'.startb')};
 const hideX=()=>{XV.style.display=XH.style.display='none';XY.textContent=''};
 SW.addEventListener('pointermove',e=>{if(!STG||STG.dataset.d3)return hideX();const r=STG.getBoundingClientRect(),s=SW.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)return hideX();
  XY.textContent='x '+Math.round((e.clientX-r.left)*STG.width/r.width)+'  y '+Math.round((e.clientY-r.top)*STG.height/r.height);
  XV.style.cssText=`display:block;left:${e.clientX-s.left}px;top:${r.top-s.top}px;width:1px;height:${r.height}px`;XH.style.cssText=`display:block;top:${e.clientY-s.top}px;left:${r.left-s.left}px;height:1px;width:${r.width}px`});
 SW.addEventListener('pointerleave',hideX);
 LOCK.addEventListener('click',e=>{if(T&&!T.started)nudge(e)});
-/* only typed commands may drive the stage: block real mouse / touch / keyboard input */
 const block=card=>['pointerdown','pointerup','mousedown','mouseup','click','dblclick','input','change','keydown','touchstart','contextmenu'].forEach(t=>card.addEventListener(t,e=>{if(!e.isTrusted)return;e.stopPropagation();if(t!='touchstart')e.preventDefault();if(t=='pointerdown')nudge(e)},{capture:true,passive:false}));
 
-/* AI output read-out under the stage */
+/* AI output read-out */
 const ro=c=>{try{
  if(c.api&&c.api.ro)return c.api.ro();
  if(c.querySelector('.o'))return eo(c);
- if(c.api&&c.api.pick)return c.api.O.map((o,i)=>['Red','Green','Orange'][i]+' block: '+(o[0]>540?'in the bin ✅':'on the table')).join(' · ');
  const q=c.querySelector('.qq');if(q){const f=q.querySelector('.fb'),h=q.querySelector('.mu');return f&&f.textContent?f.textContent.replace('Next →','').trim():h?h.textContent:q.textContent.replace('Play again','').trim()}
  if(c.querySelector('.gr'))return 'Gesture: '+c.querySelector('.gr').textContent;
  if(c.querySelector('#dt'))return c.querySelector('.st').textContent||'Scene ready — waiting for a detect command';
@@ -1130,19 +1689,20 @@ setInterval(()=>{RO.innerHTML=T?'<b>AI output</b>  '+esc(ro(T.card)):'<b>AI outp
 /* ---------- sidebar: task list ---------- */
 function stopTask(){cur++;stopFns.forEach(f=>{try{f()}catch(e){}});stopFns=[];const o=SW.querySelector('.card');if(o)o.remove();STG=null;hideX()}
 function sideList(){stopTask();T=null;setSth();
- lock(true,'','');LOCK.innerHTML=`<div class="ia"><div class="t">AI INDUCTION WEEK</div><div class="s">Alrowad International Schools</div><img src="Images/logo.png" alt="Alrowad International Schools logo" onerror="this.style.display='none'"><div class="h">👈 Choose a mission and train its AI</div></div>`;
- let h=`<p class="intro">${NT} AI missions in 4 zones. You train each AI by typing short rule codes.</p>`,lc='';ORD.forEach((k,i)=>{const c=catOf(k);if(c!=lc){lc=c;h+=`<div class="cat">${c}</div>`}const t=flat[k];h+=`<button class="it${done.has(k)?' dn':''}" data-n="${k}"><i>${done.has(k)?'✓':i+1}</i><span>${t[0]}</span>${NEW3D.has(k)?'<em>3D</em>':''}</button>`});SB.innerHTML=h;SB.scrollTop=0}
+ lock(true,'','');LOCK.innerHTML=`<div class="ia"><div class="t">AI LEARNING ACTIVITIES</div><div class="s">Alrowad International Schools</div><img src="Images/logo.png" alt="Alrowad International Schools logo" onerror="this.style.display='none'"><div class="h">👈 Choose a mission and program its AI</div></div>`;
+ let h=`<p class="intro">${NT} AI missions in 4 zones. Program each AI by choosing the right command for every situation.</p>`,lc='';
+ ORD.forEach((k,i)=>{const c=catOf(k);if(c!=lc){lc=c;h+=`<div class="cat">${c}</div>`}h+=`<button class="it${done.has(k)?' dn':''}" data-n="${k}"><i>${done.has(k)?'✓':i+1}</i><span>${flat[k][0]}</span>${D3.has(k)?`<em>${k>=24?'3D ★':'3D'}</em>`:''}</button>`});SB.innerHTML=h;SB.scrollTop=0}
 
 /* ---------- load a task ---------- */
 function show(n){stopTask();sel=n;const t=flat[n],card=document.createElement('div');card.className='card';SW.prepend(card);
- t[3](card,t[4]);STG=card.querySelector('canvas.cv');if(STG)STG.classList.add('stage');block(card);
- T={n,card,id:cur,D:CMD[n](),mi:0,pi:0,parts:[],started:false,fin:false,tok:0,hist:[],used:{},logs:{}};
- lock(true,'🔒 The AI is switched off','Read the objective, press ▶ START in the sidebar, then train the AI step by step with commands.');
+ t[3](card,t[4]);STG=card.querySelector('canvas.cv');if(STG)STG.classList.add('stage');block(card);const D=steps(n);
+ T={n,card,id:cur,S:D.s,gl:Object.assign({},GL0,D.gl),mi:0,started:false,fin:false,tok:0,hist:[],used:{},logs:{}};
+ lock(true,'🔒 The AI is switched off','Read the objective, press ▶ START in the sidebar, then program the AI step by step.');
  sideTask();setSth();requestAnimationFrame(fit)}
-function sideTask(){const t=flat[T.n],N=T.D.m.length,rb=T.n<9;
+function sideTask(){const t=flat[T.n],N=T.S.length;
  SB.innerHTML=`<button class="back">← All tasks</button><div class="tn">Task ${pos(T.n)} of ${NT} · ${catOf(T.n)}</div><h2>${t[0]}</h2>
  <section class="obj"><h3>🎯 Objective</h3><p>${t[1]}</p><p class="bn"><b>Bonus:</b> ${t[2].replace(/^Challenge:\s*/,'')}</p></section>
- <div class="note">${rb?`🧠 <b>You are the AI trainer.</b> Each of the ${N} steps shows a rule ending with <b>?</b>. Decide the correct action and feed the robot its short code, e.g. <code>stop-at /line</code>. A wrong decision shows its consequence on the stage — then retrain it.`:`⌨️ <b>Type short codes to make this AI work.</b> Clicking the stage does nothing. Each of the ${N} steps shows a code such as <code>mouth=8</code> or <code>?detect</code> — type it, then press <b>Run</b>.`}</div>
+ <div class="note">🧠 <b>You are the AI programmer.</b> Each of the ${N} steps shows a situation and up to 4 commands. Type the <b>one</b> most related command and press Run. A wrong choice shows its consequence on the stage — then reprogram it.</div>
  <div class="ctl"></div><ol class="stl"></ol>
  ${t[5]?`<div class="lks"><span>Explore the real tools:</span>${t[5].map(l=>`<a target="_blank" rel="noopener" href="${l[1]}">↗ ${l[0]}</a>`).join('')}</div>`:''}
  <div class="pdfz"><h4>📄 Task report</h4><div class="two"><div><label for="sn">Student name <span class="req">*</span></label><input id="sn" autocomplete="name" placeholder="e.g. Sara Ahmed" value="${esc(STU.n)}" required aria-required="true"></div>
@@ -1150,72 +1710,63 @@ function sideTask(){const t=flat[T.n],N=T.D.m.length,rb=T.n<9;
  <button class="pdfb">Download PDF report</button><div class="pst" aria-live="polite"></div></div>`;
  renderCtl();renderSteps();SB.scrollTop=0}
 function renderCtl(){const c=$(SB,'.ctl');if(!c)return;
- c.innerHTML=!T.started?`<button class="startb">▶ START</button>`:T.fin?`<div class="finbox">🏁 <b>All ${T.D.m.length} steps complete!</b> The AI is fully trained. Download your report below.<button class="rst">↺ Run the task again</button></div>`:`<div class="row2"><span class="live">● AI is on — follow the highlighted step</span><button class="rst">↺ Restart</button></div>`}
-function renderSteps(){const L=$(SB,'.stl');if(!L||!T)return;const M=T.D.m,N=M.length;
+ c.innerHTML=!T.started?`<button class="startb">▶ START</button>`:T.fin?`<div class="finbox">🏁 <b>All ${T.S.length} steps complete!</b> The AI is fully programmed. Download your report below.<button class="rst">↺ Run the task again</button></div>`:`<div class="row2"><span class="live">● AI is on — follow the highlighted step</span><button class="rst">↺ Restart</button></div>`}
+const keyFor=st=>{const ks=Object.keys(T.gl).filter(k=>st.o.some(o=>o[0].toLowerCase().includes(k.toLowerCase())));return ks.length?`<details class="key"><summary>🔑 Code key</summary>${ks.map(k=>`<div><code>${esc(k)}</code><span>${esc(T.gl[k])}</span></div>`).join('')}</details>`:''};
+function renderSteps(){const L=$(SB,'.stl');if(!L||!T)return;const M=T.S,N=M.length;
  L.innerHTML=M.map((m,i)=>{
-  if(T.started&&i<T.mi)return `<li class="fin"><div class="sh">✅ Step ${i+1} of ${N} complete</div><div class="ssum">${short(m[0])}</div>${(T.used[i]||[]).length?`<div class="chips sm">${T.used[i].map(c=>`<code title="${esc(c[1])}">${esc(c[0])}</code>`).join('')}</div>`:''}<div class="lsn">💡 ${m[5]}</div></li>`;
-  if(!T.started||i>T.mi)return `<li class="todo"><div class="sh">Step ${i+1} of ${N}</div><div class="ssum">${short(m[0])}</div></li>`;
-  const dec=T.parts.some(isDec),op=T.parts.find(p=>/<[^>]*\|/.test(p)),ox=op?expand(op,T.n):null,rh=op&&isDec(op)?/^if (.+?) then </.exec(op):null;
-  const lits=T.parts.filter(p=>p!==op).map(p=>expand(p,T.n)[0]);
-  const tip=(rh?`<div class="rule"><b>IF</b> ${esc(rh[1])} <b>THEN</b> <span class="q">?</span></div>`:'')+
-   (ox?`<p class="tip dec">🤔 <b>${rh?'Your decision':'Your answer'}:</b> pick ONE and type its code.</p><div class="opts">${ox.map(o=>`<div><span class="chip">${esc(o.short)}</span><span>${esc(o.opt)}</span></div>`).join('')}</div>`:'')+
-   (lits.length?`<p class="means">Means: ${lits.map(l=>`<i>${esc(l.full)}</i>`).join(' · ')}</p>`:'');
+  if(T.started&&i<T.mi)return `<li class="fin"><div class="sh">✅ Step ${i+1} of ${N} complete</div><div class="ssum">${short(m.s)}</div>${(T.used[i]||[]).length?`<div class="chips sm">${T.used[i].map(c=>`<code title="${esc(c[1])}">${esc(c[0])}</code>`).join('')}</div>`:''}<div class="lsn">💡 ${m.w}</div></li>`;
+  if(!T.started||i>T.mi)return `<li class="todo"><div class="sh">Step ${i+1} of ${N}</div><div class="ssum">${short(m.s)}</div></li>`;
   return `<li class="cur" aria-current="step"><div class="sh">Task ${pos(T.n)} · Step ${i+1} of ${N}</div>
-   <div class="blk"><h4>📌 Situation</h4><p>${shTxt(m[0],T.n)}</p></div>
-   ${dec?'':`<div class="blk"><h4>🔮 What will happen</h4><p>${m[5]}</p></div>`}
-   <div class="blk"><h4>⌨️ ${dec?'Rule to train':'Code to type'}</h4><div class="chips"${T.parts.length==1&&op?' hidden':''}></div>${tip}${T.parts.length>1?'<p class="tip">Run the commands one at a time, in order.</p>':''}</div>
-   <div class="term"><div class="pr"><span>&gt;</span><input class="ci" aria-label="Command" placeholder="type the code here" autocomplete="off" autocapitalize="off" spellcheck="false"><button class="runb">Run ▶</button></div></div>
+   <div class="blk"><h4>📌 Situation</h4><p>${m.s}</p></div>
+   ${m.r?`<div class="blk"><div class="rule"><b>IF</b> ${esc(m.r)} <b>THEN</b> <span class="q">?</span></div></div>`:''}
+   <div class="blk"><h4>⌨️ Type the ONE most related command</h4><div class="optl">${m.o.map(o=>`<span class="chip">${esc(o[0])}</span>`).join('')}</div>${keyFor(m)}</div>
+   <div class="term"><div class="pr"><span>&gt;</span><input class="ci" aria-label="Command" placeholder="type a command" autocomplete="off" autocapitalize="off" spellcheck="false"><button class="runb">Run ▶</button></div></div>
    <div class="res"><h4>📊 Results</h4><div class="log">${(T.logs[i]||[]).map(([h,k])=>`<div class="${k||''}">${h}</div>`).join('')}</div></div></li>`}).join('');
- paintChips();const ci=$(L,'.ci');
- if(ci){ci.onkeydown=e=>{if(e.key=='Enter'){e.preventDefault();run()}};setTimeout(()=>{const li=$(L,'li.cur');li&&li.scrollIntoView({block:'nearest',behavior:'smooth'});if(matchMedia('(min-width:761px)').matches)ci.focus({preventScroll:true})},60)}}
-const paintChips=()=>{const el=$(SB,'li.cur .chips');if(el)el.innerHTML=T.parts.map((p,i)=>{const e=expand(p,T.n);return `<span class="chip ${i<T.pi?'ok':i==T.pi?'nx':''}">${e.length>1?'✱ your choice':esc(e[0].short)}</span>`}).join('<span class="then">then</span>')};
+ const ci=$(L,'.ci');if(ci){ci.onkeydown=e=>{if(e.key=='Enter'){e.preventDefault();run()}};setTimeout(()=>{const li=$(L,'li.cur');li&&li.scrollIntoView({block:'nearest',behavior:'smooth'});if(matchMedia('(min-width:761px)').matches)ci.focus({preventScroll:true})},60)}}
 const say=(h,k,mi)=>{if(!T)return;const i=mi==null?T.mi:mi;(T.logs[i]=T.logs[i]||[]).unshift([h,k]);if(i!==T.mi)return;const el=$(SB,'li.cur .log');if(el){const d=document.createElement('div');d.innerHTML=h;if(k)d.className=k;el.prepend(d)}};
 const applySetup=s=>{if(!s)return;typeof s=='function'?s(T.card):sv(T.card,s)};
 
 function startTask(){if(!T||T.started)return;T.started=true;T.mi=0;lock(false);toast('▶ AI switched on');flash('pulse');startStep()}
-function startStep(){const m=T.D.m[T.mi];if(!m)return finish();applySetup(m[2]);T.parts=cmdOf(T.n,T.mi,m);T.pi=0;renderCtl();renderSteps();setSth()}
-function finish(){T.fin=true;if(!done.has(T.n)){done.add(T.n);saveDone()}renderCtl();renderSteps();setSth();burst('🏁 Task complete — the AI is fully trained!');const p=$(SB,'.pdfz');p&&p.scrollIntoView({block:'nearest',behavior:'smooth'})}
-function run(){if(!T||!T.started||T.fin)return;const inp=$(SB,'.ci');if(!inp)return;const typed=norm(inp.value);if(!typed){shake('.term');return}inp.value='';
- const id=T.id,mi=T.mi,m=T.D.m[mi];
- if(T.pi>=T.parts.length){T.pi=0;T.used[mi]=[];paintChips()}
- const exp=T.parts[T.pi],cands=expand(exp,T.n),k=cpk(typed),cd=cands.find(c=>cpk(c.short)==k||cpk(c.full)==k),s=cd?cd.full:typed,x=cd&&T.D.c.find(x=>x[2].test(s));
- if(!cd||!x){say(`❌ <b>Code not recognised:</b> <code>${esc(typed)}</code><br>${cands.length>1?'Type ONE of these codes:':'Type this code:'} ${cands.map(c=>`<code>${esc(c.short)}</code>`).join(' ')}`,'bad');T.hist.push([mi,typed,'invalid','']);toast('✖ not recognised: '+typed,1);flash('err');shake('.term');return}
- const tok=++T.tok;if(T.pi==0)applySetup(m[2]);
- const cm=/ ([0-9]+) ([0-9]+)$/.exec(s),cb=T.n==3&&/(red|green|orange)/.exec(s);if(cm)ripple(+cm[1],+cm[2]);if(cb&&T.card.api&&T.card.api.O){const o=T.card.api.O[COL[cb[1]]];ripple(o[0],o[1])}
- try{x[3](T.card,s.match(x[2]))}catch(e){say(`⚠️ ${esc(e.message)}`,'bad');T.hist.push([mi,typed,'error: '+e.message,s]);toast('⚠ '+e.message,1);flash('err');return}
- const dc=isDec(exp),sh=cd.short;T.hist.push([mi,sh,'ok',s]);(T.used[mi]=T.used[mi]||[]).push([sh,s]);toast((dc?'🧠 ':'▶ ')+sh);flash('pulse');T.pi++;paintChips();
- say(dc?`🧠 Rule trained: <code>${esc(sh)}</code> = <i>${esc(s)}</i>. Watch the stage to see how the AI behaves.`:`▶ <code>${esc(sh)}</code> — ${esc(x[1])}. Applied to the stage.`,'ok');
- setTimeout(()=>{if(T&&T.id==id&&T.mi==mi)say('🤖 '+esc(ro(T.card)),'ai')},700);
- if(T.pi<T.parts.length){const nx=expand(T.parts[T.pi],T.n);say(`✅ Accepted. Now type the next code: ${nx.length>1?'your choice from the list':`<code>${esc(nx[0].short)}</code>`}`,'ok');return}
- const t0=Date.now(),lim=m[6]||1500;
- const poll=()=>{if(!T||T.id!=id||T.mi!=mi||T.tok!=tok)return;let ok=0;try{ok=m[3](T.card)}catch(e){}
-  if(ok){say(`🎉 <b>Step ${mi+1} complete!</b> ${m[5]}`,'ok');T.hist.push([mi,'step complete','done','']);burst(`✅ Step ${mi+1} complete!`);T.mi++;setSth();setTimeout(()=>{if(T&&T.id==id)startStep()},1700)}
+function startStep(){const m=T.S[T.mi];if(!m)return finish();applySetup(m.set);renderCtl();renderSteps();setSth()}
+function finish(){T.fin=true;if(!done.has(T.n)){done.add(T.n);saveDone()}renderCtl();renderSteps();setSth();burst('🏁 Task complete — the AI is fully programmed!');const p=$(SB,'.pdfz');p&&p.scrollIntoView({block:'nearest',behavior:'smooth'})}
+function run(){if(!T||!T.started||T.fin)return;const inp=$(SB,'.ci');if(!inp)return;const typed=inp.value.trim().replace(/\s+/g,' ');if(!typed){shake('.term');return}inp.value='';
+ const id=T.id,mi=T.mi,m=T.S[mi],k=cpk(typed),o=m.o.find(o=>cpk(o[0])==k);
+ if(!o){say(`❌ <code>${esc(typed)}</code> is not one of the listed commands. Type ONE of: ${m.o.map(o=>`<code>${esc(o[0])}</code>`).join(' ')}`,'bad');T.hist.push([mi,typed,'invalid','']);toast('✖ not in the list',1);flash('err');shake('.term');return}
+ if(!o[1]){say(`⚠️ <code>${esc(o[0])}</code> would ${esc(o[2])}. That doesn’t solve this situation — read it again and choose another command.`,'bad');T.hist.push([mi,o[0],'not related',o[2]]);toast('⚠ not related: '+o[0],1);flash('err');shake('.term');return}
+ const tok=++T.tok;applySetup(m.set);
+ try{o[1](T.card)}catch(e){say(`⚠️ ${esc(e.message)}`,'bad');T.hist.push([mi,o[0],'error',e.message]);toast('⚠ '+e.message,1);flash('err');return}
+ T.hist.push([mi,o[0],'ok',o[2]]);(T.used[mi]=T.used[mi]||[]).push([o[0],o[2]]);toast('▶ '+o[0]);flash('pulse');
+ say(`▶ <code>${esc(o[0])}</code> → ${esc(o[2])}. Watch the stage…`,'ok');
+ setTimeout(()=>{if(T&&T.id==id&&T.mi==mi&&T.tok==tok)say('🤖 '+esc(ro(T.card)),'ai')},900);
+ const t0=Date.now(),lim=m.lim||1500;
+ const poll=()=>{if(!T||T.id!=id||T.mi!=mi||T.tok!=tok)return;let ok=0;try{ok=m.ok(T.card)}catch(e){}
+  if(ok){say(`🎉 <b>Step ${mi+1} complete!</b> ${m.w}`,'ok');T.hist.push([mi,'step complete','done','']);burst(`✅ Step ${mi+1} complete!`);T.mi++;setSth();setTimeout(()=>{if(T&&T.id==id)startStep()},1700)}
   else if(Date.now()-t0<lim)setTimeout(poll,250);
-  else{T.pi=0;T.used[mi]=[];paintChips();T.hist.push([mi,'step not solved','retry','']);say(`💡 Not solved yet. ${shTxt(esc(m[4]),T.n)} ${T.parts.some(isDec)?'Think about the decision again and type a new code.':'Type the codes again, starting from the first one.'}`,'bad');flash('err')}};
+  else{T.hist.push([mi,'step not solved','retry','']);say(`💡 Not solved yet. ${m.h||''} Choose another command and run it again.`,'bad');flash('err')}};
  setTimeout(poll,250)}
 
 /* ---------- PDF report ---------- */
 let DLP=null;const getDL=()=>DLP||(DLP=(async()=>{try{return window.claude&&window.claude.use?await window.claude.use('downloads'):null}catch(e){return null}})());getDL();
-const cln=s=>plain(s).replace(/[→➜⇒]/g,'->').replace(/[–—]/g,'-').replace(/≤/g,'<=').replace(/≥/g,'>=').replace(/[“”]/g,'"').replace(/[‘’]/g,"'").replace(/…/g,'...').replace(/↔/g,'<->').replace(/[^\x20-\x7E\xA0-\xFF\n]/g,'').replace(/ {2,}/g,' ').trim();
-async function pdf(){if(!T)return;const st=$(SB,'.pst'),inN=$(SB,'#sn'),inG=$(SB,'#sg'),nm=inN.value.trim(),gd=inG.value;
+const cln=s=>plain(s).replace(/[→➜⇒]/g,'->').replace(/[–—]/g,'-').replace(/≤/g,'<=').replace(/≥/g,'>=').replace(/≠/g,'!=').replace(/[“”]/g,'"').replace(/[‘’]/g,"'").replace(/…/g,'...').replace(/↔/g,'<->').replace(/₂/g,'2').replace(/[^\x20-\x7E\xA0-\xFF\n]/g,'').replace(/ {2,}/g,' ').trim();
+async function pdf(){if(!T)return;const st=$(SB,'.pst'),inN=$(SB,'#sn'),inG=$(SB,'#sg'),nm=inN.value.trim(),gd=inG.value.trim();
  inN.classList.toggle('bad',!nm);inG.classList.toggle('bad',!gd);st.className='pst';
  if(!nm||!gd){st.className='pst bad';st.textContent='Enter your '+(!nm&&!gd?'name and grade':!nm?'name':'grade')+' to download the report.';(!nm?inN:inG).focus();return}
- if(!cln(gd)){inG.classList.add('bad');st.className='pst bad';st.textContent='Type your grade in English letters or numbers, e.g. 7B.';inG.focus();return}
  if(cln(nm).replace(/[^A-Za-z\xC0-\xFF]/g,'').length<2){inN.classList.add('bad');st.className='pst bad';st.textContent='Type your name in English letters so it prints in the PDF.';inN.focus();return}
+ if(!cln(gd)){inG.classList.add('bad');st.className='pst bad';st.textContent='Type your grade in English letters or numbers, e.g. 7B.';inG.focus();return}
  STU={n:nm,g:gd};try{localStorage.setItem('aiwStu',JSON.stringify(STU))}catch(e){}
  const J=window.jspdf&&window.jspdf.jsPDF;if(!J){st.textContent='The PDF tool is still loading — try again in a moment.';return}
  st.textContent='Building your PDF…';
- const t=flat[T.n],N=T.D.m.length,d=new J({unit:'pt',format:'a4'}),W=d.internal.pageSize.getWidth(),H=d.internal.pageSize.getHeight(),M=44,BL=[31,95,214];let y=0;
+ const t=flat[T.n],N=T.S.length,d=new J({unit:'pt',format:'a4'}),W=d.internal.pageSize.getWidth(),H=d.internal.pageSize.getHeight(),M=44,BL=[31,95,214];let y=0;
  const tx=(s,z,b,col,ind)=>{d.setFont('helvetica',b?'bold':'normal');d.setFontSize(z);d.setTextColor(...(col||[11,37,69]));d.splitTextToSize(cln(s),W-2*M-(ind||0)).forEach(l=>{if(y>H-M){d.addPage();y=M+z}d.text(l,M+(ind||0),y);y+=z*1.4})};
- d.setFillColor(217,236,253);d.rect(0,0,W,84,'F');y=36;tx('AI Induction Week - Task Report',20,1,BL);tx('Alrowad International Schools',11,0,[75,101,135]);tx('Task '+pos(T.n)+' of '+NT+': '+t[0],13,1);y=110;
+ d.setFillColor(217,236,253);d.rect(0,0,W,84,'F');y=36;tx('AI Learning Activities - Task Report',20,1,BL);tx('Alrowad International Schools',11,0,[75,101,135]);tx('Task '+pos(T.n)+' of '+NT+': '+t[0],13,1);y=110;
  tx('Student: '+cln(nm)+'      Grade: '+cln(gd).replace(/^grade\s*/i,'')+'      Date: '+new Date().toLocaleDateString(),11,1);tx('Zone: '+catOf(T.n),11);
  const dn=Math.min(T.started?T.mi:0,N);tx('Progress: '+dn+' of '+N+' steps complete'+(T.fin?' - task complete':''),11,1,T.fin?[21,128,61]:[180,83,9]);y+=8;
- tx('Objective',13,1,BL);tx(t[1],11);tx(t[2],11);y+=8;
- tx('Steps and trained decisions',13,1,BL);
- T.D.m.forEach((m,i)=>{const ok=T.started&&i<T.mi;tx('Step '+(i+1)+' of '+N+(ok?'  [complete]':'  [not done]'),11,1,ok?[21,128,61]:[120,120,120]);tx(m[0],10.5,0,null,12);
-  const used=T.used[i]||[];tx((used.length?'Codes typed: '+used.map(u=>u[0]+'  (= '+u[1]+')').join('  |  '):'Code: '+cmdOf(T.n,i,m).map(p=>expand(p,T.n).map(e=>e.short).join(' / ')).join('  then  ')),10.5,0,[70,70,70],12);if(ok)tx('Result: '+m[5],10.5,0,null,12);y+=5});
- const acc=T.hist.filter(h=>h[2]=='ok').length,bad=T.hist.filter(h=>h[2]=='invalid'||/^error/.test(h[2])).length,rt=T.hist.filter(h=>h[2]=='retry').length;y+=4;
- tx('Command log ('+acc+' accepted, '+bad+' not recognised, '+rt+' retrained)',13,1,BL);
+ tx('Objective',13,1,BL);tx(t[1],11);tx('Challenge: '+t[2].replace(/^Challenge:\s*/,''),11);y+=8;
+ tx('Steps and programmed decisions',13,1,BL);
+ T.S.forEach((m,i)=>{const ok=T.started&&i<T.mi;tx('Step '+(i+1)+' of '+N+(ok?'  [complete]':'  [not done]'),11,1,ok?[21,128,61]:[120,120,120]);tx(m.s,10.5,0,null,12);if(m.r)tx('Rule: IF '+m.r+' THEN ?',10.5,1,[70,70,70],12);
+  const used=T.used[i]||[];tx(used.length?'Commands run: '+used.map(u=>u[0]+' (= '+u[1]+')').join('  |  '):'Options: '+m.o.map(o=>o[0]).join('  /  '),10.5,0,[70,70,70],12);if(ok)tx('Result: '+m.w,10.5,0,null,12);y+=5});
+ const acc=T.hist.filter(h=>h[2]=='ok').length,bad=T.hist.filter(h=>h[2]=='invalid'||h[2]=='not related'||h[2]=='error').length,rt=T.hist.filter(h=>h[2]=='retry').length;y+=4;
+ tx('Command log ('+acc+' run, '+bad+' rejected, '+rt+' reprogrammed)',13,1,BL);
  if(!T.hist.length)tx('No commands typed yet.',10.5,0,[120,120,120],12);
  T.hist.slice(-80).forEach(h=>tx('Step '+(h[0]+1)+':  '+h[1]+(h[3]&&h[2]=='ok'?'  = '+h[3]:'')+'   ('+h[2]+')',10,0,h[2]=='ok'||h[2]=='done'?[21,128,61]:[194,38,29],12));
  if(STG){try{const iw=W-2*M,ih=iw*STG.height/STG.width;y+=10;if(y+ih+30>H-M){d.addPage();y=M+13}tx('Stage snapshot',13,1,BL);d.addImage(STG.toDataURL('image/png'),'PNG',M,y,iw,ih);y+=ih+18}catch(e){}}
